@@ -6,4 +6,5 @@ public interface BoardService {
 
     BoardResponseDto save(String title, String contents);
 
+    void delete(Long boardId);
 }

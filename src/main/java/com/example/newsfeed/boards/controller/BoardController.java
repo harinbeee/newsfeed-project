@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,14 @@ public class BoardController {
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<String> delete(@PathVariable Long boardId) {
+
+        boardService.delete(boardId);
+
+        return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }
 
 
