@@ -1,5 +1,6 @@
 package com.example.newsfeed.boards.entity;
 
+import com.example.newsfeed.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
