@@ -27,11 +27,11 @@ public class Board extends BaseEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
 
-    @Setter
-    @Column(nullable = false)
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @Setter
+//    @Column(nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public Board() {
     }
