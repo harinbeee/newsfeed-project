@@ -1,5 +1,6 @@
 package com.example.newsfeed.boards.dto;
 
+import com.example.newsfeed.boards.entity.Board;
 import lombok.Getter;
 
 @Getter
@@ -18,5 +19,10 @@ public class BoardResponseDto {
         this.username = username;
         this.title = title;
         this.contents = contents;
+    }
+
+    public static BoardResponseDto toDto(Board board) {
+        return new BoardResponseDto(board.getId(), board.getUser().getUsername(), board.getTitle(),
+            board.getContents());
     }
 }
