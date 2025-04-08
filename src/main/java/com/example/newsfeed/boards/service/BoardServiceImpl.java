@@ -16,21 +16,23 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponseDto save(String title, String contents) {
 
-        User findUser = userRepository.findUserByUsername(username);
-
-        Board board = new Board(title, contents);
-        board.setUser(findUser);
-
-        Board board = boardRepository.save(board);
-        return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
-            findUser.getUsername());
+//        User findUser = userRepository.findUserByUsername(username);
+//
+//        Board board = new Board(title, contents);
+//        board.setUser(findUser);
+//
+//        Board board = boardRepository.save(board);
+//        return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
+//            findUser.getUsername());
+        return null;
     }
 
     @Override
     public List<BoardResponseDto> findAll() {
         List<Board> boards = boardRepository.findAll();
-
-        return boards.stream().map(BoardResponseDto::toDto).toList();
+//
+//        return boards.stream().map(BoardResponseDto::toDto).toList();
+        return null;
     }
 
     @Override

@@ -9,41 +9,20 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserFindResponseDto {
 
-    private Long id;
-
-    private String email;
-
-    private String password;
-
-    private String name;
-
     private String nickname;
-
-    private String phone;
 
     private String profilePicture;
 
     private String description;
-
-    private boolean isDeleted;
-
-    private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     public static UserFindResponseDto toDto(User user) { // user > UserFindResponseDto 변환
 
         return new UserFindResponseDto(
-            user.getId(),
-            user.getEmail(),
-            user.getPassword(),
             user.getName(),
-            user.getNickname(),
-            user.getPhone(),
             user.getProfilePicture(),
-            user.getDescription(),
-            user.isDeleted(),
-            user.getCreatedAt(),
+            user.getNickname(),
             user.getUpdatedAt()
         );
     }

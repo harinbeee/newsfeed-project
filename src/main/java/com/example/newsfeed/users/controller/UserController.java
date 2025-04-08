@@ -1,7 +1,6 @@
 package com.example.newsfeed.users.controller;
 
 import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.service.UserService;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,7 +49,11 @@ public class UserController {
     public ResponseEntity<UserSaveResponseDto> signUp(
         @RequestBody @Valid UserSaveRequestDto requestDto
     ) {
-        return userService.save(requestDto);
+
+        userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
+
+        return userService.save(requestDto); // 중복 없으면 가입
+
     }
 
 }

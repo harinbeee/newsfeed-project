@@ -20,8 +20,8 @@ public class BoardResponseDto {
         this.contents = contents;
     }
 
-    public static BoardResponseDto toDto(Board board) {
-        return new BoardResponseDto(board.getId(), board.getUser().getUsername(), board.getTitle(),
-            board.getContents());
-    }
+//    public static BoardResponseDto toDto(Board board) {
+//        return new BoardResponseDto(board.getId(), board.getUser().getUsername(), board.getTitle(),
+//            board.getContents());
+//    }
 }
