@@ -12,7 +12,5 @@ public interface FriendService {
 
     FriendFindResponseDto findByToUserId(Long toUserId);
 
-    FriendFindResponseDto findByIdFromUserId(Long fromUserId);
-
-    
+    FriendFindResponseDto findByFromUserId(Long fromUserId);
 }
