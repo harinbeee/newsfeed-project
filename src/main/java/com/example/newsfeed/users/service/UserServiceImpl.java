@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByIdElseThrow(userId); // 해당 user id 에 맞는 데이터 있으면 가져오고 없으면 오류
 
-        return new ResponseEntity<>( // 데이터 응답 dto 로 변환 후 리턴
+        return new ResponseEntity<>(
             UserFindResponseDto.toDto(user),
-            HttpStatus.OK);
+            HttpStatus.OK); // 데이터 응답 dto 로 변환 후 리턴
     }
 
     /**
