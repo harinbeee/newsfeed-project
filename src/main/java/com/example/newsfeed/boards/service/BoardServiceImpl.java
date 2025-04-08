@@ -19,10 +19,16 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
+    /**
+     * @param
+     * @param title
+     * @param contents
+     * @return
+     */
     @Override
-    public BoardResponseDto save(Long userId, String title, String contents) {
+    public BoardResponseDto save(String name, String title, String contents) {
 
-        User findUser = userRepository.findByIdElseThrow(userId);
+        User findUser = userRepository.findByIdElseThrow(name);
 
         Board board = new Board(title, contents);
         board.setUser(findUser);
@@ -42,12 +48,12 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public BoardResponseDto update(Long userId, Long boardId, String title, String contents) {
+    public BoardResponseDto update(String name, Long boardId, String title, String contents) {
 
         Board findboard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인유저인지 검증
-        if (findboard.getUser().getId().equals(userId)) {
+        if (findboard.getUser().getId().equals(name)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -62,12 +68,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void delete(Long userId, Long boardId) {
+    public void delete(String name, Long boardId) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인유저인지 검증
-        if (findBoard.getUser().getId().equals(userId)) {
+        if (findBoard.getUser().getNickname().equals(name)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 

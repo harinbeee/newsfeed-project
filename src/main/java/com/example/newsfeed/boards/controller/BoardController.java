@@ -27,21 +27,23 @@ public class BoardController {
     private final BoardService boardService;
 
     /**
-     * @param requestDto
-     * @param request
-     * @return
+     * 게시물 생성 컨트롤러
+     *
+     * @param requestDto 요청 객체
+     * @param request    로그인 유저 정보
+     * @return 게시글 정보가 담긴 응답 dto , 성공시 201
      */
     @PostMapping
     public ResponseEntity<BoardResponseDto> save(
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
-
         HttpSession session = request.getSession(false);
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.save(loginUser.getId(), requestDto.getTitle(), requestDto.getContents());
+            boardService.save(loginUser.getNickname(), requestDto.getTitle(),
+                requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
@@ -62,7 +64,6 @@ public class BoardController {
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
-
         HttpSession session = request.getSession(false);
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
@@ -80,11 +81,10 @@ public class BoardController {
         HttpServletRequest request
 
     ) {
-
         HttpSession session = request.getSession(false);
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
-        boardService.delete(loginUser.getId(), boardId);
+        boardService.delete(loginUser.getNickname(), boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }
