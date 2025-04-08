@@ -4,7 +4,7 @@ import com.example.newsfeed.friends.entity.Friend;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class FriendSaveResponseDto {
+public class FriendFindResponseDto {
 
     private Long id;
 
@@ -12,8 +12,8 @@ public class FriendSaveResponseDto {
 
     private Long toUserId;
 
-    public static FriendSaveResponseDto toDto(Friend friend) { // Friend > FriendSaveResponseDto 변환
-        return new FriendSaveResponseDto(
+    public static FriendFindResponseDto toDto(Friend friend) { // Friend > FriendFindResponseDto 변환
+        return new FriendFindResponseDto(
             friend.getId(),
             friend.getFromUser().getId(),
             friend.getToUser().getId()

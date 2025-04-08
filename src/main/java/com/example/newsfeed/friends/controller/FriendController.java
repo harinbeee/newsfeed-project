@@ -1,5 +1,6 @@
 package com.example.newsfeed.friends.controller;
 
+import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.service.FriendService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,21 +39,21 @@ public class FriendController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-//    @GetMapping("/{toUserId}")
-//    public ResponseEntity<FriendSaveResponseDto> findByToUserId(
-//        @PathVariable @Min(1) Long toUserId
-//    ) {
-//        FriendSaveResponseDto responseDto = friendService.findByToUserId(toUserId);
-//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/{fromUserId}")
-//    public ResponseEntity<FriendSaveResponseDto> findByIdFromUserId(
-//        @PathVariable @Min(1) Long fromUserId
-//    ) {
-//        FriendSaveResponseDto responseDto = friendService.findByIdFromUserId(fromUserId);
-//        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-//    }
+    @GetMapping("/{toUserId}")
+    public ResponseEntity<FriendFindResponseDto> findByToUserId(
+        @PathVariable @Min(1) Long toUserId
+    ) {
+        FriendFindResponseDto responseDto = friendService.findByToUserId(toUserId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{fromUserId}")
+    public ResponseEntity<FriendFindResponseDto> findByIdFromUserId(
+        @PathVariable @Min(1) Long fromUserId
+    ) {
+        FriendFindResponseDto responseDto = friendService.findByIdFromUserId(fromUserId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{toUserId}/{fromUserId}")
     public ResponseEntity<String> delete(

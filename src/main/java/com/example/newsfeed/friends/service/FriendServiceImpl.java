@@ -1,5 +1,6 @@
 package com.example.newsfeed.friends.service;
 
+import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.entity.Friend;
@@ -51,6 +52,16 @@ public class FriendServiceImpl implements FriendService {
                 )
             );
         friendRepository.delete(friend);
+    }
+
+    @Override
+    public FriendFindResponseDto findByToUserId(Long toUserId) {
+        return null;
+    }
+
+    @Override
+    public FriendFindResponseDto findByIdFromUserId(Long fromUserId) {
+        return null;
     }
 
 }
