@@ -6,6 +6,7 @@ import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +18,15 @@ public class BoardServiceImpl implements BoardService {
     private final UserRepository userRepository;
 
     @Override
-    public BoardResponseDto save(String title, String contents) {
+    public BoardResponseDto save(Long userId, String title, String contents) {
 
-        User findUser = userRepository.findByIdElseThrow(id);
+        User findUser = userRepository.findByIdElseThrow(userId);
 
         Board board = new Board(title, contents);
         board.setUser(findUser);
 
-        Board board = boardRepository.save(board);
-        return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
+        Board savedboard = boardRepository.save(board);
+        return new BoardResponseDto(savedboard.getId(), board.getTitle(), board.getContents(),
             findUser.getName());
         
     }
@@ -40,10 +41,9 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public BoardResponseDto update(String title, String contents) {
+    public BoardResponseDto update(Long boardId, String title, String contents) {
 
-        Board board = boardRepository.findById(id);
-        User findUser = board.getUser();
+        Optional<Board> board = boardRepository.findById(boardId);
 
         String updateTitle = (title != null) ? title : board.getTitle();
         String updateContents = (contents != null) ? contents : board.getContents();
