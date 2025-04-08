@@ -5,6 +5,7 @@ import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -59,8 +60,12 @@ public class BoardController {
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "false") boolean isFriendBoard
+        @RequestParam(defaultValue = "false") boolean isFriendBoard,
+        HttpServletRequest request
     ) {
+
+        HttpSession session = request.getSession(false);
+        session.getAttribute("loginUser");
 
         Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
             isFriendBoard);
@@ -69,6 +74,12 @@ public class BoardController {
     }
 
 
+    /**
+     * 게시글 삭제
+     *
+     * @param boardId
+     * @return
+     */
     @DeleteMapping("/{boardId}")
     public ResponseEntity<String> delete(@PathVariable Long boardId) {
 
