@@ -1,7 +1,7 @@
 package com.example.newsfeed.users.controller;
 
 import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.serivce.UserService;
+import com.example.newsfeed.users.service.UserService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
