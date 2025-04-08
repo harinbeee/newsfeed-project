@@ -9,6 +9,8 @@ public class BoardPageResponseDto {
 
     private String username;
 
+    private String nickname;
+
     private String title;
 
     private String contents;
@@ -22,16 +24,19 @@ public class BoardPageResponseDto {
     public BoardPageResponseDto(Board board) {
         this.userId = board.getUser().getId();
         this.username = board.getUser().getUsername();
+        this.nickname = board.getUser().getNickname();
         this.title = board.getTitle();
         this.contents = board.getContents();
         this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
     }
 
-    public BoardPageResponseDto(Long userId, String username, String title, String contents,
+    public BoardPageResponseDto(Long userId, String username, String nickname, String title,
+        String contents,
         String createdAt, String updatedAt) {
         this.userId = userId;
         this.username = username;
+        this.nickname = nickname;
         this.title = title;
         this.contents = contents;
         this.createdAt = createdAt;

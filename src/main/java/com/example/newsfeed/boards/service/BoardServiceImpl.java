@@ -42,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
 
         // isFriendBoard true 일 때 친구의 게시글이 우선순위
         if (isFriendBoard == true) {
-            boardRepository.findAllByFriendPriority(pageable);
+            return boardRepository.findAllByFriendPriority(pageable, myId);
         }
 
         Page<Board> boardPage = boardRepository.findAll(pageable);
