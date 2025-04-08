@@ -17,9 +17,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long boardId; // 단 방향 관계로 Board 의 ID 컬럼만 가짐
-
     @Column(nullable = false, unique = true)
     private String email;
 
