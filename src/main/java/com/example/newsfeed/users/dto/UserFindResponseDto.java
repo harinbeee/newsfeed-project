@@ -13,7 +13,7 @@ public class UserFindResponseDto {
 
     private String password;
 
-    private String name;
+    private String username;
 
     private String nickname;
 
@@ -35,7 +35,7 @@ public class UserFindResponseDto {
             user.getId(),
             user.getEmail(),
             user.getPassword(),
-            user.getName(),
+            user.getUsername(),
             user.getNickname(),
             user.getPhone(),
             user.getProfilePicture(),

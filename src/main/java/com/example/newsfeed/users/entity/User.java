@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -25,17 +26,21 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(nullable = false)
-    private String name;
+    private String username;
 
+    @Setter
     @Column(nullable = false)
     private String nickname;
 
+    @Setter
     @Column
     private String phone;
 
+    @Setter
     @Column
     private String profilePicture;
 
+    @Setter
     @Column
     private String description;
 
