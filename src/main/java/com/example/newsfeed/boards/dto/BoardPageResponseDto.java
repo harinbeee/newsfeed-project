@@ -28,4 +28,13 @@ public class BoardPageResponseDto {
         this.updatedAt = board.getUpdatedAt();
     }
 
+    public BoardPageResponseDto(Long userId, String username, String title, String contents,
+        String createdAt, String updatedAt) {
+        this.userId = userId;
+        this.username = username;
+        this.title = title;
+        this.contents = contents;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

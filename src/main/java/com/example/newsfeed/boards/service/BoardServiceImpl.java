@@ -36,13 +36,14 @@ public class BoardServiceImpl implements BoardService {
     public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard) {
 
         int adjustedPage = (page > 0) ? page - 1 : 0;
-        // isFriendBoard true 일 때 친구의 게시글이 우선순위
-        if (isFriendBoard == true) {
-
-        }
 
         PageRequest pageable = PageRequest.of(adjustedPage, size,
             Sort.by("updatedAt").descending());
+
+        // isFriendBoard true 일 때 친구의 게시글이 우선순위
+        if (isFriendBoard == true) {
+            boardRepository.findAllByFriendPriority(pageable);
+        }
 
         Page<Board> boardPage = boardRepository.findAll(pageable);
 
