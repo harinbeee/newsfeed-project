@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class LogoutServiceImpl implements LogoutService {
 
+    @Override
     public void logout(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
