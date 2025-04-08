@@ -3,6 +3,7 @@ package com.example.newsfeed.boards.service;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,13 @@ public class BoardServiceImpl implements BoardService {
         return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
             findUser.getUsername());
 
+    }
 
+    @Override
+    public List<BoardResponseDto> findAll() {
+        List<Board> boards = boardRepository.findAll();
+
+        return boards.stream().map(BoardResponseDto::toDto).toList();
     }
 
     @Override
