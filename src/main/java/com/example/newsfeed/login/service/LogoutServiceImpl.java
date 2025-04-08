@@ -1,16 +1,31 @@
 package com.example.newsfeed.login.service;
 
-import com.example.newsfeed.login.session.LogoutSession;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @RequiredArgsConstructor
 public class LogoutServiceImpl implements LogoutService {
 
-  private final LogoutSession logoutSession;
+  public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
 
-  public void logout(HttpServletRequest request, HttpServletResponse response) {
-    logoutSession.logout(request, response);
+    HttpSession session = request.getSession(false);
+
+    if (session != null) {
+      session.invalidate();
+
+      Cookie cookie = new Cookie("SESSIONID", null);
+      cookie.setMaxAge(0);
+      cookie.setPath("/");
+      response.addCookie(cookie);
+
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
   }
 }

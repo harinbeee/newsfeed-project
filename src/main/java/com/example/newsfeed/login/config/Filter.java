@@ -11,7 +11,7 @@ import org.springframework.util.PatternMatchUtils;
 
 public class Filter implements jakarta.servlet.Filter {
 
-  private static final String[] WHITE_LIST = {"/", "/signup", "/login"};
+  private static final String[] WHITE_LIST = {"/signup", "/login"};
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
