@@ -9,6 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserFindResponseDto {
 
+    private Long id;
+
     private String nickname;
 
     private String profilePicture;
@@ -20,6 +22,7 @@ public class UserFindResponseDto {
     public static UserFindResponseDto toDto(User user) { // user > UserFindResponseDto 변환
 
         return new UserFindResponseDto(
+            user.getId(),
             user.getUsername(),
             user.getProfilePicture(),
             user.getNickname(),

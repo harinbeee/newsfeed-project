@@ -12,26 +12,26 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public void login(String email, String password, HttpSession session,
-      HttpServletResponse response) {
+    public void login(String email, String password, HttpSession session,
+        HttpServletResponse response) {
 
-    User findEmail = userRepository.findByEmailElseThrow(email);
+        User findEmail = userRepository.findByEmailElseThrow(email);
 
-    if (findEmail.getPassword() == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "비밀번호를 찾을 수 없습니다.");
+        if (findEmail.getPassword() == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "비밀번호를 찾을 수 없습니다.");
+        }
+
+        if (findEmail.getPassword().equals(password)) {
+            session.setAttribute("user", email);
+
+            Cookie cookie = new Cookie("SESSIONID", session.getId());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
     }
-
-    if (findEmail.getPassword().equals(password)) {
-      session.setAttribute("user", email);
-
-      Cookie cookie = new Cookie("SESSIONID", session.getId());
-      cookie.setHttpOnly(true);
-      cookie.setPath("/");
-      response.addCookie(cookie);
-    } else {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
-    }
-  }
 }

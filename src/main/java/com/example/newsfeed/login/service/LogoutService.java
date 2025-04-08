@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface LogoutService {
 
-  void logout(HttpServletRequest request, HttpServletResponse response);
+    void logout(HttpServletRequest request, HttpServletResponse response);
 }

@@ -15,7 +15,7 @@ public class UserSaveResponseDto {
 
     private String password;
 
-    private String name;
+    private String username;
 
     private String nickname;
 
@@ -37,7 +37,7 @@ public class UserSaveResponseDto {
             user.getId(),
             user.getEmail(),
             user.getPassword(),
-            user.getName(),
+            user.getUsername(),
             user.getNickname(),
             user.getPhone(),
             user.getProfilePicture(),
