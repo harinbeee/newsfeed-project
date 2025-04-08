@@ -12,7 +12,6 @@ public interface BoardService {
 
     Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard);
 
-
     BoardResponseDto update(Long userId, Long boardId, String title, String contents);
 
     void delete(Long userId, Long boardId);

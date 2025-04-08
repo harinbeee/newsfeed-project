@@ -1,5 +1,7 @@
 package com.example.newsfeed.users.controller;
 
+import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
+import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
@@ -7,9 +9,11 @@ import com.example.newsfeed.users.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +40,19 @@ public class UserController {
     ) {
         return userService.find(userId);
     }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UpdateUserProfileResponseDto> update(
+        @PathVariable Long userId,
+        @RequestBody UpdateUserProfileRequestDto requestDto
+    ) {
+
+        UpdateUserProfileResponseDto updatedUser = userService.update(userId, requestDto);
+
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+
+    }
+
 
     /**
      * 유저 회원가입 메소드 추후 컨트롤러 이동 변경 > ex) AuthController

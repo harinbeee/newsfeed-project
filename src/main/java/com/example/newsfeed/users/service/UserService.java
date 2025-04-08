@@ -1,5 +1,7 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
+import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
@@ -14,4 +16,13 @@ public interface UserService {
     ResponseEntity<UserSaveResponseDto> save(UserSaveRequestDto requestDto);
 
     void findByEmail(@Email @NotBlank String email);
+
+    /**
+     * 유저 프로필 수정 메소드
+     *
+     * @param userId 유저 식별자 ID
+     * @return 수정된 유저 정보가 담겨있는 응답 DTO 객체
+     */
+    UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
+
 }

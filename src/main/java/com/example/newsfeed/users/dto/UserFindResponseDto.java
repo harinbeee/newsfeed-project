@@ -20,7 +20,7 @@ public class UserFindResponseDto {
     public static UserFindResponseDto toDto(User user) { // user > UserFindResponseDto 변환
 
         return new UserFindResponseDto(
-            user.getName(),
+            user.getUsername(),
             user.getProfilePicture(),
             user.getNickname(),
             user.getUpdatedAt()

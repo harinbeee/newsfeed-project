@@ -86,7 +86,7 @@ public class BoardController {
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getId(), requestDto.getTitle(),
+            boardService.update(boardId, loginUser.getID(), requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
