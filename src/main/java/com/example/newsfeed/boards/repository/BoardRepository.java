@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
+
     Optional<Board> findById(Long boardId);
 
     default Board findByIdOrElseThrow(Long boardId) {

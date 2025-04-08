@@ -1,11 +1,15 @@
 package com.example.newsfeed.boards.service;
 
+import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +31,22 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<BoardResponseDto> findAll() {
-        List<Board> boards = boardRepository.findAll();
+    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard) {
 
-        return boards.stream().map(BoardResponseDto::toDto).toList();
+        int adjustedPage = (page > 0) ? page - 1 : 0;
+
+        if (isFriendBoard == true) {
+            
+        }
+
+        PageRequest pageable = PageRequest.of(adjustedPage, size,
+            Sort.by("updatedAt").descending());
+
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+
+        return boardPage.map(BoardPageResponseDto::new);
     }
 
     @Override

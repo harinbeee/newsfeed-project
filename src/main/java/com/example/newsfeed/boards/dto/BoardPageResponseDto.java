@@ -1,0 +1,31 @@
+package com.example.newsfeed.boards.dto;
+
+import com.example.newsfeed.boards.entity.Board;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public class BoardPageResponseDto {
+
+    private Long userId;
+
+    private String username;
+
+    private String title;
+
+    private String contents;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String updatedAt;
+
+    public BoardPageResponseDto(Board board) {
+        this.userId = board.getUser().getId();
+        this.username = board.getUser().getUsername();
+        this.title = board.getTitle();
+        this.contents = board.getContents();
+        this.createdAt = board.getCreatedAt();
+        this.updatedAt = board.getUpdatedAt();
+    }
+
+}
