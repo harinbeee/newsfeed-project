@@ -7,7 +7,6 @@ import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,12 +39,11 @@ public class BoardController {
         HttpServletRequest request
     ) {
 
-        //로그인 정보 가져오기
-//        HttpSession session = request.getSession(false);
-//        UserResponseDto loginUser = session.getAttribute("loginUser");
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.save(requestDto.getTitle(), requestDto.getContents());
+            boardService.save(loginUser.getId(), requestDto.getTitle(), requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
@@ -68,11 +66,12 @@ public class BoardController {
     ) {
 
         HttpSession session = request.getSession(false);
-        session.getAttribute("loginUser");
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
-        List<BoardResponseDto> boardResponseDto = boardService.findAll();
+        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
+            isFriendBoard);
 
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
 
 
