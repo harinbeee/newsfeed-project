@@ -44,7 +44,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard) {
+    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard,
+        Long userId) {
 
         int adjustedPage = (page > 0) ? page - 1 : 0;
 
@@ -53,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
 
         // isFriendBoard true 일 때 친구의 게시글이 우선순위
         if (isFriendBoard == true) {
-            return boardRepository.findAllByFriendPriority(pageable, myId);
+            return boardRepository.findAllByFriendPriority(pageable, userId);
         }
 
         Page<Board> boardPage = boardRepository.findAll(pageable);

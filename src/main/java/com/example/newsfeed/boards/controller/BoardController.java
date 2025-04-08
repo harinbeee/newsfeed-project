@@ -68,10 +68,10 @@ public class BoardController {
     ) {
 
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+        Long userId = (Long) session.getAttribute("loginUser");
 
         Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
-            isFriendBoard);
+            isFriendBoard, userId);
 
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
