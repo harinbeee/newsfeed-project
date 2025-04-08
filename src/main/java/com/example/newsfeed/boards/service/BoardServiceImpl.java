@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class BoardService {
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
 
+    @Override
     public BoardResponseDto save(String title, String contents) {
 
         User findUser = userRepository.findUserByUsername(username);
