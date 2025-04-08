@@ -3,13 +3,16 @@ package com.example.newsfeed.boards.controller;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
+import com.example.newsfeed.users.dto.UserFindResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,12 +37,11 @@ public class BoardController {
         HttpServletRequest request
     ) {
 
-        //로그인 정보 가져오기
-//        HttpSession session = request.getSession(false);
-//        UserResponseDto loginUser = session.getAttribute("loginUser");
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.save(requestDto.getTitle(), requestDto.getContents());
+            boardService.save(loginUser.getId(), requestDto.getTitle(), requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
@@ -53,10 +55,36 @@ public class BoardController {
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{boardId}")
-    public ResponseEntity<String> delete(@PathVariable Long boardId) {
 
-        boardService.delete(boardId);
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<BoardResponseDto> update(
+        @PathVariable Long boardId,
+        @RequestBody BoardRequestDto requestDto,
+        HttpServletRequest request
+    ) {
+
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
+        BoardResponseDto boardResponseDto =
+            boardService.update(boardId, loginUser.getID(), requestDto.getTitle(),
+                requestDto.getContents());
+
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<String> delete(
+        @PathVariable Long boardId,
+        HttpServletRequest request
+
+    ) {
+
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
+        boardService.delete(loginUser.getId(), boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BoardService {
 
-    BoardResponseDto save(String title, String contents);
+    BoardResponseDto save(Long userId, String title, String contents);
 
     List<BoardResponseDto> findAll();
 
-    void delete(Long boardId);
+    BoardResponseDto update(Long userId, Long boardId, String title, String contents);
+
+    void delete(Long userId, Long boardId);
 
 }

@@ -8,15 +8,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  default User findByIdElseThrow(Long id) {
-    return findById(id).orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유저 식별자가 존재하지 않음"));
-  }
+    default User findByIdElseThrow(Long id) {
+        return findById(id).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유저 식별자가 존재하지 않음"));
+    }
 
-  Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email); //회원가입 시 중복인지 체크
 
-  default User findByEmailElseThrow(String email) {
-    return findByEmail(email).orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "이메일이 존재하지 않습니다."));
-  }
+    default User findByEmailElseThrow(String email) {
+        return findByEmail(email).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "이메일이 존재하지 않습니다."));
+    }
 }
