@@ -24,7 +24,6 @@ public class Filter implements jakarta.servlet.Filter {
       HttpSession session = httpRequest.getSession(false);
 
       if (session == null || session.getAttribute("user") == null) {
-        // 로그인 페이지 이동 처리
         throw new RuntimeException("로그인 해주세요.");
       }
     }

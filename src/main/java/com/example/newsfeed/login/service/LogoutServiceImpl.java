@@ -6,12 +6,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 public class LogoutServiceImpl implements LogoutService {
 
-  public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+  public void logout(HttpServletRequest request, HttpServletResponse response) {
 
     HttpSession session = request.getSession(false);
 
@@ -22,10 +22,8 @@ public class LogoutServiceImpl implements LogoutService {
       cookie.setMaxAge(0);
       cookie.setPath("/");
       response.addCookie(cookie);
-
-      return new ResponseEntity<>(HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 되어있지 않습니다.");
     }
   }
 }

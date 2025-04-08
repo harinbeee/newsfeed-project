@@ -5,6 +5,7 @@ import com.example.newsfeed.login.service.LogoutService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,8 @@ public class LogoutController {
   @PostMapping
   public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
 
-    return logoutService.logout(request, response);
+    logoutService.logout(request, response);
+
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }
