@@ -30,7 +30,6 @@ public class BoardServiceImpl implements BoardService {
         Board savedboard = boardRepository.save(board);
         return new BoardResponseDto(savedboard.getId(), board.getTitle(), board.getContents(),
             findUser.getNickname());
-        
     }
 
 
