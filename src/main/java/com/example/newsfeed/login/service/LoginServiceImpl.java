@@ -14,6 +14,7 @@ public class LoginServiceImpl implements LoginService {
 
   private final UserRepository userRepository;
 
+  @Override
   public void login(String email, String password, HttpSession session,
       HttpServletResponse response) {
 
@@ -24,7 +25,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     if (findEmail.getPassword().equals(password)) {
-      session.setAttribute("user", email);
+      session.setAttribute("user", findEmail.getId());
 
       Cookie cookie = new Cookie("SESSIONID", session.getId());
       cookie.setHttpOnly(true);
