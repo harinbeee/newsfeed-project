@@ -11,6 +11,9 @@ public interface BoardService {
 
     List<BoardResponseDto> findAll();
 
+
+    BoardResponseDto update(String title, String contents);
+
     void delete(Long boardId);
 
 }
