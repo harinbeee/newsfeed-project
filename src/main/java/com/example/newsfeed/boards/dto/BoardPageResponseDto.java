@@ -2,6 +2,7 @@ package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Board;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
 
 public class BoardPageResponseDto {
 
@@ -16,10 +17,10 @@ public class BoardPageResponseDto {
     private String contents;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public BoardPageResponseDto(Board board) {
         this.userId = board.getUser().getId();
@@ -33,7 +34,7 @@ public class BoardPageResponseDto {
 
     public BoardPageResponseDto(Long userId, String username, String nickname, String title,
         String contents,
-        String createdAt, String updatedAt) {
+        LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.userId = userId;
         this.username = username;
         this.nickname = nickname;

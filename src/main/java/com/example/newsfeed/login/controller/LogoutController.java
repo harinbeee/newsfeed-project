@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LogoutController {
 
-  private final LogoutService logoutService;
+    private final LogoutService logoutService;
 
-  @PostMapping
-  public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
 
-    logoutService.logout(request, response);
+        logoutService.logout(request, response);
 
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

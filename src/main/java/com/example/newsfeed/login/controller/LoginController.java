@@ -19,16 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginController {
 
-  private final LoginService loginService;
+    private final LoginService loginService;
 
-  @PostMapping
-  public ResponseEntity<Void> login(
-      @RequestBody @Valid LoginRequestDto requestDto,
-      HttpSession session,
-      HttpServletResponse response
-  ) {
-    loginService.login(requestDto.getEmail(), requestDto.getPassword(), session, response);
+    @PostMapping
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestDto requestDto,
+        HttpSession session, HttpServletResponse response) {
+        loginService.login(requestDto.getEmail(), requestDto.getPassword(), session, response);
 
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

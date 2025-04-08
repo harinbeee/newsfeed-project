@@ -15,7 +15,7 @@ public class FriendSaveResponseDto {
     public static FriendSaveResponseDto toDto(Friend friend) { // Friend > FriendSaveResponseDto 변환
         return new FriendSaveResponseDto(
             friend.getId(),
-            friend.getFromUserId(),
+            friend.getFromUser().getId(),
             friend.getToUser().getId()
         );
     }

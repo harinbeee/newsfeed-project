@@ -51,11 +51,11 @@ public class User extends BaseEntity {
 
     }
 
-    public User(String email, String password, String name, String nickname, String phone,
+    public User(String email, String password, String username, String nickname, String phone,
         String profilePicture, String description) {
         this.email = email;
         this.password = password;
-        this.name = name;
+        this.username = username;
         this.nickname = nickname;
         this.phone = phone;
         this.profilePicture = profilePicture;

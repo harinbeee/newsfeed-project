@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByIdElseThrow(userId); // 해당 user id 에 맞는 데이터 있으면 가져오고 없으면 오류
 
-        return new ResponseEntity<>(
-            UserFindResponseDto.toDto(user),
+        return new ResponseEntity<>(UserFindResponseDto.toDto(user),
             HttpStatus.OK); // 데이터 응답 dto 로 변환 후 리턴
     }
 
@@ -46,8 +45,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public UpdateUserProfileResponseDto update(
-        Long userId,
+    public UpdateUserProfileResponseDto update(Long userId,
         UpdateUserProfileRequestDto requestDto) {
 
         User findUser = userRepository.findByIdElseThrow(userId);
@@ -63,7 +61,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     /**
      * 유저 회원가입 기능
      *
@@ -74,18 +71,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<UserSaveResponseDto> save(UserSaveRequestDto requestDto) {
 
-        User user = new User(
-            requestDto.getEmail(),
-            requestDto.getPassword(),
-            requestDto.getUsername(),
-            requestDto.getNickname(),
-            requestDto.getPhone(),
-            requestDto.getProfilePicture(),
-            requestDto.getDescription()
-        );
+        User user = new User(requestDto.getEmail(), requestDto.getPassword(),
+            requestDto.getUsername(), requestDto.getNickname(), requestDto.getPhone(),
+            requestDto.getProfilePicture(), requestDto.getDescription());
 
-        return new ResponseEntity<>(
-            UserSaveResponseDto.toDto(userRepository.save(user)),
+        return new ResponseEntity<>(UserSaveResponseDto.toDto(userRepository.save(user)),
             HttpStatus.OK);
     }
 
