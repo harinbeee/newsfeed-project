@@ -1,13 +1,14 @@
 package com.example.newsfeed.boards.controller;
 
+import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -49,12 +51,29 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시글 전체조회
+     *
+     * @param page
+     * @param size
+     * @param isFriendBoard
+     * @return
+     */
     @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> findAll() {
+    public ResponseEntity<Page<BoardPageResponseDto>> findAll(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "false") boolean isFriendBoard,
+        HttpServletRequest request
+    ) {
 
-        List<BoardResponseDto> boardResponseDto = boardService.findAll();
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
+            isFriendBoard);
+
+        return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
 
 
@@ -68,13 +87,19 @@ public class BoardController {
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getId(), requestDto.getTitle(),
+            boardService.update(boardId, loginUser.getID(), requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
 
+    /**
+     * 게시글 삭제
+     *
+     * @param boardId
+     * @return
+     */
     @DeleteMapping("/{boardId}")
     public ResponseEntity<String> delete(
         @PathVariable Long boardId,

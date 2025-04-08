@@ -1,15 +1,18 @@
 package com.example.newsfeed.boards.service;
 
+import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -39,11 +42,23 @@ public class BoardServiceImpl implements BoardService {
     }
 
 
+    @Transactional(readOnly = true)
     @Override
-    public List<BoardResponseDto> findAll() {
-        List<Board> boards = boardRepository.findAll();
+    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard) {
 
-        return boards.stream().map(BoardResponseDto::toDto).toList();
+        int adjustedPage = (page > 0) ? page - 1 : 0;
+
+        PageRequest pageable = PageRequest.of(adjustedPage, size,
+            Sort.by("updatedAt").descending());
+
+        // isFriendBoard true 일 때 친구의 게시글이 우선순위
+        if (isFriendBoard == true) {
+            return boardRepository.findAllByFriendPriority(pageable, myId);
+        }
+
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+
+        return boardPage.map(BoardPageResponseDto::new);
     }
 
 
