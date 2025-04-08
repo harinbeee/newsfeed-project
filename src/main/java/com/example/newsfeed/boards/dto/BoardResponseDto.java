@@ -21,6 +21,7 @@ public class BoardResponseDto {
         this.contents = contents;
     }
 
+    // 전체 조회
     public static BoardResponseDto toDto(Board board) {
         return new BoardResponseDto(board.getId(), board.getUser().getUsername(), board.getTitle(),
             board.getContents());

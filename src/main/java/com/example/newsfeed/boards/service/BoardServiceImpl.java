@@ -14,7 +14,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
 
     @Override
-    public BoardResponseDto save(String title, String contents) {
+    public BoardResponseDto save(Long id, String title, String contents) {
 
         User findUser = userRepository.findUserByUsername(username);
 
@@ -32,6 +32,20 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards = boardRepository.findAll();
 
         return boards.stream().map(BoardResponseDto::toDto).toList();
+    }
+
+
+    @Override
+    public BoardResponseDto update(String title, String contents) {
+
+        Board board = boardRepository.findById(id);
+        User findUser = board.getUser();
+
+        String updateTitle = (title != null) ? title : board.getTitle();
+        String updateContents = (contents != null) ? contents : board.getContents();
+
+        board.update(updateTitle, updateContents);
+        return new BoardResponseDto(board.getTitle(), board.getContent());
     }
 
     @Override
