@@ -19,11 +19,9 @@ public class BoardService {
         Board board = new Board(title, contents);
         board.setUser(findUser);
 
-        Board board = boardRepository.save(board);
+        board = boardRepository.save(board);
         return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
             findUser.getUsername());
-
-
     }
 
 

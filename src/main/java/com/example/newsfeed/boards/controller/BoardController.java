@@ -4,7 +4,6 @@ import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,11 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    /**
+     * @param requestDto
+     * @param request
+     * @return
+     */
     @PostMapping
     public ResponseEntity<BoardResponseDto> save(
         @RequestBody BoardRequestDto requestDto,
