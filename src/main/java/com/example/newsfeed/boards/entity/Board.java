@@ -1,6 +1,7 @@
 package com.example.newsfeed.boards.entity;
 
 import com.example.newsfeed.common.entity.BaseEntity;
+import com.example.newsfeed.users.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,16 +28,21 @@ public class Board extends BaseEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
 
-//    @Setter
-//    @Column(nullable = false)
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @Setter
+    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Board() {
     }
 
     public Board(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
     }

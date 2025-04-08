@@ -3,6 +3,8 @@ package com.example.newsfeed.users.service;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
+import com.example.newsfeed.users.dto.UserSaveRequestDto;
+import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -60,4 +63,36 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    /**
+     * 유저 회원가입 기능
+     *
+     * @param requestDto 가입정보
+     * @return UserSaveResponseDto 와 응답코드
+     */
+    @Transactional
+    @Override
+    public ResponseEntity<UserSaveResponseDto> save(UserSaveRequestDto requestDto) {
+
+        User user = new User(
+            requestDto.getEmail(),
+            requestDto.getPassword(),
+            requestDto.getUsername(),
+            requestDto.getNickname(),
+            requestDto.getPhone(),
+            requestDto.getProfilePicture(),
+            requestDto.getDescription()
+        );
+
+        return new ResponseEntity<>(
+            UserSaveResponseDto.toDto(userRepository.save(user)),
+            HttpStatus.OK);
+    }
+
+    @Override
+    public void findByEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
+        }
+    }
 }
