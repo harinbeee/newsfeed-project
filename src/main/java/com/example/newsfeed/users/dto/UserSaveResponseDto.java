@@ -15,7 +15,11 @@ public class UserSaveResponseDto {
 
   private String password;
 
+<<<<<<< HEAD
   private String name;
+=======
+    private String username;
+>>>>>>> 2d97b16dacc3024bace2a0714f79fac446a7c7ad
 
   private String nickname;
 
@@ -33,6 +37,7 @@ public class UserSaveResponseDto {
 
   public static UserSaveResponseDto toDto(User user) { // user > UserSaveResponseDto 변환
 
+<<<<<<< HEAD
     return new UserSaveResponseDto(
         user.getId(),
         user.getEmail(),
@@ -47,4 +52,20 @@ public class UserSaveResponseDto {
         user.getUpdatedAt()
     );
   }
+=======
+        return new UserSaveResponseDto(
+            user.getId(),
+            user.getEmail(),
+            user.getPassword(),
+            user.getUsername(),
+            user.getNickname(),
+            user.getPhone(),
+            user.getProfilePicture(),
+            user.getDescription(),
+            user.isDeleted(),
+            user.getCreatedAt(),
+            user.getUpdatedAt()
+        );
+    }
+>>>>>>> 2d97b16dacc3024bace2a0714f79fac446a7c7ad
 }

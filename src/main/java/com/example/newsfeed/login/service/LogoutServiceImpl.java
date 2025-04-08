@@ -11,20 +11,20 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class LogoutServiceImpl implements LogoutService {
 
-  @Override
-  public void logout(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
 
-    HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
-    if (session != null) {
-      session.invalidate();
+        if (session != null) {
+            session.invalidate();
 
-      Cookie cookie = new Cookie("SESSIONID", null);
-      cookie.setMaxAge(0);
-      cookie.setPath("/");
-      response.addCookie(cookie);
-    } else {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 되어있지 않습니다.");
+            Cookie cookie = new Cookie("SESSIONID", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 되어있지 않습니다.");
+        }
     }
-  }
 }

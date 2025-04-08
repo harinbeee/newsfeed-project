@@ -1,18 +1,19 @@
 package com.example.newsfeed.boards.service;
 
+import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
-import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface BoardService {
 
-    BoardResponseDto save(Long userId, String title, String contents);
+    BoardResponseDto save(String name, String title, String contents);
 
-    List<BoardResponseDto> findAll();
+    Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard);
 
-    BoardResponseDto update(Long userId, Long boardId, String title, String contents);
+    BoardResponseDto update(String name, Long boardId, String title, String contents);
 
-    void delete(Long userId, Long boardId);
+    void delete(String name, Long boardId);
 
 }
