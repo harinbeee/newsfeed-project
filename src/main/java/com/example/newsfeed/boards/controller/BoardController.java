@@ -63,17 +63,28 @@ public class BoardController {
         HttpServletRequest request
     ) {
 
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, requestDto.getTitle(), requestDto.getContents());
+            boardService.update(boardId, loginUser.getId(), requestDto.getTitle(),
+                requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<String> delete(@PathVariable Long boardId) {
+    public ResponseEntity<String> delete(
+        @PathVariable Long boardId,
+        HttpServletRequest request
 
-        boardService.delete(boardId);
+    ) {
+
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
+        boardService.delete(loginUser.getId(), boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }
