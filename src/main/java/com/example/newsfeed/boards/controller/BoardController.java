@@ -47,6 +47,14 @@ public class BoardController {
 
     }
 
+    /**
+     * 게시글 전체조회
+     *
+     * @param page
+     * @param size
+     * @param isFriendBoard
+     * @return
+     */
     @GetMapping
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
