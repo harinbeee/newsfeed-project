@@ -9,7 +9,7 @@ public class UpdateUserProfileRequestDto {
 
     private final String nickname;
     private final String phone;
-    private final String profile_picture;
+    private final String profilePicture;
     private final String description;
 
 }
