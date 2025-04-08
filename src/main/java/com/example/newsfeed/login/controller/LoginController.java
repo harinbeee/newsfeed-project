@@ -2,7 +2,6 @@ package com.example.newsfeed.login.controller;
 
 
 import com.example.newsfeed.login.dto.LoginRequestDto;
-import com.example.newsfeed.login.dto.LoginResponseDto;
 import com.example.newsfeed.login.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +22,7 @@ public class LoginController {
   private final LoginService loginService;
 
   @PostMapping
-  public ResponseEntity<LoginResponseDto> login(
+  public ResponseEntity<Void> login(
       @RequestBody @Valid LoginRequestDto requestDto,
       HttpSession session,
       HttpServletResponse response
