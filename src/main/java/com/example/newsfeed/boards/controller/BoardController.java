@@ -4,9 +4,13 @@ import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,11 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    /**
+     * @param requestDto
+     * @param request
+     * @return
+     */
     @PostMapping
     public ResponseEntity<BoardResponseDto> save(
         @RequestBody BoardRequestDto requestDto,
@@ -34,6 +43,22 @@ public class BoardController {
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BoardResponseDto>> findAll() {
+
+        List<BoardResponseDto> boardResponseDto = boardService.findAll();
+
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<String> delete(@PathVariable Long boardId) {
+
+        boardService.delete(boardId);
+
+        return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }
 
 
