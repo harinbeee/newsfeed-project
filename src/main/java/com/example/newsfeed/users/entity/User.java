@@ -42,6 +42,21 @@ public class User extends BaseEntity {
     @Column
     private boolean isDeleted;
 
+    public User() {
+
+    }
+
+    public User(String email, String password, String name, String nickname, String phone,
+        String profilePicture, String description) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.profilePicture = profilePicture;
+        this.description = description;
+    }
+
     public boolean isDeleted() {
         return isDeleted;
     }

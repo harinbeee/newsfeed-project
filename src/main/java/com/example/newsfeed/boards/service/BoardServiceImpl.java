@@ -24,7 +24,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.save(board);
         return new BoardResponseDto(board.getId(), board.getTitle(), board.getContents(),
             findUser.getUsername());
-
     }
 
     @Override
