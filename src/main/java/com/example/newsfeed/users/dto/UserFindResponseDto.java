@@ -3,7 +3,9 @@ package com.example.newsfeed.users.dto;
 import com.example.newsfeed.users.entity.User;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class UserFindResponseDto {
 

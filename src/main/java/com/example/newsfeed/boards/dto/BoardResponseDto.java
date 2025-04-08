@@ -1,6 +1,5 @@
 package com.example.newsfeed.boards.dto;
 
-import com.example.newsfeed.boards.entity.Board;
 import lombok.Getter;
 
 @Getter
