@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.entity;
 
+import com.example.newsfeed.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +12,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +42,7 @@ public class User {
     @Column
     private boolean isDeleted;
 
-
+    public boolean isDeleted() {
+        return isDeleted;
+    }
 }
