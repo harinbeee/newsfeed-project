@@ -4,14 +4,17 @@ import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
+import com.example.newsfeed.users.dto.UserFindResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,10 +70,27 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         session.getAttribute("loginUser");
 
-        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
-            isFriendBoard);
+        List<BoardResponseDto> boardResponseDto = boardService.findAll();
 
-        return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<BoardResponseDto> update(
+        @PathVariable Long boardId,
+        @RequestBody BoardRequestDto requestDto,
+        HttpServletRequest request
+    ) {
+
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
+        BoardResponseDto boardResponseDto =
+            boardService.update(boardId, loginUser.getId(), requestDto.getTitle(),
+                requestDto.getContents());
+
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
 
@@ -81,9 +101,16 @@ public class BoardController {
      * @return
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<String> delete(@PathVariable Long boardId) {
+    public ResponseEntity<String> delete(
+        @PathVariable Long boardId,
+        HttpServletRequest request
 
-        boardService.delete(boardId);
+    ) {
+
+        HttpSession session = request.getSession(false);
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+
+        boardService.delete(loginUser.getId(), boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
     }
