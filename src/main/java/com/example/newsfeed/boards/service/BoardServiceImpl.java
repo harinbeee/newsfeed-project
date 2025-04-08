@@ -8,7 +8,9 @@ import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board savedboard = boardRepository.save(board);
         return new BoardResponseDto(savedboard.getId(), board.getTitle(), board.getContents(),
-            findUser.getName());
+            findUser.getNickname());
         
     }
 
@@ -41,21 +43,34 @@ public class BoardServiceImpl implements BoardService {
 
 
     @Override
-    public BoardResponseDto update(Long boardId, String title, String contents) {
+    public BoardResponseDto update(Long userId, Long boardId, String title, String contents) {
 
-        Optional<Board> board = boardRepository.findById(boardId);
+        Board findboard = boardRepository.findByIdOrElseThrow(boardId);
 
-        String updateTitle = (title != null) ? title : board.getTitle();
-        String updateContents = (contents != null) ? contents : board.getContents();
+        // 작성자 = 로그인유저인지 검증
+        if (findboard.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
-        board.update(updateTitle, updateContents);
-        return new BoardResponseDto(board.getTitle(), board.getContent());
+        // 기존 내용 저장하기,,,,
+        String updateTitle = (title != null) ? title : findboard.getTitle();
+        String updateContents = (contents != null) ? contents : findboard.getContents();
+
+        findboard.update(updateTitle, updateContents);
+        return new BoardResponseDto(boardId, findboard.getUser().getNickname(),
+            findboard.getTitle(),
+            findboard.getContents());
     }
 
     @Override
-    public void delete(Long boardId) {
+    public void delete(Long userId, Long boardId) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+
+        // 작성자 = 로그인유저인지 검증
+        if (findBoard.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         boardRepository.delete(findBoard);
     }
