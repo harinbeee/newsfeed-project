@@ -1,4 +1,4 @@
-package com.example.newsfeed.users.serivce;
+package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.entity.User;
