@@ -27,4 +27,5 @@ public class BoardService {
     }
 
 
+    void delete(Long boardId);
 }
