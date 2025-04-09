@@ -93,8 +93,10 @@ public class UserServiceImpl implements UserService {
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             if (userRepository.findByEmail(email).get().isDeleted()) {
+                // 회원가입시 탈퇴된 회원 예외처리
                 throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
             } else {
+                // 회원가입시 중복된 회원 예외처리
                 throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
             }
         }
@@ -120,6 +122,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
+        // 회원 정보에 탈퇴 입력
         user.setDeleted(true);
         userRepository.save(user);
 
