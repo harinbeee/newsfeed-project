@@ -46,7 +46,7 @@ public class FriendController {
 
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
-        if (fromUserId.equals(requestDto.getToUserId())) {
+        if (fromUserId.equals(requestDto.getToUserId())) { // 같은 유저를 팔로우 하는지 체크
             throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
         }
 
@@ -71,7 +71,8 @@ public class FriendController {
 
         Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
-        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(toUserId);
+        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(
+            toUserId); // 날 팔로우 하는 사람 리스트
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
@@ -88,7 +89,8 @@ public class FriendController {
 
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
-        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(fromUserId);
+        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(
+            fromUserId); // 내가 팔로우 한 사람 리스트
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 

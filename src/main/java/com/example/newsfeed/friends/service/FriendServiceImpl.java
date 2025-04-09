@@ -32,9 +32,7 @@ public class FriendServiceImpl implements FriendService {
 
         //db에 이미 같은 형식의 데이터가 있는지 체크
         if (friendRepository.findByToUserIdAndFromUserId(toUserId, fromUserId).isPresent()) {
-            throw new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "중복된 데이터가 존재함"
-            );
+            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
         }
 
         User toUser = userRepository.findByIdElseThrow(toUserId);
