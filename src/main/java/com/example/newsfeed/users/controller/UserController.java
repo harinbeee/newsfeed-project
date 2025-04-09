@@ -8,6 +8,8 @@ import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -87,8 +89,8 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
-        HttpSession session) {
-        userService.isDeleted(requsetDto, session);
+        HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        userService.isDeleted(requsetDto, session, request, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

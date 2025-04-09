@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.login.service.LogoutService;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -9,6 +10,8 @@ import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final LogoutService logoutService;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -98,7 +102,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session) {
+    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session,
+        HttpServletRequest request, HttpServletResponse response) {
 
         Long sessionUserId = (Long) session.getAttribute("user");
         User user = userRepository.findByIdElseThrow(sessionUserId);
@@ -118,6 +123,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // 로그아웃 실행
+        logoutService.logout(request, response);
     }
 
     /**
