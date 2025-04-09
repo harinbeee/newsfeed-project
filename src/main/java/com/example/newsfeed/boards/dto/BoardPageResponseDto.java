@@ -3,7 +3,9 @@ package com.example.newsfeed.boards.dto;
 import com.example.newsfeed.boards.entity.Board;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class BoardPageResponseDto {
 
     private Long userId;
