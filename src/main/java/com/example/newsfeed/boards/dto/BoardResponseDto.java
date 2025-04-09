@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BoardResponseDto {
 
-    private Long id;
+    private Long boardId;
 
     private String nickname;
 
@@ -25,7 +25,7 @@ public class BoardResponseDto {
     // 전체 조회
     public static BoardResponseDto toDto(Board board) {
         return new BoardResponseDto(
-            board.getId(),
+            board.getBoardId(),
             board.getUser().getNickname(),
             board.getTitle(),
             board.getContents(),
