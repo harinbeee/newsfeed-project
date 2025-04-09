@@ -1,6 +1,11 @@
 package com.example.newsfeed.users.service;
 
+<<<<<<< HEAD
 import com.example.newsfeed.login.service.LogoutService;
+=======
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
+>>>>>>> 37a6a745df7f8c653e7c1b9378c63e6c91bec608
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -15,11 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +37,11 @@ public class UserServiceImpl implements UserService {
      * @return ResponseEntity 응답데이터와 200 코드
      */
     @Override
-    public ResponseEntity<UserFindResponseDto> find(Long userId) {
+    public UserFindResponseDto find(Long userId) {
 
         User user = userRepository.findByIdElseThrow(userId); // 해당 user id 에 맞는 데이터 있으면 가져오고 없으면 오류
 
-        return new ResponseEntity<>(UserFindResponseDto.toDto(user),
-            HttpStatus.OK); // 데이터 응답 dto 로 변환 후 리턴
+        return UserFindResponseDto.toDto(user); // 데이터 응답 dto 로 변환 후 리턴
     }
 
     /**
@@ -76,14 +77,13 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public ResponseEntity<UserSaveResponseDto> save(UserSaveRequestDto requestDto) {
+    public UserSaveResponseDto save(UserSaveRequestDto requestDto) {
 
         User user = new User(requestDto.getEmail(), requestDto.getPassword(),
             requestDto.getUsername(), requestDto.getNickname(), requestDto.getPhone(),
             requestDto.getProfilePicture(), requestDto.getDescription());
 
-        return new ResponseEntity<>(UserSaveResponseDto.toDto(userRepository.save(user)),
-            HttpStatus.OK);
+        return UserSaveResponseDto.toDto(userRepository.save(user));
 
     }
 
@@ -95,11 +95,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
+<<<<<<< HEAD
             if (userRepository.findByEmail(email).get().isDeleted()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 재가입 할 수 없습니다.");
             } else {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
             }
+=======
+            throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
+>>>>>>> 37a6a745df7f8c653e7c1b9378c63e6c91bec608
         }
     }
 
@@ -115,12 +119,12 @@ public class UserServiceImpl implements UserService {
 
         // 미로그인 처리
         if (sessionUserId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 하지 않았습니다.");
+            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
         }
 
         // 비밀번호 체크
         if (password.equals(requsetDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+            throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
         user.setDeleted(true);
@@ -131,6 +135,8 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 비밀번호 수정 메소드
+     *
      * @param userId     유저 식별자 ID
      * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
      */
@@ -139,7 +145,7 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
 
         if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 일치합니다.");
+            throw new BusinessException(ExceptionCode.PASSWORD_NOT_CHANGED);
         }
 
         User user = userRepository.findByIdElseThrow(userId);
