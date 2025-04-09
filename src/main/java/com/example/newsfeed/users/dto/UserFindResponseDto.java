@@ -23,9 +23,9 @@ public class UserFindResponseDto {
 
         return new UserFindResponseDto(
             user.getId(),
-            user.getUsername(),
-            user.getProfilePicture(),
             user.getNickname(),
+            user.getProfilePicture(),
+            user.getDescription(),
             user.getUpdatedAt()
         );
     }
