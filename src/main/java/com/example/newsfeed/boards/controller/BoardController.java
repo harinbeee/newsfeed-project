@@ -111,12 +111,9 @@ public class BoardController {
 
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
-        User user = userRepository.findByIdElseThrow(userId);
-
-        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
+            boardService.update(boardId, userId, requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);

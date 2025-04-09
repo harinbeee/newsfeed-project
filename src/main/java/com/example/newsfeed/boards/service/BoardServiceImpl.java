@@ -81,22 +81,16 @@ public class BoardServiceImpl implements BoardService {
         return BoardResponseDto.toDto(findBoard);
     }
 
-    /**
-     * @param boardId
-     * @param name
-     * @param title
-     * @param contents
-     * @return
-     */
+
     @Transactional
     @Override
-    public BoardResponseDto update(Long boardId, String name, String title, String contents) {
+    public BoardResponseDto update(Long boardId, Long userId, String title, String contents) {
 
         // 게시글 찾기
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인 유저인지 검증
-        if (findBoard.getUser().getNickname().equals(name)) {
+        if (!findBoard.getUser().getId().equals(userId)) {
             throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }
 
@@ -121,7 +115,7 @@ public class BoardServiceImpl implements BoardService {
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인 유저인지 검증
-        if (findBoard.getUser().getNickname().equals(name)) {
+        if (!findBoard.getUser().getNickname().equals(name)) {
             throw new BusinessException(ExceptionCode.BOARD_DELETE_FORBIDDEN);
         }
 

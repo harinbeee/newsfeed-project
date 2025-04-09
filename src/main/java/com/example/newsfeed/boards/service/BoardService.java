@@ -14,7 +14,7 @@ public interface BoardService {
 
     BoardResponseDto findOne(Long boardId);
 
-    BoardResponseDto update(Long boardId, String name, String title, String contents);
+    BoardResponseDto update(Long boardId, Long userId, String title, String contents);
 
     void delete(String name, Long boardId);
 
