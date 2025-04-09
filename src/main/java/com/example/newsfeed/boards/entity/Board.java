@@ -29,7 +29,6 @@ public class Board extends BaseEntity {
     private String contents;
 
     @Setter
-    @Column(nullable = false)
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
