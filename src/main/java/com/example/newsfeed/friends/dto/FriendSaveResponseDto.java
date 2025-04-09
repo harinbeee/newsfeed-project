@@ -2,7 +2,9 @@ package com.example.newsfeed.friends.dto;
 
 import com.example.newsfeed.friends.entity.Friend;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class FriendSaveResponseDto {
 

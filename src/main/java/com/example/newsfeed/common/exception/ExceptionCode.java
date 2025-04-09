@@ -16,6 +16,7 @@ public enum ExceptionCode {
     BOARD_DELETE_FORBIDDEN(400, "", "작성자 본인만 삭제할 수 있습니다."),
     LOGIN_FORBIDDEN(400, "", "탈퇴한 회원은 로그인 하실 수 없습니다."),
     SIGNUP_FORBIDDEN(400, "", "탈퇴한 회원은 재가입 할 수 없습니다."),
+    DB_DATA_CONFLICT(400, "", "동일한 값이 존재 합니다"),
 
     // 401
     NOT_LOGIN_ERROR(401, "", "로그인이 필요합니다."),
