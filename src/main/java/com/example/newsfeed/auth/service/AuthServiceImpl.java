@@ -1,4 +1,4 @@
-package com.example.newsfeed.login.service;
+package com.example.newsfeed.auth.service;
 
 import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
@@ -6,6 +6,7 @@ import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginServiceImpl implements LoginService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -37,6 +38,23 @@ public class LoginServiceImpl implements LoginService {
             response.addCookie(cookie);
         } else {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
+        }
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+
+            Cookie cookie = new Cookie("SESSIONID", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
         }
     }
 }

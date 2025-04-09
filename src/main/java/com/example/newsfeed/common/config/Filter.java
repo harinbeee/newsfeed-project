@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class Filter extends OncePerRequestFilter {
 
-    private static final String[] WHITE_LIST = {"/users/signup", "/login"};
+    private static final String[] WHITE_LIST = {"/signup", "/login"};
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
