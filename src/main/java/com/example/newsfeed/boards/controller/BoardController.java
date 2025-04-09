@@ -54,10 +54,10 @@ public class BoardController {
     /**
      * 게시글 전체조회
      *
-     * @param page
-     * @param size
-     * @param isFriendBoard
-     * @return
+     * @param page          페이지
+     * @param size          페이지당 개수
+     * @param isFriendBoard true = 친구의 게시글 우선정렬
+     * @return Page dto
      */
     @GetMapping
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
@@ -75,7 +75,6 @@ public class BoardController {
 
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
-
 
     @PatchMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> update(
