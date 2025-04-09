@@ -13,8 +13,6 @@ public class UserSaveResponseDto {
 
     private String email;
 
-    private String password;
-
     private String username;
 
     private String nickname;
@@ -36,7 +34,6 @@ public class UserSaveResponseDto {
         return new UserSaveResponseDto(
             user.getId(),
             user.getEmail(),
-            user.getPassword(),
             user.getUsername(),
             user.getNickname(),
             user.getPhone(),
