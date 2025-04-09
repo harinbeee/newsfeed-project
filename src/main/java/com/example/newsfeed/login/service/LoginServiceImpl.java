@@ -1,5 +1,6 @@
 package com.example.newsfeed.login.service;
 
+import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void login(String email, String password, HttpSession session,
@@ -26,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
             throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
         }
 
-        if (findUser.getPassword().equals(password)) {
+        if (passwordEncoder.matches(password, findUser.getPassword())) {
             session.setAttribute("user", findUser.getId());
 
             Cookie cookie = new Cookie("SESSIONID", session.getId());
