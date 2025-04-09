@@ -8,6 +8,7 @@ import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -56,10 +57,14 @@ public class UserController {
     @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
-        @RequestBody UpdateUserProfileRequestDto requestDto
+        @RequestBody UpdateUserProfileRequestDto requestDto,
+        HttpServletRequest request
     ) {
+        HttpSession session = request.getSession(false);
 
-        UpdateUserProfileResponseDto updatedUser = userService.update(userId, requestDto);
+        Long loginId = (Long) session.getAttribute("user");
+
+        UpdateUserProfileResponseDto updatedUser = userService.update(userId, loginId, requestDto);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 
@@ -89,9 +94,11 @@ public class UserController {
 
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
-        HttpSession session) {
-        userService.isDeleted(requsetDto, session);
+    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requestDto,
+        @PathVariable Long userId,
+        HttpSession session
+    ) {
+        userService.isDeleted(requestDto, userId, session);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

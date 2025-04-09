@@ -23,10 +23,11 @@ public interface UserService {
      * @param userId 유저 식별자 ID
      * @return 수정된 유저 정보가 담겨있는 응답 DTO 객체
      */
-    UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
+    UpdateUserProfileResponseDto update(Long userId, Long loginId,
+        UpdateUserProfileRequestDto requestDto);
 
 
-    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session);
+    void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpSession session);
 
     /**
      * 비밀번호 수정 메소드

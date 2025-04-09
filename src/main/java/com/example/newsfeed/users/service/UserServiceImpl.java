@@ -1,7 +1,9 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.exception.UserAccessDeniedException;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -46,12 +49,16 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public UpdateUserProfileResponseDto update(Long userId,
+    public UpdateUserProfileResponseDto update(Long userId, Long loginId,
         UpdateUserProfileRequestDto requestDto) {
+        // 로그인한 유저와 수정하려는 유저의 id 비교
+        if (!userId.equals(loginId)) {
+            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+        }
 
         User findUser = userRepository.findByIdElseThrow(userId);
 
-        // 별명, 전화번호, 프로필사진, 설명은 null이 될 수 있으므로 선택적으로 데이터 설정
+        // 별명, 전화번호, 프로필사진, 설명은 null 이 될 수 있으므로 선택적으로 데이터 설정
         Optional.ofNullable(requestDto.getNickname()).ifPresent(findUser::setNickname);
         Optional.ofNullable(requestDto.getPhone()).ifPresent(findUser::setPhone);
         Optional.ofNullable(requestDto.getProfilePicture()).ifPresent(findUser::setProfilePicture);
@@ -71,8 +78,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserSaveResponseDto save(UserSaveRequestDto requestDto) {
+        // 비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(requestDto.getEmail(), requestDto.getPassword(),
+        User user = new User(requestDto.getEmail(), encodedPassword,
             requestDto.getUsername(), requestDto.getNickname(), requestDto.getPhone(),
             requestDto.getProfilePicture(), requestDto.getDescription());
 
@@ -95,19 +104,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session) {
+    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpSession session) {
 
         Long sessionUserId = (Long) session.getAttribute("user");
+
+        if (!userId.equals(sessionUserId)) {
+            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+        }
+
         User user = userRepository.findByIdElseThrow(sessionUserId);
         String password = user.getPassword();
 
-        // 미로그인 처리
-        if (sessionUserId == null) {
-            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
-        }
-
         // 비밀번호 체크
-        if (password.equals(requsetDto.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), password)) {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
