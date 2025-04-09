@@ -2,9 +2,9 @@ package com.example.newsfeed.auth.controller;
 
 
 import com.example.newsfeed.auth.dto.LoginRequestDto;
+import com.example.newsfeed.auth.dto.UserSaveRequestDto;
+import com.example.newsfeed.auth.dto.UserSaveResponseDto;
 import com.example.newsfeed.auth.service.AuthService;
-import com.example.newsfeed.users.dto.UserSaveRequestDto;
-import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -68,7 +68,7 @@ public class AuthController {
 
         userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
 
-        UserSaveResponseDto responseDto = userService.save(requestDto); // 중복 없으면 가입
+        UserSaveResponseDto responseDto = authService.save(requestDto); // 중복 없으면 가입
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 

@@ -1,4 +1,4 @@
-package com.example.newsfeed.users.dto;
+package com.example.newsfeed.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

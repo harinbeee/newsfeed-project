@@ -10,8 +10,6 @@ import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.dto.UserSaveRequestDto;
-import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,27 +67,6 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(requestDto.getDescription()).ifPresent(findUser::setDescription);
 
         return UpdateUserProfileResponseDto.toDto(findUser);
-
-    }
-
-
-    /**
-     * 유저 회원가입 기능
-     *
-     * @param requestDto 가입정보
-     * @return UserSaveResponseDto 와 응답코드
-     */
-    @Transactional
-    @Override
-    public UserSaveResponseDto save(UserSaveRequestDto requestDto) {
-        // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-
-        User user = new User(requestDto.getEmail(), encodedPassword, requestDto.getUsername(),
-            requestDto.getNickname(), requestDto.getPhone(), requestDto.getProfilePicture(),
-            requestDto.getDescription());
-
-        return UserSaveResponseDto.toDto(userRepository.save(user));
 
     }
 

@@ -5,8 +5,6 @@ import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.dto.UserSaveRequestDto;
-import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +13,7 @@ public interface UserService {
 
     UserFindResponseDto find(Long userId);
 
-    UserSaveResponseDto save(UserSaveRequestDto requestDto);
+    ;
 
     void findByEmail(String email);
 
