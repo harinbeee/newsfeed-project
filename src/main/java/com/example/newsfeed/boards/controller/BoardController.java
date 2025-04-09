@@ -5,6 +5,8 @@ import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
+import com.example.newsfeed.users.entity.User;
+import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
 
     private final BoardService boardService;
+    private final UserRepository userRepository;
 
     /**
      * 게시글 생성
@@ -41,7 +44,10 @@ public class BoardController {
         HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+        Long userId = (Long) session.getAttribute("user");
+        User user = userRepository.findByIdElseThrow(userId);
+
+        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         BoardResponseDto boardResponseDto =
             boardService.save(loginUser.getNickname(), requestDto.getTitle(),
@@ -68,7 +74,7 @@ public class BoardController {
     ) {
 
         HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("loginUser");
+        Long userId = (Long) session.getAttribute("user");
 
         Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
             isFriendBoard, userId);
@@ -106,7 +112,7 @@ public class BoardController {
         HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("user");
 
         BoardResponseDto boardResponseDto =
             boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
@@ -129,7 +135,7 @@ public class BoardController {
         HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
+        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("user");
 
         boardService.delete(loginUser.getNickname(), boardId);
 
