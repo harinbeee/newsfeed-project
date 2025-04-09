@@ -8,6 +8,7 @@ import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final EntityManager em;
 
     /**
      * @param
@@ -90,6 +92,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponseDto update(Long boardId, String name, String title, String contents) {
 
+        // 게시글 찾기
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인 유저인지 검증
@@ -102,7 +105,10 @@ public class BoardServiceImpl implements BoardService {
         String updateContents = (contents != null) ? contents : findBoard.getContents();
 
         findBoard.update(updateTitle, updateContents);
-        return BoardResponseDto.toDto(findBoard);
+        em.flush();
+        Board updatedBoard = boardRepository.findByIdOrElseThrow(boardId); // 업데이트 내용 저장
+
+        return BoardResponseDto.toDto(updatedBoard);
     }
 
     /**
