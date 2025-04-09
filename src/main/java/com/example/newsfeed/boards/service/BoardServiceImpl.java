@@ -4,16 +4,16 @@ import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -96,7 +96,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 작성자 = 로그인 유저인지 검증
         if (findboard.getUser().getNickname().equals(name)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }
 
         // 기존 내용 저장
@@ -120,7 +120,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 작성자 = 로그인 유저인지 검증
         if (findBoard.getUser().getNickname().equals(name)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new BusinessException(ExceptionCode.BOARD_DELETE_FORBIDDEN);
         }
 
         boardRepository.delete(findBoard);

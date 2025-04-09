@@ -1,11 +1,11 @@
 package com.example.newsfeed.friends.repository;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.friends.entity.Friend;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
 
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, Long> {
@@ -14,6 +14,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     default Friend findByIdElseThrow(Long id) {
         return findById(id).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "아이디가 존재하지 않습니다."));
+            () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
     }
 }

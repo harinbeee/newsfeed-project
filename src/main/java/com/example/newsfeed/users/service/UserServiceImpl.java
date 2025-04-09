@@ -1,5 +1,7 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -12,10 +14,8 @@ import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
+            throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
         }
     }
 
@@ -103,12 +103,12 @@ public class UserServiceImpl implements UserService {
 
         // 미로그인 처리
         if (sessionUserId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 하지 않았습니다.");
+            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
         }
 
         // 비밀번호 체크
         if (password.equals(requsetDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+            throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
         user.setDeleted(true);
@@ -116,6 +116,8 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 비밀번호 수정 메소드
+     *
      * @param userId     유저 식별자 ID
      * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
      */
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
 
         if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 일치합니다.");
+            throw new BusinessException(ExceptionCode.PASSWORD_NOT_CHANGED);
         }
 
         User user = userRepository.findByIdElseThrow(userId);
