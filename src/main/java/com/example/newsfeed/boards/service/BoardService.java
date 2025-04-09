@@ -10,7 +10,7 @@ public interface BoardService {
 
     BoardResponseDto save(String name, String title, String contents);
 
-    Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard);
+    Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard, Long userId);
 
     BoardResponseDto update(String name, Long boardId, String title, String contents);
 
