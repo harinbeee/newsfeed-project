@@ -66,7 +66,7 @@ public class BoardController {
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "false") boolean isFriendBoardㅎ,
+        @RequestParam(defaultValue = "false") boolean isFriendBoard,
         HttpServletRequest request
     ) {
 
