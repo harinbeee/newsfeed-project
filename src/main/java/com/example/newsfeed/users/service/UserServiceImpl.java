@@ -1,12 +1,15 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
+import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -91,4 +94,46 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
         }
     }
+
+
+    @Override
+    @Transactional
+    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session) {
+
+        Long sessionUserId = (Long) session.getAttribute("user");
+        User user = userRepository.findByIdElseThrow(sessionUserId);
+        String password = user.getPassword();
+
+        // 미로그인 처리
+        if (sessionUserId == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 하지 않았습니다.");
+        }
+
+        // 비밀번호 체크
+        if (password.equals(requsetDto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        }
+
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+
+    /**
+     * @param userId     유저 식별자 ID
+     * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
+     */
+    @Transactional
+    @Override
+    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
+
+        if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 일치합니다.");
+        }
+
+        User user = userRepository.findByIdElseThrow(userId);
+        user.updatePassword(requestDto.getNewPassword());
+
+    }
+
+
 }

@@ -44,6 +44,7 @@ public class User extends BaseEntity {
     @Column
     private String description;
 
+    @Setter
     @Column
     private boolean isDeleted;
 
@@ -65,4 +66,9 @@ public class User extends BaseEntity {
     public boolean isDeleted() {
         return isDeleted;
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 }
