@@ -79,6 +79,11 @@ public class UserServiceImpl implements UserService {
             HttpStatus.OK);
     }
 
+    /**
+     * 이메일 중복체크
+     *
+     * @param email 유저가 입력한 이메일
+     */
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
