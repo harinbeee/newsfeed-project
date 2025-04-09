@@ -3,6 +3,9 @@ package com.example.newsfeed.auth.controller;
 
 import com.example.newsfeed.auth.dto.LoginRequestDto;
 import com.example.newsfeed.auth.service.AuthService;
+import com.example.newsfeed.users.dto.UserSaveRequestDto;
+import com.example.newsfeed.users.dto.UserSaveResponseDto;
+import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     /**
      * @param requestDto 이메일과 비밀번호 요청
@@ -48,4 +52,26 @@ public class AuthController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 유저 회원가입 메소드
+     *
+     * @param requestDto { “email”: String, “password”: String, “username”: String, “nickname”:
+     *                   String, “phone”: String, “profile_picture”: String, “description”: String,
+     *                   }
+     * @return UserSaveResponseDto, 응답코드 200 성공 401 에러
+     */
+    @PostMapping("/signup")
+    public ResponseEntity<UserSaveResponseDto> signUp(
+        @RequestBody @Valid UserSaveRequestDto requestDto
+    ) {
+
+        userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
+
+        UserSaveResponseDto responseDto = userService.save(requestDto); // 중복 없으면 가입
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
+    }
+
 }
