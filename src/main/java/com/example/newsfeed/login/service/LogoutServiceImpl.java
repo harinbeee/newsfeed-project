@@ -1,13 +1,13 @@
 package com.example.newsfeed.login.service;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class LogoutServiceImpl implements LogoutService {
             cookie.setPath("/");
             response.addCookie(cookie);
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 되어있지 않습니다.");
+            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
         }
     }
 }

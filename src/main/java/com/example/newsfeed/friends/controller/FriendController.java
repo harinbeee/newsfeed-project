@@ -47,7 +47,7 @@ public class FriendController {
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
         if (fromUserId.equals(requestDto.getToUserId())) {
-            throw new BusinessException(ExceptionCode.USER_DATA_CONFLICT);
+            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
         }
 
         FriendSaveResponseDto responseDto = friendService.save(

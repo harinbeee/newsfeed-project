@@ -1,5 +1,7 @@
 package com.example.newsfeed.friends.service;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.entity.Friend;
@@ -8,9 +10,7 @@ import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -92,11 +92,7 @@ public class FriendServiceImpl implements FriendService {
     public void delete(Long toUserId, Long fromUserId) {
         Friend friend = friendRepository
             .findByToUserIdAndFromUserId(toUserId, fromUserId)
-            .orElseThrow(() ->
-                new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "유저 식별자가 존재하지 않음"
-                )
-            );
+            .orElseThrow(() -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
         friendRepository.delete(friend);
     }
 
