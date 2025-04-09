@@ -9,6 +9,7 @@ import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
 
@@ -36,6 +37,6 @@ public interface UserService {
      * @param userId     유저 식별자 ID
      * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
      */
-    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto);
+    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto, HttpSession session);
 
 }

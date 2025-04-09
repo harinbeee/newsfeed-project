@@ -149,13 +149,28 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
+    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto,
+        HttpSession session) {
 
+        Long sessionUserId = (Long) session.getAttribute("user");
+
+        // 로그인한 유저와 삭제하려는 유저의 id 비교
+        if (!userId.equals(sessionUserId)) {
+            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+        }
+
+        User user = userRepository.findByIdElseThrow(userId);
+
+        // 비밀번호 체크
+        if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
+            throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
+        }
+
+        // 기존 비밀번호와 새로운 비밀번호 똑같은지 비교
         if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
             throw new BusinessException(ExceptionCode.PASSWORD_NOT_CHANGED);
         }
 
-        User user = userRepository.findByIdElseThrow(userId);
         user.updatePassword(requestDto.getNewPassword());
 
     }
