@@ -32,7 +32,7 @@ public class Filter extends OncePerRequestFilter {
         }
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
+        if (session == null || session.getAttribute("user") == null) {
             ErrorResponse errorResponse = ErrorResponse.of(ExceptionCode.NOT_LOGIN_ERROR,
                 "로그인이 필요합니다.");
 
