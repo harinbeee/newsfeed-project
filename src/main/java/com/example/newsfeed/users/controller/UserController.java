@@ -41,6 +41,13 @@ public class UserController {
         return userService.find(userId);
     }
 
+    /**
+     * 유저 프로필 수정 요청 컨트롤러
+     *
+     * @param userId     유저 식별자 id
+     * @param requestDto 수정할 데이터가 담겨있는 {@link UpdateUserProfileRequestDto} 객체
+     * @return 수정된 정보가 담겨있는 응답 객체
+     */
     @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
