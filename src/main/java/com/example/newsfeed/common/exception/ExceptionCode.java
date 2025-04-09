@@ -16,7 +16,6 @@ public enum ExceptionCode {
     BOARD_DELETE_FORBIDDEN(400, "", "작성자 본인만 삭제할 수 있습니다."),
     LOGIN_FORBIDDEN(400, "", "탈퇴한 회원은 로그인 하실 수 없습니다."),
     SIGNUP_FORBIDDEN(400, "", "탈퇴한 회원은 재가입 할 수 없습니다."),
-    DB_DATA_CONFLICT(400, "", "동일한 값이 존재 합니다"),
     ALREADY_LOGIN(400, "", "이미 로그인 되어있습니다."),
 
     // 401
@@ -27,7 +26,10 @@ public enum ExceptionCode {
 
     // 404
     BOARD_NOT_FOUND(404, "", "게시글이 존재하지 않습니다."),
-    USER_NOT_FOUND(404, "", "유저 정보를 찾을 수 없습니다.");
+    USER_NOT_FOUND(404, "", "유저 정보를 찾을 수 없습니다."),
+
+    //409
+    DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다");
 
     private final int status;
     private final String code;
