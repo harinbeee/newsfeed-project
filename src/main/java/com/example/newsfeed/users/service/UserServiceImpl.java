@@ -1,11 +1,8 @@
 package com.example.newsfeed.users.service;
 
-<<<<<<< HEAD
-import com.example.newsfeed.login.service.LogoutService;
-=======
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
->>>>>>> 37a6a745df7f8c653e7c1b9378c63e6c91bec608
+import com.example.newsfeed.login.service.LogoutService;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -20,8 +17,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -95,15 +94,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-<<<<<<< HEAD
             if (userRepository.findByEmail(email).get().isDeleted()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 재가입 할 수 없습니다.");
             } else {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
+                throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
             }
-=======
-            throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
->>>>>>> 37a6a745df7f8c653e7c1b9378c63e6c91bec608
         }
     }
 

@@ -27,13 +27,8 @@ public interface UserService {
      */
     UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
 
-
-<<<<<<< HEAD
     void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session, HttpServletRequest request,
         HttpServletResponse response);
-=======
-    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session);
->>>>>>> 37a6a745df7f8c653e7c1b9378c63e6c91bec608
 
     /**
      * 비밀번호 수정 메소드
