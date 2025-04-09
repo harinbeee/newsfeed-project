@@ -80,6 +80,7 @@ public class UserServiceImpl implements UserService {
 
         return new ResponseEntity<>(UserSaveResponseDto.toDto(userRepository.save(user)),
             HttpStatus.OK);
+
     }
 
     /**
