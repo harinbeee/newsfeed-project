@@ -57,9 +57,9 @@ public class BoardController {
     /**
      * 게시글 전체조회
      *
-     * @param page
-     * @param size
-     * @param isFriendBoard
+     * @param page          페이지
+     * @param size          페이지당 개수
+     * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
      * @return
      */
     @GetMapping
