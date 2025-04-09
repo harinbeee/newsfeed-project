@@ -1,17 +1,15 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.auth.service.AuthService;
 import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.exception.UserAccessDeniedException;
-import com.example.newsfeed.login.service.LogoutService;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.dto.UserSaveRequestDto;
-import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final LogoutService logoutService;
+    private final AuthService authService;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -72,27 +70,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
-    /**
-     * 유저 회원가입 기능
-     *
-     * @param requestDto 가입정보
-     * @return UserSaveResponseDto 와 응답코드
-     */
-    @Transactional
-    @Override
-    public UserSaveResponseDto save(UserSaveRequestDto requestDto) {
-        // 비밀번호 인코딩
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-
-        User user = new User(requestDto.getEmail(), encodedPassword,
-            requestDto.getUsername(), requestDto.getNickname(), requestDto.getPhone(),
-            requestDto.getProfilePicture(), requestDto.getDescription());
-
-        return UserSaveResponseDto.toDto(userRepository.save(user));
-
-    }
-
     /**
      * 이메일 중복체크
      *
@@ -114,8 +91,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId,
-        HttpServletRequest request, HttpServletResponse response) {
+    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
+        HttpServletResponse response) {
 
         HttpSession session = request.getSession(false);
         Long sessionUserId = (Long) session.getAttribute("user");
@@ -138,7 +115,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         // 로그아웃 실행
-        logoutService.logout(request, response);
+        authService.logout(request, response);
     }
 
     /**

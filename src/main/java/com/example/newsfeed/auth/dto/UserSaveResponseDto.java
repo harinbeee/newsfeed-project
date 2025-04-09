@@ -1,4 +1,4 @@
-package com.example.newsfeed.users.dto;
+package com.example.newsfeed.auth.dto;
 
 import com.example.newsfeed.users.entity.User;
 import java.time.LocalDateTime;
