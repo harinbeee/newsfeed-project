@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BoardService {
 
-    BoardResponseDto save(String name, String title, String contents);
+    BoardResponseDto save(Long userId, String title, String contents);
 
     Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard, Long userId);
 

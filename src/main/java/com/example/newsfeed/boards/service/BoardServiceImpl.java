@@ -31,9 +31,9 @@ public class BoardServiceImpl implements BoardService {
      * @return
      */
     @Override
-    public BoardResponseDto save(String username, String title, String contents) {
+    public BoardResponseDto save(Long userId, String title, String contents) {
         // username으로 유저 찾기
-        User findUser = userRepository.findByUsernameElseThrow(username);
+        User findUser = userRepository.findByIdElseThrow(userId);
 
         Board board = new Board(title, contents);
         board.setUser(findUser);
