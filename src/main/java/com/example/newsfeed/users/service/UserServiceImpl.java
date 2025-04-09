@@ -81,6 +81,11 @@ public class UserServiceImpl implements UserService {
             HttpStatus.OK);
     }
 
+    /**
+     * 이메일 중복체크
+     *
+     * @param email 유저가 입력한 이메일
+     */
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
@@ -89,6 +94,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session) {
 
         Long sessionUserId = (Long) session.getAttribute("user");
@@ -105,8 +111,7 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
-        boolean deleted = user.isDeleted();
-        deleted = true;
-
+        user.setDeleted(true);
+        userRepository.save(user);
     }
 }

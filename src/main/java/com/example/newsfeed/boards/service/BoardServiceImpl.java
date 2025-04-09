@@ -29,9 +29,9 @@ public class BoardServiceImpl implements BoardService {
      * @return
      */
     @Override
-    public BoardResponseDto save(String name, String title, String contents) {
+    public BoardResponseDto save(String nickname, String title, String contents) {
 
-        User findUser = userRepository.findByIdElseThrow(name);
+        User findUser = userRepository.findByNicknameElseThrow(nickname);
 
         Board board = new Board(title, contents);
         board.setUser(findUser);
@@ -41,34 +41,47 @@ public class BoardServiceImpl implements BoardService {
             findUser.getNickname());
     }
 
-
+    /**
+     * @param page
+     * @param size
+     * @param isFriendBoard
+     * @param userId
+     * @return
+     */
     @Transactional(readOnly = true)
     @Override
-    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard) {
-
+    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard,
+        Long userId) {
+        // page 값 조절
         int adjustedPage = (page > 0) ? page - 1 : 0;
 
         PageRequest pageable = PageRequest.of(adjustedPage, size,
             Sort.by("updatedAt").descending());
 
         // isFriendBoard true 일 때 친구의 게시글이 우선순위
-        if (isFriendBoard == true) {
-            return boardRepository.findAllByFriendPriority(pageable, myId);
+        if (isFriendBoard) {
+            return boardRepository.findAllByFriendPriority(pageable, userId);
         }
-
+        // false 일 때 업데이트 날짜로 정렬
         Page<Board> boardPage = boardRepository.findAll(pageable);
 
         return boardPage.map(BoardPageResponseDto::new);
     }
 
-
+    /**
+     * @param boardId
+     * @param name
+     * @param title
+     * @param contents
+     * @return
+     */
     @Override
-    public BoardResponseDto update(String name, Long boardId, String title, String contents) {
+    public BoardResponseDto update(Long boardId, String name, String title, String contents) {
 
         Board findboard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인유저인지 검증
-        if (findboard.getUser().getId().equals(name)) {
+        if (findboard.getUser().getNickname().equals(name)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -82,6 +95,10 @@ public class BoardServiceImpl implements BoardService {
             findboard.getContents());
     }
 
+    /**
+     * @param name
+     * @param boardId
+     */
     @Override
     public void delete(String name, Long boardId) {
 

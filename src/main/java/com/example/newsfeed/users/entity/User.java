@@ -44,6 +44,7 @@ public class User extends BaseEntity {
     @Column
     private String description;
 
+    @Setter
     @Column
     private boolean isDeleted;
 

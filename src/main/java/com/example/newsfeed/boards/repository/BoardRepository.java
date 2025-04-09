@@ -23,8 +23,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("""
         SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(u.id, u.username, u.nickname, b.title, b.contents, b.createdAt, b.updatedAt)
-        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.user = u
-        ORDER BY CASE WHEN f.to_user_id = :myId THEN 0 ELSE 1 END, b.updatedAt DESC
+        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser = :userId AND f.toUser = u
+        ORDER BY CASE WHEN f.fromUser = :userId THEN 0 ELSE 1 END, b.updatedAt DESC
         """)
-    Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long myId);
+    Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long userId);
 }
