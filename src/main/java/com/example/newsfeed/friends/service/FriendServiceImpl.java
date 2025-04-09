@@ -45,8 +45,8 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 팔로우 취소
      *
-     * @param toUserId   팔로우 취소 누른 사람 아이디
-     * @param fromUserId 팔로우 취소 된 사람 아이디
+     * @param toUserId   팔로우 취소 된 사람 아이디
+     * @param fromUserId 팔로우 취소 누른 사람 아이디
      */
     @Override
     public void delete(Long toUserId, Long fromUserId) {
