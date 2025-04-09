@@ -57,9 +57,9 @@ public class BoardController {
     /**
      * 게시글 전체조회
      *
-     * @param page
-     * @param size
-     * @param isFriendBoard
+     * @param page          페이지
+     * @param size          페이지당 개수
+     * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
      * @return
      */
     @GetMapping
@@ -111,12 +111,9 @@ public class BoardController {
 
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
-        User user = userRepository.findByIdElseThrow(userId);
-
-        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
+            boardService.update(boardId, userId, requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
