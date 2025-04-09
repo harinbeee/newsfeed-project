@@ -9,7 +9,6 @@ import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
 
@@ -25,9 +24,10 @@ public interface UserService {
      * @param userId 유저 식별자 ID
      * @return 수정된 유저 정보가 담겨있는 응답 DTO 객체
      */
-    UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
+    UpdateUserProfileResponseDto update(Long userId, Long loginId,
+        UpdateUserProfileRequestDto requestDto);
 
-    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session, HttpServletRequest request,
+    void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
         HttpServletResponse response);
 
     /**

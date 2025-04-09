@@ -21,6 +21,9 @@ public enum ExceptionCode {
     // 401
     NOT_LOGIN_ERROR(401, "", "로그인이 필요합니다."),
 
+    // 403
+    USER_ACCESS_DENIED(403, "", "로그인한 유저의 id와 일치하지 않습니다."),
+    
     // 404
     BOARD_NOT_FOUND(404, "", "게시글이 존재하지 않습니다."),
     USER_NOT_FOUND(404, "", "유저 정보를 찾을 수 없습니다.");
