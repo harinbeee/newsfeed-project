@@ -14,7 +14,8 @@ public enum ExceptionCode {
     PASSWORD_NOT_CHANGED(400, "", "기존 비밀번호와 새로운 비밀번호가 일치합니다."),
     BOARD_UPDATE_FORBIDDEN(400, "", "작성자 본인만 수정할 수 있습니다."),
     BOARD_DELETE_FORBIDDEN(400, "", "작성자 본인만 삭제할 수 있습니다."),
-
+    LOGIN_FORBIDDEN(400, "", "탈퇴한 회원은 로그인 하실 수 없습니다."),
+    SIGNUP_FORBIDDEN(400, "", "탈퇴한 회원은 재가입 할 수 없습니다."),
     // 401
     NOT_LOGIN_ERROR(401, "", "로그인이 필요합니다."),
 

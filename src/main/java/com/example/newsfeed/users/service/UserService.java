@@ -7,6 +7,8 @@ import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
@@ -25,8 +27,8 @@ public interface UserService {
      */
     UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
 
-
-    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session);
+    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session, HttpServletRequest request,
+        HttpServletResponse response);
 
     /**
      * 비밀번호 수정 메소드
