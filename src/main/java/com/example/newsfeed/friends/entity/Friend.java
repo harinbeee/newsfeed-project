@@ -21,11 +21,11 @@ public class Friend {
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "to_user_id")
-    private User toUser; // 팔로우 유저 아이디
+    private User toUser; //팔로우 유저가 팔로잉한 유저 아이디
 
     @ManyToOne
     @JoinColumn(nullable = false, name = "from_user_id")
-    private User fromUser; //팔로우 유저가 팔로잉한 유저 아이디
+    private User fromUser; // 팔로우한 유저 아이디
 
     public Friend(User toUser, User fromUser) {
         this.toUser = toUser;
