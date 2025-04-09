@@ -42,7 +42,8 @@ public class UserController {
     public ResponseEntity<UserFindResponseDto> find(
         @PathVariable @Min(value = 1) Long userId
     ) {
-        return userService.find(userId);
+        UserFindResponseDto responseDto = userService.find(userId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     /**
@@ -80,7 +81,9 @@ public class UserController {
 
         userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
 
-        return userService.save(requestDto); // 중복 없으면 가입
+        UserSaveResponseDto responseDto = userService.save(requestDto); // 중복 없으면 가입
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
 

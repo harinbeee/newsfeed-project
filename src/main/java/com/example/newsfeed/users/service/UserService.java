@@ -8,17 +8,14 @@ import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    ResponseEntity<UserFindResponseDto> find(Long userId);
+    UserFindResponseDto find(Long userId);
 
-    ResponseEntity<UserSaveResponseDto> save(UserSaveRequestDto requestDto);
+    UserSaveResponseDto save(UserSaveRequestDto requestDto);
 
-    void findByEmail(@Email @NotBlank String email);
+    void findByEmail(String email);
 
     /**
      * 유저 프로필 수정 메소드
@@ -30,7 +27,7 @@ public interface UserService {
 
 
     void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session);
-  
+
     /**
      * 비밀번호 수정 메소드
      *

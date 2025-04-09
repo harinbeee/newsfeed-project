@@ -30,11 +30,11 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public BoardResponseDto save(String nickname, String title, String contents) {
-
+        // nickname으로 유저 찾기
         User findUser = userRepository.findByNicknameElseThrow(nickname);
 
         Board board = new Board(title, contents);
-        board.setUser(findUser);
+        board.setUser(findUser); // user 데이터 입력
 
         Board savedboard = boardRepository.save(board);
         return new BoardResponseDto(savedboard.getId(), board.getTitle(), board.getContents(),
@@ -70,22 +70,36 @@ public class BoardServiceImpl implements BoardService {
 
     /**
      * @param boardId
+     * @return
+     */
+    @Override
+    public BoardResponseDto findOne(Long boardId) {
+
+        Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+
+        return new BoardResponseDto(boardId, findBoard.getUser().getNickname(),
+            findBoard.getTitle(), findBoard.getContents());
+    }
+
+    /**
+     * @param boardId
      * @param name
      * @param title
      * @param contents
      * @return
      */
+    @Transactional
     @Override
     public BoardResponseDto update(Long boardId, String name, String title, String contents) {
 
         Board findboard = boardRepository.findByIdOrElseThrow(boardId);
 
-        // 작성자 = 로그인유저인지 검증
+        // 작성자 = 로그인 유저인지 검증
         if (findboard.getUser().getNickname().equals(name)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        // 기존 내용 저장하기,,,,
+        // 기존 내용 저장
         String updateTitle = (title != null) ? title : findboard.getTitle();
         String updateContents = (contents != null) ? contents : findboard.getContents();
 
@@ -104,7 +118,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
-        // 작성자 = 로그인유저인지 검증
+        // 작성자 = 로그인 유저인지 검증
         if (findBoard.getUser().getNickname().equals(name)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
