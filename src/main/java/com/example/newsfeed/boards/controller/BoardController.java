@@ -111,8 +111,12 @@ public class BoardController {
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
+
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute("user");
+        User user = userRepository.findByIdElseThrow(userId);
+
+        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         BoardResponseDto boardResponseDto =
             boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
@@ -135,7 +139,10 @@ public class BoardController {
         HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
-        UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("user");
+        Long userId = (Long) session.getAttribute("user");
+        User user = userRepository.findByIdElseThrow(userId);
+
+        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         boardService.delete(loginUser.getNickname(), boardId);
 
