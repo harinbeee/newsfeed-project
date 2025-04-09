@@ -1,5 +1,6 @@
 package com.example.newsfeed.friends.service;
 
+import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.entity.Friend;
@@ -41,6 +42,12 @@ public class FriendServiceImpl implements FriendService {
 
     }
 
+    /**
+     * 팔로우 취소
+     *
+     * @param toUserId   팔로우 취소 누른 사람 아이디
+     * @param fromUserId 팔로우 취소 된 사람 아이디
+     */
     @Override
     public void delete(Long toUserId, Long fromUserId) {
         Friend friend = friendRepository
@@ -51,6 +58,30 @@ public class FriendServiceImpl implements FriendService {
                 )
             );
         friendRepository.delete(friend);
+    }
+
+    /**
+     * Friend 테이블에서 id 값으로 조회
+     *
+     * @param toUserId toUserId 받음
+     * @return 조회결과
+     */
+    @Override
+    public FriendFindResponseDto findByToUserId(Long toUserId) {
+        Friend friend = friendRepository.findByIdElseThrow(toUserId);
+        return FriendFindResponseDto.toDto(friend);
+    }
+
+    /**
+     * Friend 테이블에서 id 값으로 조회
+     *
+     * @param fromUserId toUserId 받음
+     * @return 조회결과
+     */
+    @Override
+    public FriendFindResponseDto findByFromUserId(Long fromUserId) {
+        Friend friend = friendRepository.findByIdElseThrow(fromUserId);
+        return FriendFindResponseDto.toDto(friend);
     }
 
 }
