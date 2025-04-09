@@ -94,7 +94,7 @@ public class UserController {
     }
 
     /**
-     * @param requsetDto 입력한 password 요청
+     * @param requestDto 입력한 password 요청
      * @param session    로그인 된 세션id 조회
      * @param request    세션에 저장된 userid 요청
      * @param response   쿠키를 만료
@@ -121,10 +121,11 @@ public class UserController {
     @PatchMapping("/{userId}/update-password")
     public ResponseEntity<Void> updatePassword(
         @PathVariable Long userId,
-        @RequestBody UpdatePasswordRequestDto requestDto
+        @RequestBody UpdatePasswordRequestDto requestDto,
+        HttpSession session
     ) {
 
-        userService.updatePassword(userId, requestDto);
+        userService.updatePassword(userId, requestDto, session);
 
         return new ResponseEntity<>(HttpStatus.OK);
 
