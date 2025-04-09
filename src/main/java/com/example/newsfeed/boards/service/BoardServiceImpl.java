@@ -52,17 +52,17 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard,
         Long userId) {
-
+        // page 값 조절
         int adjustedPage = (page > 0) ? page - 1 : 0;
 
         PageRequest pageable = PageRequest.of(adjustedPage, size,
             Sort.by("updatedAt").descending());
 
         // isFriendBoard true 일 때 친구의 게시글이 우선순위
-        if (isFriendBoard == true) {
+        if (isFriendBoard) {
             return boardRepository.findAllByFriendPriority(pageable, userId);
         }
-
+        // false 일 때 업데이트 날짜로 정렬
         Page<Board> boardPage = boardRepository.findAll(pageable);
 
         return boardPage.map(BoardPageResponseDto::new);
