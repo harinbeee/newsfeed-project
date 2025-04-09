@@ -2,6 +2,7 @@ package com.example.newsfeed.users.controller;
 
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
+import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
     /**
      * 유저 프로필 조회 컨트롤러
@@ -75,8 +76,9 @@ public class UserController {
     }
 
     @PatchMapping("/{userId")
-    public ResponseEntity<Void> isDeleted(HttpSession session) {
-        userService.isDeleted(session);
+    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
+        HttpSession session) {
+        userService.isDeleted(requsetDto, session);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -62,7 +62,4 @@ public class User extends BaseEntity {
         this.description = description;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
 }
