@@ -40,9 +40,9 @@ public class FriendController {
     }
 
     /**
-     * 내가 팔로우한 사람들 조회
+     * 날 팔로우 하고 있는 사람들 조회
      *
-     * @param toUserId 팔로우 하는 사람 아이디
+     * @param toUserId 팔로잉 된 사람 아이디
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
     @GetMapping("/{toUserId}")
@@ -54,9 +54,9 @@ public class FriendController {
     }
 
     /**
-     * 날 팔로우 하고 있는 사람들 조회
+     * 내가 팔로우한 사람들 조회
      *
-     * @param fromUserId 팔로잉 된 사람 아이디
+     * @param fromUserId 팔로우 하는 사람 아이디
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
     @GetMapping("/{fromUserId}")
@@ -70,8 +70,8 @@ public class FriendController {
     /**
      * 팔로우 취소
      *
-     * @param toUserId   팔로우 취소를 누른 사람 아이디
-     * @param fromUserId 팔로우 취소 할 사람 아이디
+     * @param toUserId   팔로우 취소 할 사람 아이디
+     * @param fromUserId 팔로우 취소를 누른 사람 아이디
      * @return 상태코드 200
      */
     @DeleteMapping("/{toUserId}/{fromUserId}")
