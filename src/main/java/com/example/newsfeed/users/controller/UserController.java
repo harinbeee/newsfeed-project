@@ -89,7 +89,13 @@ public class UserController {
 
     }
 
-
+    /**
+     * @param requsetDto 입력한 password 요청
+     * @param session    로그인 된 세션id 조회
+     * @param request    세션에 저장된 userid 요청
+     * @param response   쿠키를 만료
+     * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
+     */
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
         HttpSession session, HttpServletRequest request, HttpServletResponse response) {
