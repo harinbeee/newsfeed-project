@@ -114,22 +114,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session,
+    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId,
         HttpServletRequest request, HttpServletResponse response) {
 
+        HttpSession session = request.getSession(false);
         Long sessionUserId = (Long) session.getAttribute("user");
 
+        // 로그인한 유저와 삭제하려는 유저의 id 비교
         if (!userId.equals(sessionUserId)) {
             throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
         User user = userRepository.findByIdElseThrow(sessionUserId);
         String password = user.getPassword();
-
-        // 미로그인 처리
-        if (sessionUserId == null) {
-            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
-        }
 
         // 비밀번호 체크
         if (!passwordEncoder.matches(requestDto.getPassword(), password)) {

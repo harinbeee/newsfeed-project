@@ -101,9 +101,13 @@ public class UserController {
      * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
      */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
-        HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        userService.isDeleted(requsetDto, session, request, response);
+    public ResponseEntity<Void> isDeleted(
+        @RequestBody UserDeleteRequsetDto requestDto,
+        @PathVariable Long userId,
+        HttpServletRequest request,
+        HttpServletResponse response) {
+
+        userService.isDeleted(requestDto, userId, request, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
