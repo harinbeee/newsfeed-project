@@ -8,9 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class LoginServiceImpl implements LoginService {
         User findUser = userRepository.findByEmailElseThrow(email);
 
         if (findUser.isDeleted()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 로그인 하실 수 없습니다.");
+            throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
         }
 
         if (findUser.getPassword().equals(password)) {

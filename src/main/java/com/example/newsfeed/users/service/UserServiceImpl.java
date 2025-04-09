@@ -17,10 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService {
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             if (userRepository.findByEmail(email).get().isDeleted()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 재가입 할 수 없습니다.");
+                throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
             } else {
                 throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
             }
