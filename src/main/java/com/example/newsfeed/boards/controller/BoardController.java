@@ -76,7 +76,14 @@ public class BoardController {
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
 
-
+    /**
+     * 게시글 수정
+     *
+     * @param boardId
+     * @param requestDto
+     * @param request
+     * @return
+     */
     @PatchMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> update(
         @PathVariable Long boardId,
@@ -87,7 +94,7 @@ public class BoardController {
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getID(), requestDto.getTitle(),
+            boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
