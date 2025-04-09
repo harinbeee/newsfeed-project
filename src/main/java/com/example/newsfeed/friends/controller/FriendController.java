@@ -41,7 +41,6 @@ public class FriendController {
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
-
         HttpSession session = request.getSession(false);
 
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
