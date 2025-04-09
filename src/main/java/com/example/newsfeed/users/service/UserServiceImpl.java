@@ -113,5 +113,7 @@ public class UserServiceImpl implements UserService {
 
         user.setDeleted(true);
         userRepository.save(user);
+
+        // 로그아웃 실행
     }
 }
