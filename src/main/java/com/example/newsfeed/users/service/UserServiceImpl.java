@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.service;
 
+import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
@@ -93,6 +94,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     @Transactional
     public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session) {
@@ -116,4 +118,23 @@ public class UserServiceImpl implements UserService {
 
         // 로그아웃 실행
     }
+
+    /**
+     * @param userId     유저 식별자 ID
+     * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
+     */
+    @Transactional
+    @Override
+    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
+
+        if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 일치합니다.");
+        }
+
+        User user = userRepository.findByIdElseThrow(userId);
+        user.updatePassword(requestDto.getNewPassword());
+
+    }
+
+
 }
