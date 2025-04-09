@@ -2,6 +2,7 @@ package com.example.newsfeed.common.handler;
 
 import com.example.newsfeed.common.exception.ErrorResponse;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.exception.UserAccessDeniedException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,16 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
 
+    }
+
+    @ExceptionHandler(UserAccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleUserAccessDeniedException(
+        UserAccessDeniedException ex) {
+
+        final ErrorResponse response = ErrorResponse.of(
+            ExceptionCode.USER_ACCESS_DENIED, ex.getMessage());
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
 
