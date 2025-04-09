@@ -8,15 +8,15 @@ public class BoardResponseDto {
 
     private final Long id;
 
-    private final String username;
+    private final String nickname;
 
     private final String title;
 
     private final String contents;
 
-    public BoardResponseDto(Long id, String username, String title, String contents) {
+    public BoardResponseDto(Long id, String title, String contents, String nickname) {
         this.id = id;
-        this.username = username;
+        this.nickname = nickname;
         this.title = title;
         this.contents = contents;
     }

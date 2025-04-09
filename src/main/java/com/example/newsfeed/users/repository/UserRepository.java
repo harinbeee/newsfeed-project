@@ -20,10 +20,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             () -> new BusinessException(ExceptionCode.EMAIL_NOT_FOUND));
     }
 
-    Optional<User> findByNickname(String nickname);
+    Optional<User> findByUsername(String username);
 
-    default User findByNicknameElseThrow(String nickname) {
-        return findByNickname(nickname).orElseThrow(
+    default User findByUsernameElseThrow(String username) {
+        return findByUsername(username).orElseThrow(
             () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
     }
 }
