@@ -45,12 +45,9 @@ public class BoardController {
     ) {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
-        User user = userRepository.findByIdElseThrow(userId);
-
-        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
         BoardResponseDto boardResponseDto =
-            boardService.save(loginUser.getNickname(), requestDto.getTitle(),
+            boardService.save(userId, requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
