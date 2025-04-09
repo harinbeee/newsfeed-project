@@ -1,4 +1,4 @@
-package com.example.newsfeed.login.config;
+package com.example.newsfeed.common.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
