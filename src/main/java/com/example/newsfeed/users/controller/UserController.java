@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.controller;
 
+import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
@@ -77,6 +78,25 @@ public class UserController {
         userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
 
         return userService.save(requestDto); // 중복 없으면 가입
+
+    }
+
+    /**
+     * 비밀번호 수정 요청 컨트롤러
+     *
+     * @param userId     유저 식별자 ID
+     * @param requestDto 클라이언트 요청 정보가 담겨있는 DTO 객체
+     * @return 응답코드 200 성공
+     */
+    @PatchMapping("/{userId}/update-password")
+    public ResponseEntity<Void> updatePassword(
+        @PathVariable Long userId,
+        @RequestBody UpdatePasswordRequestDto requestDto
+    ) {
+
+        userService.updatePassword(userId, requestDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
