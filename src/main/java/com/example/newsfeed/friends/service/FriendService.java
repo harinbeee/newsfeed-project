@@ -1,16 +1,17 @@
 package com.example.newsfeed.friends.service;
 
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
-import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
+import java.util.List;
 
 public interface FriendService {
 
-    FriendSaveResponseDto save(FriendSaveRequestDto requestDto);
+    FriendSaveResponseDto save(Long toUserId, Long fromUserId);
 
     void delete(Long toUserId, Long fromUserId);
 
-    FriendFindResponseDto findByToUserId(Long toUserId);
+    List<FriendFindResponseDto> findByToUserId(Long toUserId);
 
-    FriendFindResponseDto findByFromUserId(Long fromUserId);
+    List<FriendFindResponseDto> findByFromUserId(Long fromUserId);
+
 }

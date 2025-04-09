@@ -10,6 +10,7 @@ public enum ExceptionCode {
     PASSWORD_INVALID(403, "U001", "비밀번호가 일치하지 않습니다."),
     USER_NOT_FOUND(404, "U002", "유저 정보를 찾을 수 없습니다."),
     EMAIL_NOT_FOUND(404, "U003", "이메일이 존재하지 않습니다."),
+    USER_DATA_CONFLICT(409, "U004", "동일한 값이 존재 합니다"),
 
     // 일정
     SCHEDULE_NOT_FOUND(404, "S001", "일정 정보를 찾을 수 없습니다."),
