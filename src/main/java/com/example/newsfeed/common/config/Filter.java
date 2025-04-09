@@ -1,4 +1,4 @@
-package com.example.newsfeed.login.config;
+package com.example.newsfeed.common.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
