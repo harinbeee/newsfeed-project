@@ -1,10 +1,15 @@
 package com.example.newsfeed.friends.controller;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.service.FriendService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,57 +33,82 @@ public class FriendController {
     /**
      * 팔로우 저장 컨트롤러
      *
-     * @param requestDto toUserId, fromUserId 두 개 받음
+     * @param requestDto > toUserId, 내가 팔로우 한 사람 가져옴
      * @return 팔로우 유저 ID, 와 팔로잉 유저 ID, 식별자 ID , 응답코드
      */
     @PostMapping
     public ResponseEntity<FriendSaveResponseDto> save(
-        @RequestBody FriendSaveRequestDto requestDto
+        @RequestBody FriendSaveRequestDto requestDto,
+        HttpServletRequest request
     ) {
-        FriendSaveResponseDto responseDto = friendService.save(requestDto);
+
+        HttpSession session = request.getSession(false);
+
+        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
+        if (fromUserId.equals(requestDto.getToUserId())) { // 같은 유저를 팔로우 하는지 체크
+            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
+        }
+
+        FriendSaveResponseDto responseDto = friendService.save(
+            requestDto.getToUserId(),
+            fromUserId
+        );
+
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     /**
      * 날 팔로우 하고 있는 사람들 조회
      *
-     * @param toUserId 팔로잉 된 사람 아이디
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
-    @GetMapping("/{toUserId}")
-    public ResponseEntity<FriendFindResponseDto> findByToUserId(
-        @PathVariable @Min(1) Long toUserId
+    @GetMapping("/toUserId")
+    public ResponseEntity<List<FriendFindResponseDto>> findByToUserId(
+        HttpServletRequest request
     ) {
-        FriendFindResponseDto responseDto = friendService.findByToUserId(toUserId);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        HttpSession session = request.getSession(false);
+
+        Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
+        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(
+            toUserId); // 날 팔로우 하는 사람 리스트
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
     /**
      * 내가 팔로우한 사람들 조회
      *
-     * @param fromUserId 팔로우 하는 사람 아이디
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
-    @GetMapping("/{fromUserId}")
-    public ResponseEntity<FriendFindResponseDto> findByIdFromUserId(
-        @PathVariable @Min(1) Long fromUserId
+    @GetMapping("/fromUserId")
+    public ResponseEntity<List<FriendFindResponseDto>> findByIdFromUserId(
+        HttpServletRequest request
     ) {
-        FriendFindResponseDto responseDto = friendService.findByFromUserId(fromUserId);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        HttpSession session = request.getSession(false);
+
+        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
+        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(
+            fromUserId); // 내가 팔로우 한 사람 리스트
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
     /**
      * 팔로우 취소
      *
-     * @param toUserId   팔로우 취소 할 사람 아이디
-     * @param fromUserId 팔로우 취소를 누른 사람 아이디
+     * @param toUserId 팔로우 취소 할 사람 아이디
      * @return 상태코드 200
      */
-    @DeleteMapping("/{toUserId}/{fromUserId}")
+    @DeleteMapping("/{toUserId}")
     public ResponseEntity<String> delete(
         @PathVariable @Min(1) Long toUserId,
-        @PathVariable @Min(1) Long fromUserId
+        HttpServletRequest request
     ) {
+        HttpSession session = request.getSession(false);
+
+        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
         friendService.delete(toUserId, fromUserId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

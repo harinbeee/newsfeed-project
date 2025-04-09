@@ -58,10 +58,14 @@ public class UserController {
     @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
-        @RequestBody UpdateUserProfileRequestDto requestDto
+        @RequestBody UpdateUserProfileRequestDto requestDto,
+        HttpServletRequest request
     ) {
+        HttpSession session = request.getSession(false);
 
-        UpdateUserProfileResponseDto updatedUser = userService.update(userId, requestDto);
+        Long loginId = (Long) session.getAttribute("user");
+
+        UpdateUserProfileResponseDto updatedUser = userService.update(userId, loginId, requestDto);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 
@@ -90,16 +94,20 @@ public class UserController {
     }
 
     /**
-     * @param requsetDto 입력한 password 요청
+     * @param requestDto 입력한 password 요청
      * @param session    로그인 된 세션id 조회
      * @param request    세션에 저장된 userid 요청
      * @param response   쿠키를 만료
      * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
      */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
-        HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        userService.isDeleted(requsetDto, session, request, response);
+    public ResponseEntity<Void> isDeleted(
+        @RequestBody UserDeleteRequsetDto requestDto,
+        @PathVariable Long userId,
+        HttpServletRequest request,
+        HttpServletResponse response) {
+
+        userService.isDeleted(requestDto, userId, request, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -113,10 +121,11 @@ public class UserController {
     @PatchMapping("/{userId}/update-password")
     public ResponseEntity<Void> updatePassword(
         @PathVariable Long userId,
-        @RequestBody UpdatePasswordRequestDto requestDto
+        @RequestBody UpdatePasswordRequestDto requestDto,
+        HttpSession session
     ) {
 
-        userService.updatePassword(userId, requestDto);
+        userService.updatePassword(userId, requestDto, session);
 
         return new ResponseEntity<>(HttpStatus.OK);
 

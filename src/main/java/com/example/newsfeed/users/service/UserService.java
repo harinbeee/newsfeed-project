@@ -25,9 +25,10 @@ public interface UserService {
      * @param userId 유저 식별자 ID
      * @return 수정된 유저 정보가 담겨있는 응답 DTO 객체
      */
-    UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
+    UpdateUserProfileResponseDto update(Long userId, Long loginId,
+        UpdateUserProfileRequestDto requestDto);
 
-    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session, HttpServletRequest request,
+    void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
         HttpServletResponse response);
 
     /**
@@ -36,6 +37,6 @@ public interface UserService {
      * @param userId     유저 식별자 ID
      * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
      */
-    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto);
+    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto, HttpSession session);
 
 }
