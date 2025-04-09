@@ -62,13 +62,19 @@ public class FriendController {
      *
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
-    @GetMapping("/toUserId")
+    @GetMapping("/toUserId/{userId}")
     public ResponseEntity<List<FriendFindResponseDto>> findByToUserId(
-        HttpServletRequest request
+        HttpServletRequest request,
+        @PathVariable Long userId
     ) {
         HttpSession session = request.getSession(false);
 
         Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
+        // 로그인한 유저와 path 로 받은 id 값 비교
+        if (!userId.equals(toUserId)) {
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
+        }
 
         List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(
             toUserId); // 날 팔로우 하는 사람 리스트
@@ -80,13 +86,19 @@ public class FriendController {
      *
      * @return FriendFindResponseDto 테이블 id, toUserId, fromUserId, 200 응답코드
      */
-    @GetMapping("/fromUserId")
+    @GetMapping("/fromUserId/{userId}")
     public ResponseEntity<List<FriendFindResponseDto>> findByIdFromUserId(
-        HttpServletRequest request
+        HttpServletRequest request,
+        @PathVariable Long userId
     ) {
         HttpSession session = request.getSession(false);
 
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
+
+        // 로그인한 유저와 path 로 받은 id 값 비교
+        if (!userId.equals(fromUserId)) {
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
+        }
 
         List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(
             fromUserId); // 내가 팔로우 한 사람 리스트
