@@ -4,6 +4,7 @@ import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.exception.UserAccessDeniedException;
+import com.example.newsfeed.login.service.LogoutService;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -13,6 +14,8 @@ import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LogoutService logoutService;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -97,14 +101,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
+            if (userRepository.findByEmail(email).get().isDeleted()) {
+                // 회원가입시 탈퇴된 회원 예외처리
+                throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
+            } else {
+                // 회원가입시 중복된 회원 예외처리
+                throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
+            }
         }
     }
 
 
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpSession session) {
+    public void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session,
+        HttpServletRequest request, HttpServletResponse response) {
 
         Long sessionUserId = (Long) session.getAttribute("user");
 
@@ -115,13 +126,22 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByIdElseThrow(sessionUserId);
         String password = user.getPassword();
 
+        // 미로그인 처리
+        if (sessionUserId == null) {
+            throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
+        }
+
         // 비밀번호 체크
         if (!passwordEncoder.matches(requestDto.getPassword(), password)) {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
+        // 회원 정보에 탈퇴 입력
         user.setDeleted(true);
         userRepository.save(user);
+
+        // 로그아웃 실행
+        logoutService.logout(request, response);
     }
 
     /**

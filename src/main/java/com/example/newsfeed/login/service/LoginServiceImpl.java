@@ -22,6 +22,10 @@ public class LoginServiceImpl implements LoginService {
 
         User findUser = userRepository.findByEmailElseThrow(email);
 
+        if (findUser.isDeleted()) {
+            throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
+        }
+
         if (findUser.getPassword().equals(password)) {
             session.setAttribute("user", findUser.getId());
 

@@ -9,6 +9,7 @@ import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -92,13 +93,17 @@ public class UserController {
 
     }
 
-
+    /**
+     * @param requsetDto 입력한 password 요청
+     * @param session    로그인 된 세션id 조회
+     * @param request    세션에 저장된 userid 요청
+     * @param response   쿠키를 만료
+     * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
+     */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requestDto,
-        @PathVariable Long userId,
-        HttpSession session
-    ) {
-        userService.isDeleted(requestDto, userId, session);
+    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
+        HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        userService.isDeleted(requsetDto, session, request, response);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
