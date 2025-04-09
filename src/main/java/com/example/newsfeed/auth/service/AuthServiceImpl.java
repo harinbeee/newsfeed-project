@@ -47,6 +47,11 @@ public class AuthServiceImpl implements AuthService {
         HttpServletResponse response) {
 
         User findUser = userRepository.findByEmailElseThrow(email);
+        Long sessionUserId = (Long) session.getAttribute("user");
+
+        if (sessionUserId != null) {
+            throw new BusinessException(ExceptionCode.ALREADY_LOGIN);
+        }
 
         if (findUser.isDeleted()) {
             throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
