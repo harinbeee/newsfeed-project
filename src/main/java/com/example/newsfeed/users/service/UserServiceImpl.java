@@ -13,7 +13,6 @@ import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,12 +49,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public UpdateUserProfileResponseDto update(Long userId, Long loginId,
+    public UpdateUserProfileResponseDto update(Long userId,
         UpdateUserProfileRequestDto requestDto) {
-        // 로그인한 유저와 수정하려는 유저의 id 비교
-        if (!userId.equals(loginId)) {
-            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
-        }
 
         User findUser = userRepository.findByIdElseThrow(userId);
 
@@ -93,15 +88,7 @@ public class UserServiceImpl implements UserService {
     public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
         HttpServletResponse response) {
 
-        HttpSession session = request.getSession(false);
-        Long sessionUserId = (Long) session.getAttribute("user");
-
-        // 로그인한 유저와 삭제하려는 유저의 id 비교
-        if (!userId.equals(sessionUserId)) {
-            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
-        }
-
-        User user = userRepository.findByIdElseThrow(sessionUserId);
+        User user = userRepository.findByIdElseThrow(userId);
         String password = user.getPassword();
 
         // 비밀번호 체크
@@ -125,15 +112,7 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     @Override
-    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto,
-        HttpSession session) {
-
-        Long sessionUserId = (Long) session.getAttribute("user");
-
-        // 로그인한 유저와 삭제하려는 유저의 id 비교
-        if (!userId.equals(sessionUserId)) {
-            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
-        }
+    public void updatePassword(Long userId, UpdatePasswordRequestDto requestDto) {
 
         User user = userRepository.findByIdElseThrow(userId);
 

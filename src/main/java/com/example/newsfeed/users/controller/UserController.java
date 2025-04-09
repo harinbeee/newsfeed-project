@@ -1,5 +1,7 @@
 package com.example.newsfeed.users.controller;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -55,13 +57,15 @@ public class UserController {
     public ResponseEntity<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
         @RequestBody UpdateUserProfileRequestDto requestDto,
-        HttpServletRequest request
+        HttpSession session
     ) {
-        HttpSession session = request.getSession(false);
-
         Long loginId = (Long) session.getAttribute("user");
+        // 로그인한 유저와 수정하려는 유저의 id 비교
+        if (!userId.equals(loginId)) {
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
+        }
 
-        UpdateUserProfileResponseDto updatedUser = userService.update(userId, loginId, requestDto);
+        UpdateUserProfileResponseDto updatedUser = userService.update(userId, requestDto);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 
@@ -69,7 +73,7 @@ public class UserController {
 
     /**
      * @param requestDto 입력한 password 요청
-     * @param session    로그인 된 세션id 조회
+     * @param userId     로그인 한 id
      * @param request    세션에 저장된 userid 요청
      * @param response   쿠키를 만료
      * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
@@ -80,6 +84,13 @@ public class UserController {
         @PathVariable Long userId,
         HttpServletRequest request,
         HttpServletResponse response) {
+
+        HttpSession session = request.getSession(false);
+        Long sessionUserId = (Long) session.getAttribute("user");
+        // 로그인한 유저와 삭제하려는 유저의 id 비교
+        if (!userId.equals(sessionUserId)) {
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
+        }
 
         userService.isDeleted(requestDto, userId, request, response);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -99,7 +110,13 @@ public class UserController {
         HttpSession session
     ) {
 
-        userService.updatePassword(userId, requestDto, session);
+        Long sessionUserId = (Long) session.getAttribute("user");
+        // 로그인한 유저와 삭제하려는 유저의 id 비교
+        if (!userId.equals(sessionUserId)) {
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
+        }
+
+        userService.updatePassword(userId, requestDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
 
