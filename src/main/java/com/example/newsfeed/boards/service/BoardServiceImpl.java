@@ -37,8 +37,7 @@ public class BoardServiceImpl implements BoardService {
         board.setUser(findUser);
 
         Board savedboard = boardRepository.save(board);
-        return new BoardResponseDto(savedboard.getId(), board.getTitle(), board.getContents(),
-            findUser.getNickname());
+        return BoardResponseDto.toDto(savedboard);
     }
 
     /**
@@ -77,8 +76,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
-        return new BoardResponseDto(boardId, findBoard.getUser().getNickname(),
-            findBoard.getTitle(), findBoard.getContents());
+        return BoardResponseDto.toDto(findBoard);
     }
 
     /**
@@ -92,21 +90,19 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardResponseDto update(Long boardId, String name, String title, String contents) {
 
-        Board findboard = boardRepository.findByIdOrElseThrow(boardId);
+        Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
 
         // 작성자 = 로그인 유저인지 검증
-        if (findboard.getUser().getNickname().equals(name)) {
+        if (findBoard.getUser().getNickname().equals(name)) {
             throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }
 
         // 기존 내용 저장
-        String updateTitle = (title != null) ? title : findboard.getTitle();
-        String updateContents = (contents != null) ? contents : findboard.getContents();
+        String updateTitle = (title != null) ? title : findBoard.getTitle();
+        String updateContents = (contents != null) ? contents : findBoard.getContents();
 
-        findboard.update(updateTitle, updateContents);
-        return new BoardResponseDto(boardId, findboard.getUser().getNickname(),
-            findboard.getTitle(),
-            findboard.getContents());
+        findBoard.update(updateTitle, updateContents);
+        return BoardResponseDto.toDto(findBoard);
     }
 
     /**

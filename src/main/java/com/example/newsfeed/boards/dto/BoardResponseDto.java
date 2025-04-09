@@ -23,7 +23,7 @@ public class BoardResponseDto {
 
     // 전체 조회
     public static BoardResponseDto toDto(Board board) {
-        return new BoardResponseDto(board.getId(), board.getUser().getNickname(), board.getTitle(),
-            board.getContents());
+        return new BoardResponseDto(board.getId(), board.getTitle(),
+            board.getContents(), board.getUser().getNickname());
     }
 }
