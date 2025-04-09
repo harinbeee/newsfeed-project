@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.controller;
 
+import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
 import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
@@ -44,6 +45,13 @@ public class UserController {
         return userService.find(userId);
     }
 
+    /**
+     * 유저 프로필 수정 요청 컨트롤러
+     *
+     * @param userId     유저 식별자 id
+     * @param requestDto 수정할 데이터가 담겨있는 {@link UpdateUserProfileRequestDto} 객체
+     * @return 수정된 정보가 담겨있는 응답 객체
+     */
     @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
@@ -76,10 +84,32 @@ public class UserController {
 
     }
 
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
         HttpSession session) {
         userService.isDeleted(requsetDto, session);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 비밀번호 수정 요청 컨트롤러
+     *
+     * @param userId     유저 식별자 ID
+     * @param requestDto 클라이언트 요청 정보가 담겨있는 DTO 객체
+     * @return 응답코드 200 성공
+     */
+    @PatchMapping("/{userId}/update-password")
+    public ResponseEntity<Void> updatePassword(
+        @PathVariable Long userId,
+        @RequestBody UpdatePasswordRequestDto requestDto
+    ) {
+
+        userService.updatePassword(userId, requestDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+
 }
