@@ -60,13 +60,13 @@ public class BoardController {
      * @param page          페이지
      * @param size          페이지당 개수
      * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
-     * @return
+     * @return 페이징 dto 응답
      */
     @GetMapping
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "false") boolean isFriendBoard,
+        @RequestParam(defaultValue = "false") boolean isFriendBoardㅎ,
         HttpServletRequest request
     ) {
 
