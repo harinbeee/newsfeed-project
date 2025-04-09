@@ -12,7 +12,7 @@ public interface BoardService {
 
     Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard, Long userId);
 
-    BoardResponseDto update(String name, Long boardId, String title, String contents);
+    BoardResponseDto update(Long boardId, String name, String title, String contents);
 
     void delete(String name, Long boardId);
 

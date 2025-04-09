@@ -54,10 +54,10 @@ public class BoardController {
     /**
      * 게시글 전체조회
      *
-     * @param page          페이지
-     * @param size          페이지당 개수
-     * @param isFriendBoard true = 친구의 게시글 우선정렬
-     * @return Page dto
+     * @param page
+     * @param size
+     * @param isFriendBoard
+     * @return
      */
     @GetMapping
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
@@ -76,6 +76,14 @@ public class BoardController {
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
 
+    /**
+     * 게시글 수정
+     *
+     * @param boardId
+     * @param requestDto
+     * @param request
+     * @return
+     */
     @PatchMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> update(
         @PathVariable Long boardId,
@@ -86,7 +94,7 @@ public class BoardController {
         UserFindResponseDto loginUser = (UserFindResponseDto) session.getAttribute("loginUser");
 
         BoardResponseDto boardResponseDto =
-            boardService.update(boardId, loginUser.getID(), requestDto.getTitle(),
+            boardService.update(boardId, loginUser.getNickname(), requestDto.getTitle(),
                 requestDto.getContents());
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
