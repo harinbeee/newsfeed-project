@@ -1,5 +1,6 @@
 package com.example.newsfeed.common.handler;
 
+import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ErrorResponse;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.exception.UserAccessDeniedException;
@@ -81,5 +82,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 
+    // 비즈니스 로직의 예외처리(Unchecked Exception 발생시 처리)
+    @ExceptionHandler(BusinessException.class) // 만들어준 커스텀익셉션 발생시 처리해주는 곳
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
+
+        final ErrorResponse errorResponse = ErrorResponse.of(
+            ex.getExceptionCode(), ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
+
+    }
 
 }
