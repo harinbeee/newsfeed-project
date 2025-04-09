@@ -70,6 +70,19 @@ public class BoardServiceImpl implements BoardService {
 
     /**
      * @param boardId
+     * @return
+     */
+    @Override
+    public BoardResponseDto findOne(Long boardId) {
+
+        Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+
+        return new BoardResponseDto(boardId, findBoard.getUser().getNickname(),
+            findBoard.getTitle(), findBoard.getContents());
+    }
+
+    /**
+     * @param boardId
      * @param name
      * @param title
      * @param contents

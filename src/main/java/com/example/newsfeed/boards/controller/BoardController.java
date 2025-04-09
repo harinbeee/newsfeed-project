@@ -76,6 +76,15 @@ public class BoardController {
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardResponseDto> findOne(
+        @PathVariable Long boardId
+    ) {
+        BoardResponseDto boardResponseDto =
+            boardService.findOne(boardId);
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
+
     /**
      * 게시글 수정
      *
