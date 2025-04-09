@@ -3,16 +3,19 @@ package com.example.newsfeed.users.controller;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
+import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,6 +84,14 @@ public class UserController {
 
     }
 
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
+        HttpSession session) {
+        userService.isDeleted(requsetDto, session);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     /**
      * 비밀번호 수정 요청 컨트롤러
      *
@@ -99,5 +110,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+
 
 }
