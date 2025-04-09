@@ -3,9 +3,11 @@ package com.example.newsfeed.users.service;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
+import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public interface UserService {
      */
     UpdateUserProfileResponseDto update(Long userId, UpdateUserProfileRequestDto requestDto);
 
+
+    void isDeleted(UserDeleteRequsetDto requsetDto, HttpSession session);
+  
     /**
      * 비밀번호 수정 메소드
      *

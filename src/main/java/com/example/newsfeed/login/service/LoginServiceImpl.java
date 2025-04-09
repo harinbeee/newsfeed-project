@@ -20,14 +20,14 @@ public class LoginServiceImpl implements LoginService {
     public void login(String email, String password, HttpSession session,
         HttpServletResponse response) {
 
-        User findEmail = userRepository.findByEmailElseThrow(email);
+        User findUser = userRepository.findByEmailElseThrow(email);
 
-        if (findEmail.getPassword() == null) {
+        if (findUser.getPassword() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "비밀번호를 찾을 수 없습니다.");
         }
 
-        if (findEmail.getPassword().equals(password)) {
-            session.setAttribute("user", email);
+        if (findUser.getPassword().equals(password)) {
+            session.setAttribute("user", findUser.getId());
 
             Cookie cookie = new Cookie("SESSIONID", session.getId());
             cookie.setHttpOnly(true);
