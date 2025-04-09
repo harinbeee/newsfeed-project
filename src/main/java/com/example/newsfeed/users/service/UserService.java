@@ -7,7 +7,6 @@ import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
 
@@ -23,7 +22,7 @@ public interface UserService {
      * @param userId 유저 식별자 ID
      * @return 수정된 유저 정보가 담겨있는 응답 DTO 객체
      */
-    UpdateUserProfileResponseDto update(Long userId, Long loginId,
+    UpdateUserProfileResponseDto update(Long userId,
         UpdateUserProfileRequestDto requestDto);
 
     void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
@@ -35,6 +34,6 @@ public interface UserService {
      * @param userId     유저 식별자 ID
      * @param requestDto 클라이언트 요청 정보가 담겨있는 요청 DTO 객체
      */
-    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto, HttpSession session);
+    void updatePassword(Long userId, UpdatePasswordRequestDto requestDto);
 
 }
