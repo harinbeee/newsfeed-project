@@ -4,7 +4,6 @@ import com.example.newsfeed.auth.service.AuthService;
 import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
-import com.example.newsfeed.common.exception.UserAccessDeniedException;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
         UpdateUserProfileRequestDto requestDto) {
         // 로그인한 유저와 수정하려는 유저의 id 비교
         if (!userId.equals(loginId)) {
-            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
         User findUser = userRepository.findByIdElseThrow(userId);
@@ -99,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
         // 로그인한 유저와 삭제하려는 유저의 id 비교
         if (!userId.equals(sessionUserId)) {
-            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
         User user = userRepository.findByIdElseThrow(sessionUserId);
@@ -133,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
         // 로그인한 유저와 삭제하려는 유저의 id 비교
         if (!userId.equals(sessionUserId)) {
-            throw new UserAccessDeniedException(ExceptionCode.USER_ACCESS_DENIED);
+            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
         User user = userRepository.findByIdElseThrow(userId);
