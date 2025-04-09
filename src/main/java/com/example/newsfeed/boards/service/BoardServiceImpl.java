@@ -88,9 +88,6 @@ public class BoardServiceImpl implements BoardService {
 
         // 게시글 찾기
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
-        if (findBoard == null) {
-            throw new BusinessException(ExceptionCode.BOARD_NOT_FOUND);
-        }
 
         // 작성자 = 로그인 유저인지 검증
         if (!findBoard.getUser().getId().equals(userId)) {
@@ -116,10 +113,6 @@ public class BoardServiceImpl implements BoardService {
     public void delete(String name, Long boardId) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
-
-        if (findBoard == null) {
-            throw new BusinessException(ExceptionCode.BOARD_NOT_FOUND);
-        }
 
         // 작성자 = 로그인 유저인지 검증
         if (!findBoard.getUser().getNickname().equals(name)) {
