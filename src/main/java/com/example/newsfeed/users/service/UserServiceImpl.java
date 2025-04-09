@@ -95,7 +95,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void findByEmail(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
+            if (userRepository.findByEmail(email).get().isDeleted()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 재가입 할 수 없습니다.");
+            } else {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "중복 된 아이디 입니다");
+            }
         }
     }
 

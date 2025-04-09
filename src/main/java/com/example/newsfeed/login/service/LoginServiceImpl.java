@@ -22,6 +22,10 @@ public class LoginServiceImpl implements LoginService {
 
         User findUser = userRepository.findByEmailElseThrow(email);
 
+        if (findUser.isDeleted()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 회원은 로그인 하실 수 없습니다.");
+        }
+
         if (findUser.getPassword() == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "비밀번호를 찾을 수 없습니다.");
         }
