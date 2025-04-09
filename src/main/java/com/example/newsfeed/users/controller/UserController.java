@@ -3,16 +3,19 @@ package com.example.newsfeed.users.controller;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
+import com.example.newsfeed.users.dto.UserDeleteRequsetDto;
 import com.example.newsfeed.users.dto.UserFindResponseDto;
 import com.example.newsfeed.users.dto.UserSaveRequestDto;
 import com.example.newsfeed.users.dto.UserSaveResponseDto;
 import com.example.newsfeed.users.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +42,8 @@ public class UserController {
     public ResponseEntity<UserFindResponseDto> find(
         @PathVariable @Min(value = 1) Long userId
     ) {
-        return userService.find(userId);
+        UserFindResponseDto responseDto = userService.find(userId);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     /**
@@ -77,8 +81,18 @@ public class UserController {
 
         userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
 
-        return userService.save(requestDto); // 중복 없으면 가입
+        UserSaveResponseDto responseDto = userService.save(requestDto); // 중복 없으면 가입
 
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
+    }
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> isDeleted(@RequestBody UserDeleteRequsetDto requsetDto,
+        HttpSession session) {
+        userService.isDeleted(requsetDto, session);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -99,5 +113,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+
 
 }
