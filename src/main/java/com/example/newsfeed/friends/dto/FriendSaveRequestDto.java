@@ -1,12 +1,13 @@
 package com.example.newsfeed.friends.dto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class FriendSaveRequestDto {
 
-    private Long toUserId; // 팔로잉 된 사람
-
-    private Long fromUserId; // 팔로우 누룬 사람
+    private final Long toUserId; // 팔로잉 된 사람
+    private final Long fromUserId; // 팔로우 누룬 사람
 
 }

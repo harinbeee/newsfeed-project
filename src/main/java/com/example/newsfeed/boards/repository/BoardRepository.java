@@ -1,5 +1,6 @@
 package com.example.newsfeed.boards.repository;
 
+
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.common.exception.BusinessException;

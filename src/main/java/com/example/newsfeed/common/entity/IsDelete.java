@@ -1,4 +1,4 @@
-package com.example.newsfeed.common.delete;
+package com.example.newsfeed.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

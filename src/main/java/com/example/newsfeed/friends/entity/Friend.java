@@ -1,6 +1,6 @@
 package com.example.newsfeed.friends.entity;
 
-import com.example.newsfeed.common.delete.IsDelete;
+import com.example.newsfeed.common.entity.IsDelete;
 import com.example.newsfeed.users.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,11 +10,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Table(name = "friends")
+@NoArgsConstructor
 @Where(clause = "is_deleted = false")
 public class Friend extends IsDelete {
 
@@ -35,6 +37,4 @@ public class Friend extends IsDelete {
         this.fromUser = fromUser;
     }
 
-    public Friend() {
-    }
 }

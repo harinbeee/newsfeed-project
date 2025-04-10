@@ -11,11 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Table(name = "likes")
+@NoArgsConstructor
 public class Like {
 
     @Id
@@ -34,12 +36,10 @@ public class Like {
     @Column(nullable = false)
     private Long userId;
 
-    public Like(Long userId, Board board) {
+    public Like(Long userId, Board board, Comment comment) {
         this.userId = userId;
         this.board = board;
+        this.comment = comment;
     }
 
-    public Like() {
-
-    }
 }
