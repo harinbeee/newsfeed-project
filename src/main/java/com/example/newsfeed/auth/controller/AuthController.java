@@ -29,7 +29,9 @@ public class AuthController {
     /**
      * 유저 회원가입 메소드
      *
-     * @param requestDto 회원가입 요청 정보가 담겨있는 {@link UserSaveRequestDto} 객체
+     * @param requestDto { “email”: String, “password”: String, “username”: String, “nickname”:
+     *                   String, “phone”: String, “profile_picture”: String, “description”: String,
+     *                   }
      * @return UserSaveResponseDto, 응답코드 200 성공 401 에러
      */
     @PostMapping("/signup")
@@ -46,9 +48,7 @@ public class AuthController {
     }
 
     /**
-     * 로그인 요청 컨트롤러
-     *
-     * @param requestDto 로그인 요청 정보가 담겨있는 {@link LoginRequestDto} 객체
+     * @param requestDto 이메일과 비밀번호 요청
      * @param session    세션에 userid 입력
      * @param response   쿠키에 세션id 저장
      * @return 응답코드 200 성공, 400 접근금지, 400 비밀번호 미일치
@@ -56,9 +56,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(
         @RequestBody @Valid LoginRequestDto requestDto,
-        HttpSession session,
+        HttpServletRequest request,
         HttpServletResponse response
     ) {
+
+        HttpSession session = request.getSession();
 
         authService.login(requestDto, session, response);
 
@@ -79,7 +81,7 @@ public class AuthController {
         authService.logout(request, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
+
 
 }
