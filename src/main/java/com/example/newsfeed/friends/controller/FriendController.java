@@ -1,7 +1,5 @@
 package com.example.newsfeed.friends.controller;
 
-import com.example.newsfeed.common.exception.BusinessException;
-import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
@@ -77,7 +75,6 @@ public class FriendController {
     /**
      * 내가 팔로우하는 유저 조회 컨트롤러
      *
-
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
