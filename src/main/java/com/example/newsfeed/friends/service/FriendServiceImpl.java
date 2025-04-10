@@ -52,19 +52,13 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 나를 팔로우하는 유저 조회 서비스
      *
-     * @param loginUser 로그인한 유저 식별자
-     * @param toUserId  나를 팔로우하는 유저 식별자
+     * @param toUserId 나를 팔로우하는 유저 식별자
      * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
     @Override
-    public List<FriendFindResponseDto> findByToUserId(Long loginUser, Long toUserId) {
+    public List<FriendFindResponseDto> findByToUserId(Long toUserId) {
 
         friendRepository.findByIdElseThrow(toUserId);
-
-        // 로그인한 유저와 path 로 받은 id 값 비교
-        if (!loginUser.equals(toUserId)) {
-            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
-        }
 
         List<Friend> friendList = friendRepository.findByToUserId(toUserId);
         return friendList.stream()
@@ -76,19 +70,13 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 내가 팔로우하는 유저 조회 서비스
      *
-     * @param loginUser  로그인한 유저 식별자
      * @param fromUserId 내가 팔로우하는 유저 식별자
      * @return 내가 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
     @Override
-    public List<FriendFindResponseDto> findByFromUserId(Long loginUser, Long fromUserId) {
+    public List<FriendFindResponseDto> findByFromUserId(Long fromUserId) {
 
         friendRepository.findByIdElseThrow(fromUserId);
-
-        // 로그인한 유저와 path 로 받은 id 값 비교
-        if (!loginUser.equals(fromUserId)) {
-            throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
-        }
 
         List<Friend> friendList = friendRepository.findByFromUserId(fromUserId);
         return friendList.stream()

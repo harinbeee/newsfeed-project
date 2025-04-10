@@ -19,20 +19,18 @@ public interface FriendService {
     /**
      * 나를 팔로우하는 유저 조회 서비스
      *
-     * @param loginUser 로그인한 유저 식별자
-     * @param toUserId  나를 팔로우하는 유저 식별자
+     * @param toUserId 나를 팔로우하는 유저 식별자
      * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    List<FriendFindResponseDto> findByToUserId(Long loginUser, Long toUserId);
+    List<FriendFindResponseDto> findByToUserId(Long toUserId);
 
     /**
      * 내가 팔로우하는 유저 조회 서비스
      *
-     * @param loginUser  로그인한 유저 식별자
      * @param fromUserId 내가 팔로우하는 유저 식별자
      * @return 내가 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    List<FriendFindResponseDto> findByFromUserId(Long loginUser, Long fromUserId);
+    List<FriendFindResponseDto> findByFromUserId(Long fromUserId);
 
     /**
      * 팔로우 취소 요청 서비스

@@ -50,7 +50,7 @@ public class AuthController {
      *
      * @param requestDto 로그인 요청 정보가 담겨있는 {@link LoginRequestDto} 객체
      * @param request    세션에 저장된 유저 정보
-     * @param response   쿠키에 세션id 저장
+     * @param response   쿠키에 세션 id 저장
      * @return 성공 시 200 OK
      */
     @PostMapping("/login")

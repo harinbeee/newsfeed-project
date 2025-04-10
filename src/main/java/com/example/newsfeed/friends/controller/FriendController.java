@@ -41,6 +41,7 @@ public class FriendController {
     ) {
 
         HttpSession session = request.getSession(false);
+
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
         FriendSaveResponseDto responseDto = friendService.save(requestDto, fromUserId);
@@ -52,21 +53,20 @@ public class FriendController {
     /**
      * 나를 팔로우하는 유저 조회 컨트롤러
      *
-     * @param userId  유저 식별자
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    @GetMapping("/toUserId/{userId}")
+    @GetMapping("/toUserId")
     public ResponseEntity<List<FriendFindResponseDto>> findByToUserId(
-        @PathVariable Long userId,
         HttpServletRequest request
     ) {
 
         HttpSession session = request.getSession(false);
+
         Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
-        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(userId,
-            toUserId); // 나를 팔로우하는 사람 리스트
+        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(
+            toUserId); // 날 팔로우 하는 사람 리스트
 
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
 
@@ -75,22 +75,20 @@ public class FriendController {
     /**
      * 내가 팔로우하는 유저 조회 컨트롤러
      *
-     * @param userId  유저 식별자
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    @GetMapping("/fromUserId/{userId}")
+    @GetMapping("/fromUserId")
     public ResponseEntity<List<FriendFindResponseDto>> findByIdFromUserId(
-        @PathVariable Long userId,
         HttpServletRequest request
     ) {
 
         HttpSession session = request.getSession(false);
+
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
-        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(userId,
-            fromUserId); // 내가 팔로우하는 사람 리스트
-
+        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(
+            fromUserId); // 내가 팔로우 한 사람 리스트
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
 
     }
@@ -109,6 +107,7 @@ public class FriendController {
     ) {
 
         HttpSession session = request.getSession(false);
+
         Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
 
         friendService.delete(toUserId, fromUserId);
