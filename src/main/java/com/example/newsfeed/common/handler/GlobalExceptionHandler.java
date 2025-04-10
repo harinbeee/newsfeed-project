@@ -4,10 +4,10 @@ import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ErrorResponse;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import jakarta.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,70 +16,44 @@ import org.springframework.web.server.ResponseStatusException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String VALIDATION_ERROR_DELIMITER = ", ";
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> responseStatusExceptionHandler(
-        ResponseStatusException re) {
-
-        final ErrorResponse response = ErrorResponse.of(
-            ExceptionCode.NOT_VALID_ERROR, re.getReason());
-
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        ResponseStatusException ex
+    ) {
+        return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, ex.getReason());
     }
 
-    /**
-     * > @Validated 검증에 걸렸을 때 오류 클라이언트로 보내주는 메소드
-     *
-     * @param ce exception 에러정보 가지고 있음
-     * @return 에러메시지 status, code, message, reason
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> constraintViolationExceptionHandler(
-        ConstraintViolationException ce
+        ConstraintViolationException ex
     ) {
-
-        final ErrorResponse response = ErrorResponse.of(
-            ExceptionCode.NOT_VALID_ERROR, ce.getMessage());
-
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-
+        return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, ex.getMessage());
     }
 
-    /**
-     * > @valid 유효성 검증에 실패했을 경우 발생하는 예외 처리
-     *
-     * @param ex exception 에러정보 가지고 있음
-     * @return 에러메시지 status, code, message, reason
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-        MethodArgumentNotValidException ex) {
-
-        BindingResult bindingResult = ex.getBindingResult();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        // reason 상세 오류메시지 세팅
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            stringBuilder.append(fieldError.getField()).append(":"); // 필드 아이디
-            stringBuilder.append(fieldError.getDefaultMessage()); // 오류 메시지
-            stringBuilder.append(", ");
-        }
-
-        final ErrorResponse response = ErrorResponse.of(
-            ExceptionCode.NOT_VALID_ERROR, String.valueOf(stringBuilder));
-
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
-
+        MethodArgumentNotValidException ex
+    ) {
+        String errorMessage = createValidationErrorMessage(ex.getBindingResult());
+        return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, errorMessage);
     }
 
-    // 비즈니스 로직의 예외처리(Unchecked Exception 발생시 처리)
-    @ExceptionHandler(BusinessException.class) // 만들어준 커스텀익셉션 발생시 처리해주는 곳
+    @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
+        return createErrorResponse(ex.getExceptionCode(), ex.getMessage());
+    }
 
-        final ErrorResponse errorResponse = ErrorResponse.of(
-            ex.getExceptionCode(), ex.getMessage());
+    private ResponseEntity<ErrorResponse> createErrorResponse(ExceptionCode code, String reason) {
+        ErrorResponse response = ErrorResponse.of(code, reason);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
-
+    private String createValidationErrorMessage(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+            .map(error -> String.format("%s:%s", error.getField(), error.getDefaultMessage()))
+            .collect(Collectors.joining(VALIDATION_ERROR_DELIMITER));
     }
 
 }
