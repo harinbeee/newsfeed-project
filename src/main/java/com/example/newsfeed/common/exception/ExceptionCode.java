@@ -28,6 +28,7 @@ public enum ExceptionCode {
     BOARD_NOT_FOUND(404, "", "게시글이 존재하지 않습니다."),
     USER_NOT_FOUND(404, "", "유저 정보를 찾을 수 없습니다."),
     Like_NOT_FOUND(404, "", "좋아요 테이블 정보를 찾을 수 없습니다."),
+    SORT_TYPE_NOT_FOUND(404, "", "지원하지 않는 정렬 타입 입니다."),
 
     //409
     DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다");
