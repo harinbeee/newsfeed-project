@@ -1,18 +1,16 @@
 package com.example.newsfeed.friends.dto;
 
 import com.example.newsfeed.friends.entity.Friend;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FriendFindResponseDto {
 
-    private Long id;
-
-    private Long fromUserId;
-
-    private Long toUserId;
+    private final Long id;
+    private final Long fromUserId;
+    private final Long toUserId;
 
     public static FriendFindResponseDto toDto(Friend friend) { // Friend > FriendFindResponseDto 변환
         return new FriendFindResponseDto(
@@ -21,4 +19,5 @@ public class FriendFindResponseDto {
             friend.getToUser().getId()
         );
     }
+
 }
