@@ -38,7 +38,7 @@ public class LikeServiceImpl implements LikeService {
         Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
 
         // 자기 게시판에 좋아요 금지
-        if (board.getUser().getId() == requestDto.getUserId()) {
+        if (board.getUser().getId().equals(requestDto.getUserId())) {
             throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
         }
 
@@ -49,7 +49,7 @@ public class LikeServiceImpl implements LikeService {
 
         if (comment != null) {
             // 자기 댓글에 좋아요 금지
-            if (comment.getUser().getId() == requestDto.getUserId()) {
+            if (comment.getUser().getId().equals(requestDto.getUserId())) {
                 throw new BusinessException(ExceptionCode.COMMENT_SELFLIKE_BLOCK);
             }
         }
