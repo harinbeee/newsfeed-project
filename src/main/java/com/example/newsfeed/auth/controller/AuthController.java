@@ -33,17 +33,21 @@ public class AuthController {
      * @return 응답코드 200 성공, 400 접근금지, 400 비밀번호 미일치
      */
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestDto requestDto,
-        HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Void> login(
+        @RequestBody @Valid LoginRequestDto requestDto,
+        HttpSession session,
+        HttpServletResponse response
+    ) {
 
-        HttpSession session = request.getSession();
-
-        authService.login(requestDto.getEmail(), requestDto.getPassword(), session, response);
+        authService.login(requestDto, session, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     /**
+     * 로그아웃 요청 컨트롤러
+     *
      * @param request  세션에 저장된 userid 요청
      * @param response 쿠키를 만료
      * @return 응답정보 200 성공, 401 미로그인
