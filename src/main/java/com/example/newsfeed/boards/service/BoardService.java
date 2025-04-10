@@ -3,6 +3,7 @@ package com.example.newsfeed.boards.service;
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
+import com.example.newsfeed.common.util.SortType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,13 @@ public interface BoardService {
     /**
      * 게시글 전체 조회 요청 서비스
      *
-     * @param page          현재 페이지
-     * @param size          페이지당 게시글 개수
-     * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
-     * @param userId        친구 식별자
+     * @param page   현재 페이지
+     * @param size   페이지당 게시글 개수
+     * @param sort   FRIEND = 친구 우선순위, LIKES = 좋아요 우선순위, RECENT = 수정일 기준 정렬
+     * @param userId 친구 식별자
      * @return 조회된 게시글 정보가 담겨있는 {@link Page} 객체
      */
-    Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard, Long userId);
+    Page<BoardPageResponseDto> findAll(int page, int size, SortType sort, Long userId);
 
     /**
      * 게시글 단건 조회 요청 서비스
