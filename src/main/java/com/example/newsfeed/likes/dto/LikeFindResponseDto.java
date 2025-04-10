@@ -1,12 +1,12 @@
 package com.example.newsfeed.likes.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LikeFindResponseDto {
 
-    private Long likeCnt;
+    private final Long likeCnt;
 
 }

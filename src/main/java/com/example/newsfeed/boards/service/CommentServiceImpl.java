@@ -6,10 +6,13 @@ import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     /**
-     * 댓글 저장 요청 서비스
+     * 댓글 생성 요청 서비스
      *
      * @param userId     유저 식별자
      * @param boardId    게시글 식별자
@@ -57,5 +60,54 @@ public class CommentServiceImpl implements CommentService {
 
         return CommentResponseDto.toDto(findComment);
 
+    }
+
+    /**
+     * 댓글 수정 요청 서비스
+     *
+     * @param commentId  댓글 식별자
+     * @param userId     유저 식별자
+     * @param requestDto 댓글 내용이 담긴 {@link CommentRequestDto} 객체
+     * @return
+     */
+    @Transactional
+    @Override
+    public CommentResponseDto update(Long commentId, Long userId, CommentRequestDto requestDto) {
+
+        // 현재 로그인한 유저찾기
+        User loginUser = userRepository.findByIdElseThrow(userId);
+        // 수정할 댓글
+        Comment updatedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        // 수정 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때
+        if (!loginUser.getId().equals(updatedComment.getUser().getId())) {
+            throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
+        }
+
+        updatedComment.setContents(requestDto.getContents());
+
+        return CommentResponseDto.toDto(updatedComment);
+    }
+
+    /**
+     * 댓글 삭제 요청 서비스
+     *
+     * @param commentId 댓글 식별자
+     * @param userId    유저 식별자
+     */
+    @Override
+    public void delete(Long commentId, Long userId) {
+
+        // 현재 로그인한 유저찾기
+        User loginUser = userRepository.findByIdElseThrow(userId);
+        // 삭제할 댓글
+        Comment deletedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        // 삭제 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때
+        if (!loginUser.getId().equals(deletedComment.getUser().getId())) {
+            throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
+        }
+
+        commentRepository.delete(deletedComment);
     }
 }

@@ -139,11 +139,8 @@ public class BoardController {
 
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
-        User user = userRepository.findByIdElseThrow(userId);
 
-        UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
-
-        boardService.delete(loginUser.getId(), boardId);
+        boardService.delete(userId, boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
 

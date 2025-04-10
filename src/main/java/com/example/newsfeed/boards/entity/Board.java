@@ -37,6 +37,9 @@ public class Board extends BaseEntity {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
 
+    @Column(name = "board_image")
+    private String boardImage;
+
     @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,11 +52,13 @@ public class Board extends BaseEntity {
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+        this.boardImage = requestDto.getBoardImage();
     }
 
-    public void update(String title, String contents) {
+    public void update(String title, String contents, String boardImage) {
         this.title = title;
         this.contents = contents;
+        this.boardImage = boardImage;
     }
 
 }

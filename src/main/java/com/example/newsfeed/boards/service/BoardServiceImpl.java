@@ -118,12 +118,15 @@ public class BoardServiceImpl implements BoardService {
         }
 
         // 기존 내용 저장
+        String updateImage =
+            (requestDto.getBoardImage() != null) ? requestDto.getBoardImage()
+                : findBoard.getBoardImage();
         String updateTitle =
             (requestDto.getTitle() != null) ? requestDto.getTitle() : findBoard.getTitle();
         String updateContents =
             (requestDto.getContents() != null) ? requestDto.getContents() : findBoard.getContents();
 
-        findBoard.update(updateTitle, updateContents);
+        findBoard.update(updateImage, updateTitle, updateContents);
 
         Board updatedBoard = boardRepository.findByIdOrElseThrow(boardId); // 업데이트 내용 저장
 
@@ -142,6 +145,7 @@ public class BoardServiceImpl implements BoardService {
     public void delete(Long userId, Long boardId) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+        User user = userRepository.findByIdElseThrow(userId);
 
         // 작성자 = 로그인 유저인지 검증
         if (!findBoard.getUser().getId().equals(userId)) {
