@@ -20,6 +20,10 @@ public class ApiResponse<T> {
     private final T data;
     private final ErrorResponse errorResponse;
 
+    public static <T> ApiResponse<T> ok() {
+        return new ApiResponse<>(HttpStatus.OK, true, null, null);
+    }
+
     public static <T> ApiResponse<T> ok(final T data) {
         return new ApiResponse<>(HttpStatus.OK, true, data, null);
     }
