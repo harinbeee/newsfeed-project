@@ -19,7 +19,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("""
         SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(u.id, u.username, u.nickname, b.title, b.contents, b.createdAt, b.updatedAt)
-        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
+        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u LEFT JOIN Comment c ON c.board = b
+        GROUP BY b
         ORDER BY CASE WHEN f.fromUser.id = :userId THEN 0 ELSE 1 END, b.updatedAt DESC
         """)
     Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long userId);
