@@ -9,10 +9,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "friends")
+@NoArgsConstructor
 public class Friend {
 
     @Id
@@ -32,6 +34,4 @@ public class Friend {
         this.fromUser = fromUser;
     }
 
-    public Friend() {
-    }
 }
