@@ -109,17 +109,17 @@ public class UserServiceImpl implements UserService {
         user.setDeleted(true);
         userRepository.save(user);
 
-        // board에서 탈퇴회원 처리
+        // board에서 탈퇴회원의 게시판 숨김
         Board boardDelete = boardRepository.findByIdOrElseThrow(userId);
         boardDelete.setDeleted(true);
         boardRepository.save(boardDelete);
 
-        // friends에서 탈퇴회원 처리
+        // friends에서 탈퇴회원의 팔로우 숨김
         Friend friendDelete = friendRepository.findByIdElseThrow(userId);
         friendDelete.setDeleted(true);
         friendRepository.save(friendDelete);
 
-        // comment에서 탈퇴회원 처리
+        // comment에서 탈퇴회원의 댓글 숨김
         Comment commentDelete = commentRepository.findByIdOrElseThrow(userId);
         commentDelete.setDeleted(true);
         commentRepository.save(commentDelete);
