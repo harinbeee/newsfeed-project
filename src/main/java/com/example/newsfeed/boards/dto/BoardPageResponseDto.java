@@ -16,6 +16,9 @@ public class BoardPageResponseDto {
     private final String title;
     private final String contents;
     private final String boardImage;
+    private final Long likeCount;
+    private final Long commentCount;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
@@ -23,15 +26,5 @@ public class BoardPageResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime updatedAt;
 
-    public BoardPageResponseDto(Board board) {
-        this.userId = board.getUser().getId();
-        this.username = board.getUser().getUsername();
-        this.nickname = board.getUser().getNickname();
-        this.title = board.getTitle();
-        this.contents = board.getContents();
-        this.boardImage = board.getBoardImage();
-        this.createdAt = board.getCreatedAt();
-        this.updatedAt = board.getUpdatedAt();
-    }
 
 }

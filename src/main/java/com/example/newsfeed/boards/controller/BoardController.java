@@ -9,6 +9,13 @@ import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import com.example.newsfeed.common.util.SortType;
+import com.example.newsfeed.users.dto.UserFindResponseDto;
+import com.example.newsfeed.users.entity.User;
+import com.example.newsfeed.users.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +45,7 @@ public class BoardController {
      */
     @PostMapping
     public ApiResponse<BoardResponseDto> save(
-        @RequestBody BoardRequestDto requestDto,
+        @Valid @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
         return ApiResponse.created(boardService.save(getUserId(request), requestDto));
@@ -47,17 +54,17 @@ public class BoardController {
     /**
      * 게시글 전체 조회 요청 컨트롤러
      *
-     * @param page          현재 페이지
-     * @param size          페이지당 게시글 개수
-     * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
-     * @param request       로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
+     * @param page    현재 페이지
+     * @param size    페이지당 게시글 개수
+     * @param sort    FRIEND = 친구 우선순위, LIKES = 좋아요 우선순위, RECENT = 수정일 기준 정렬
+     * @param request 로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
      * @return 조회된 게시글 정보가 담긴 {@link BoardPageResponseDto} 객체
      */
     @GetMapping
     public ApiResponse<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "false") boolean isFriendBoard,
+        @RequestParam(defaultValue = "RECENT") SortType sort,
         HttpServletRequest request
     ) {
         return ApiResponse.ok(boardService.findAll(page, size, isFriendBoard, getUserId(request)));

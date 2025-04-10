@@ -7,6 +7,7 @@ import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.util.SortType;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,15 +50,15 @@ public class BoardServiceImpl implements BoardService {
     /**
      * 게시글 전체 조회 요청 서비스
      *
-     * @param page          현재 페이지
-     * @param size          페이지당 게시글 개수
-     * @param isFriendBoard 친구의 게시글 여부
-     * @param userId        친구 식별자
+     * @param page   현재 페이지
+     * @param size   페이지당 게시글 개수
+     * @param sort   FRIEND = 친구 우선순위, LIKES = 좋아요 우선순위, RECENT = 수정일 기준 정렬
+     * @param userId 친구 식별자
      * @return 조회된 게시글 정보가 담겨있는 {@link Page} 객체
      */
     @Transactional(readOnly = true)
     @Override
-    public Page<BoardPageResponseDto> findAll(int page, int size, boolean isFriendBoard,
+    public Page<BoardPageResponseDto> findAll(int page, int size, SortType sort,
         Long userId) {
 
         // page 값 조절
@@ -68,15 +69,21 @@ public class BoardServiceImpl implements BoardService {
             Sort.by("updatedAt").descending()
         );
 
-        // isFriendBoard true 일 때 친구의 게시글이 우선순위
-        if (isFriendBoard) {
-            return boardRepository.findAllByFriendPriority(pageable, userId);
+        switch (sort) {
+            case FRIEND -> {
+                return boardRepository.findAllByFriendPriority(pageable, userId);
+            }
+            case LIKES -> {
+                return boardRepository.findAllByLikePriority(pageable, userId);
+            }
+            case RECENT -> {
+                return boardRepository.findAllByUpdatedAtPriority(pageable, userId);
+            }
+            default -> {
+                throw new BusinessException(ExceptionCode.SORT_TYPE_NOT_FOUND);
+            }
+
         }
-        // false 일 때 업데이트 날짜로 정렬
-        Page<Board> boardPage = boardRepository.findAll(pageable);
-
-        return boardPage.map(BoardPageResponseDto::new);
-
     }
 
     /**
@@ -111,15 +118,15 @@ public class BoardServiceImpl implements BoardService {
         }
 
         // 기존 내용 저장
-        String updateImage =
-            (requestDto.getBoardImage() != null) ? requestDto.getBoardImage()
-                : findBoard.getBoardImage();
         String updateTitle =
             (requestDto.getTitle() != null) ? requestDto.getTitle() : findBoard.getTitle();
         String updateContents =
             (requestDto.getContents() != null) ? requestDto.getContents() : findBoard.getContents();
+        String updateImage =
+            (requestDto.getBoardImage() != null) ? requestDto.getBoardImage()
+                : findBoard.getBoardImage();
 
-        findBoard.update(updateImage, updateTitle, updateContents);
+        findBoard.update(updateTitle, updateContents, updateImage);
 
         Board updatedBoard = boardRepository.findByIdOrElseThrow(boardId); // 업데이트 내용 저장
 

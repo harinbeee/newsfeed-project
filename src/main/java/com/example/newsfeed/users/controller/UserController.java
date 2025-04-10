@@ -12,9 +12,10 @@ import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@Validated
 public class UserController {
 
     private final UserService userService;
@@ -39,7 +39,7 @@ public class UserController {
      */
     @GetMapping("/{userId}")
     public ApiResponse<UserFindResponseDto> find(
-        @PathVariable @Min(value = 1) Long userId
+        @PathVariable Long userId
     ) {
         return ApiResponse.ok(userService.find(userId));
     }

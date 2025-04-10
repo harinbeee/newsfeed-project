@@ -2,6 +2,7 @@ package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.entity.Comment;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -16,7 +17,11 @@ public class BoardResponseDto {
     private final String title;
     private final String contents;
     private final String boardImage;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime cratedAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime updatedAt;
     private final List<CommentResponseDto> comments;
 
