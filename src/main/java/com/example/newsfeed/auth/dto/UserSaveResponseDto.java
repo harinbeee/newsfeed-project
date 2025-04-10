@@ -10,27 +10,17 @@ import lombok.Getter;
 public class UserSaveResponseDto {
 
     private Long id;
-
     private String email;
-
     private String username;
-
     private String nickname;
-
     private String phone;
-
     private String profilePicture;
-
     private String description;
-
     private boolean isDeleted;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
     public static UserSaveResponseDto toDto(User user) { // user > UserSaveResponseDto 변환
-
         return new UserSaveResponseDto(
             user.getId(),
             user.getEmail(),
@@ -44,4 +34,5 @@ public class UserSaveResponseDto {
             user.getUpdatedAt()
         );
     }
+
 }
