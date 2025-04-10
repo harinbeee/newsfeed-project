@@ -1,6 +1,5 @@
 package com.example.newsfeed.boards.controller;
 
-import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
 import com.example.newsfeed.boards.repository.BoardRepository;
@@ -36,8 +35,7 @@ public class CommentController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        CommentResponseDto commentResponseDto =
-            commentService.save(userId, boardId, requestDto.getContents());
+        CommentResponseDto commentResponseDto = commentService.save(userId, boardId, requestDto);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
 
