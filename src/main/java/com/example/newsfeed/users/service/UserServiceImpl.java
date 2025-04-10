@@ -1,10 +1,14 @@
 package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
+import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.exception.UserAccessDeniedException;
+import com.example.newsfeed.friends.entity.Friend;
+import com.example.newsfeed.friends.repository.FriendRepository;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -27,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final BoardRepository boardRepository;
+    private final FriendRepository friendRepository;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -113,6 +119,16 @@ public class UserServiceImpl implements UserService {
         // 회원 정보에 탈퇴 입력
         user.setDeleted(true);
         userRepository.save(user);
+
+        // board에서 탈퇴회원 처리
+        Board boardDelete = boardRepository.findByIdOrElseThrow(userId);
+        boardDelete.setDeleted(true);
+        boardRepository.save(boardDelete);
+
+        // friends에서 탈토회원 처리
+        Friend friendDelete = friendRepository.findByIdElseThrow(userId);
+        friendDelete.setDeleted(true);
+        friendRepository.save(friendDelete);
 
         // 로그아웃 실행
         authService.logout(request, response);

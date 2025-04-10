@@ -53,6 +53,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(ExceptionCode.ALREADY_LOGIN);
         }
 
+        // 회원 탈퇴시
         if (findUser.isDeleted()) {
             throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
         }

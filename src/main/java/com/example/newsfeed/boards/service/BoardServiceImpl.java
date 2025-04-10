@@ -10,6 +10,7 @@ import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@SQLDelete(sql = "UPDATE BoardServiceImpl SET is_deleted = true WHERE id = ?")
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;

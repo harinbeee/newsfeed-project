@@ -12,10 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
 @Table(name = "boards")
+@Where(clause = "is_deleted = false")
 public class Board extends BaseEntity {
 
     @Id
