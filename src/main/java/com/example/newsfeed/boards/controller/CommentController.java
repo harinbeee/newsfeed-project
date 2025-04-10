@@ -1,5 +1,7 @@
 package com.example.newsfeed.boards.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
 import com.example.newsfeed.boards.repository.BoardRepository;
@@ -7,7 +9,6 @@ import com.example.newsfeed.boards.service.CommentService;
 import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,14 +42,8 @@ public class CommentController {
         @RequestBody CommentRequestDto requestDto,
         HttpServletRequest userRequest
     ) {
-
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        CommentResponseDto commentResponseDto = commentService.save(userId, boardId, requestDto);
-
-        return ApiResponse.created(commentResponseDto);
-
+        return ApiResponse.created(
+            commentService.save(getUserId(userRequest), boardId, requestDto));
     }
 
     /**
@@ -63,11 +58,7 @@ public class CommentController {
         @PathVariable Long boardId,
         @PathVariable Long commentId
     ) {
-
-        CommentResponseDto commentResponseDto = commentService.findOne(boardId, commentId);
-
-        return ApiResponse.ok(commentResponseDto);
-
+        return ApiResponse.ok(commentService.findOne(boardId, commentId));
     }
 
     /**
@@ -84,14 +75,7 @@ public class CommentController {
         @RequestBody CommentRequestDto requestDto,
         HttpServletRequest userRequest
     ) {
-
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        CommentResponseDto commentResponseDto = commentService.update(commentId, userId,
-            requestDto);
-
-        return ApiResponse.ok(commentResponseDto);
+        return ApiResponse.ok(commentService.update(commentId, getUserId(userRequest), requestDto));
     }
 
     /**
@@ -106,11 +90,7 @@ public class CommentController {
         @PathVariable Long commentId,
         HttpServletRequest userRequest
     ) {
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        commentService.delete(commentId, userId);
-
+        commentService.delete(commentId, getUserId(userRequest));
         return ApiResponse.ok();
     }
 }
