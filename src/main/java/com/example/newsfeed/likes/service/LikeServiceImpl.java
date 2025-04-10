@@ -2,8 +2,6 @@ package com.example.newsfeed.likes.service;
 
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
-import com.example.newsfeed.common.exception.BusinessException;
-import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.likes.dto.LikeFindRequestDto;
 import com.example.newsfeed.likes.dto.LikeFindResponseDto;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
@@ -52,11 +50,10 @@ public class LikeServiceImpl implements LikeService {
 
         boardRepository.findByIdOrElseThrow(requestDto.getBoardId()); // 있는 게시글 인지 체크
 
-        Long likeCnt = likeRepository.findByBoardIdOrCommentId(
-                requestDto.getBoardId(),
-                requestDto.getCommentId()
-            )
-            .orElseThrow(() -> new BusinessException(ExceptionCode.Like_NOT_FOUND));
+        Long likeCnt = likeRepository.findByBoardIdOrCommentIdOrElseThrow(
+            requestDto.getBoardId(),
+            requestDto.getCommentId()
+        );
 
         return new LikeFindResponseDto(likeCnt);
 

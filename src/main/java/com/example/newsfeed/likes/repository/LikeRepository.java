@@ -1,5 +1,7 @@
 package com.example.newsfeed.likes.repository;
 
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.likes.entity.Like;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +15,12 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
         @Param("boardId") Long boardId,
         @Param("commentId") Long commentId
     );
+
+    default Long findByBoardIdOrCommentIdOrElseThrow(
+        @Param("boardId") Long boardId,
+        @Param("commentId") Long commentId) {
+        return findByBoardIdOrCommentId(boardId, commentId).orElseThrow(
+            () -> new BusinessException(ExceptionCode.Like_NOT_FOUND));
+    }
+
 }
