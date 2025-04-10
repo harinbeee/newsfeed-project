@@ -9,6 +9,7 @@ import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class BoardController {
      */
     @PostMapping
     public ResponseEntity<BoardResponseDto> save(
-        @RequestBody BoardRequestDto requestDto,
+        @Valid @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
 
