@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
-
     private final BoardRepository boardRepository;
 
+
     /**
-     * 좋아요 저장 메소드
+     * 좋아요 저장 요청 서비스
      *
-     * @param requestDto 게시글 ID, 작성한 유저 ID
-     * @return 게시글 ID, 작성한 유저 ID , 좋아요 테이블 식별자
+     * @param requestDto 좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
+     * @return 좋아요 응답 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @Override
     public LikeSaveResponseDto save(LikeSaveRequestDto requestDto) {
@@ -35,15 +35,17 @@ public class LikeServiceImpl implements LikeService {
         Like like = new Like(requestDto.getUserId(), board);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
+
     }
 
     /**
-     * 게시글 ID로 조회 or 댓글 ID로 조회
+     * 게시글 또는 댓글의 좋아요 개수 조회 요청 서비스
      * <p>
      * boardId,commentId로,boardId+commentId로 로 조회 가능 넘겨주는 값에 따라 사용에 따라 수정 부탁합니다
+     * </p>
      *
-     * @param requestDto 게시글 ID,  댓글 ID
-     * @return 게시글 좋아요 개수 or댓글 좋아요 개수
+     * @param requestDto 게시글 또는 댓글의 좋아요 요청 정보가 담겨있는 {@link LikeFindRequestDto} 객체
+     * @return 좋아요 개수 정보를 담고있는 {@link LikeFindResponseDto} 객체
      */
     @Override
     public LikeFindResponseDto findLikeCntByBoardIdOrCommentId(LikeFindRequestDto requestDto) {
@@ -57,6 +59,7 @@ public class LikeServiceImpl implements LikeService {
             .orElseThrow(() -> new BusinessException(ExceptionCode.Like_NOT_FOUND));
 
         return new LikeFindResponseDto(likeCnt);
+
     }
 
 }

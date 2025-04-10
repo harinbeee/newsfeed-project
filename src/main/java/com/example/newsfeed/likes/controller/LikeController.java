@@ -25,6 +25,13 @@ public class LikeController {
 
     private final LikeService likeService;
 
+    /**
+     * 좋아요 저장 요청 컨트롤러
+     *
+     * @param requestDto  좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
+     * @param loginUserId 유저 식별자
+     * @return 좋아요 정보가 담긴 {@link LikeSaveResponseDto} 객체
+     */
     @PostMapping
     public ResponseEntity<LikeSaveResponseDto> save(
         @RequestBody @Valid LikeSaveRequestDto requestDto,
@@ -38,22 +45,23 @@ public class LikeController {
         LikeSaveResponseDto responseDto = likeService.save(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+
     }
 
     /**
-     * boardId, commentId로 조회 컨트롤러
-     * <p>
-     * 일단 boardId,commentId로,boardId+commentId로 로 조회 가능 넘겨주는 값에 따라 사용에 따라 수정 부탁합니다
+     * 게시글 또는 댓글의 좋아요 개수 조회 요청 컨트롤러
      *
-     * @param requestDto boardId, commentId 둘 중 하나
-     * @return
+     * @param requestDto 게시글 또는 댓글의 좋아요 요청 정보가 담겨있는 {@link LikeFindRequestDto} 객체
+     * @return 좋아요 개수 정보가 담긴 {@link LikeFindResponseDto} 객체
      */
     @GetMapping
     public ResponseEntity<LikeFindResponseDto> findLikeCntByBoardIdOrCommentId(
         @RequestBody @Valid LikeFindRequestDto requestDto
     ) {
+
         LikeFindResponseDto responseDto = likeService.findLikeCntByBoardIdOrCommentId(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        
     }
 }
