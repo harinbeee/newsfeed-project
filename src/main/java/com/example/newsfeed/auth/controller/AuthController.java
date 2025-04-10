@@ -5,14 +5,12 @@ import com.example.newsfeed.auth.dto.LoginRequestDto;
 import com.example.newsfeed.auth.dto.UserSaveRequestDto;
 import com.example.newsfeed.auth.dto.UserSaveResponseDto;
 import com.example.newsfeed.auth.service.AuthService;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,15 +31,13 @@ public class AuthController {
      * @return 생성된 유저 정보가 담겨있는 {@link UserSaveResponseDto} 객체
      */
     @PostMapping("/signup")
-    public ResponseEntity<UserSaveResponseDto> signUp(
+    public ApiResponse<UserSaveResponseDto> signUp(
         @RequestBody @Valid UserSaveRequestDto requestDto
     ) {
 
         userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
 
-        UserSaveResponseDto responseDto = authService.save(requestDto); // 중복 없으면 가입
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return ApiResponse.ok(authService.save(requestDto));
 
     }
 
@@ -54,17 +50,15 @@ public class AuthController {
      * @return 성공 시 200 OK
      */
     @PostMapping("/login")
-    public ResponseEntity<Void> login(
+    public ApiResponse<Void> login(
         @RequestBody @Valid LoginRequestDto requestDto,
         HttpServletRequest request,
         HttpServletResponse response
     ) {
 
-        HttpSession session = request.getSession();
+        authService.login(requestDto, request.getSession(), response);
 
-        authService.login(requestDto, session, response);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok();
 
     }
 
@@ -76,11 +70,11 @@ public class AuthController {
      * @return 성공 시 200 OK
      */
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse<Void> logout(HttpServletRequest request, HttpServletResponse response) {
 
         authService.logout(request, response);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok();
 
     }
 

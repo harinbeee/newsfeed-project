@@ -14,9 +14,10 @@ public class BoardPageResponseDto {
     private final String nickname;
     private final String title;
     private final String contents;
-    private final Long commentCount;
-    private final Long likeCount;
     private final String boardImage;
+    private final Long likeCount;
+    private final Long commentCount;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;

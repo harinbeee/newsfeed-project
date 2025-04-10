@@ -2,6 +2,7 @@ package com.example.newsfeed.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -21,10 +22,10 @@ public enum ExceptionCode {
     COMMENT_SELFLIKE_BLOCK(400, "", "자신이 작성한 댓글에 좋아요를 누를 수 없습니다."),
 
     // 401
-    NOT_LOGIN_ERROR(401, "", "로그인이 필요합니다."),
+    NOT_LOGIN_ERROR(401, HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
 
     // 403
-    USER_ACCESS_DENIED(403, "", "로그인한 유저의 id와 일치하지 않습니다."),
+    USER_ACCESS_DENIED(403, HttpStatus.FORBIDDEN, "로그인한 유저의 id와 일치하지 않습니다."),
 
     // 404
     BOARD_NOT_FOUND(404, "", "게시글이 존재하지 않습니다."),
@@ -34,10 +35,10 @@ public enum ExceptionCode {
     SORT_TYPE_NOT_FOUND(404, "", "지원하지 않는 정렬 타입 입니다."),
 
     //409
-    DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다");
+    DB_DATA_CONFLICT(409, HttpStatus.CONFLICT, "동일한 값이 존재 합니다");
 
-    private final int status;
-    private final String code;
+    private final int code;
+    private final HttpStatus httpStatus;
     private final String message;
 
 }
