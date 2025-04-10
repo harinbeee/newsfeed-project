@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class BoardRequestDto {
+public class CommentRequestDto {
 
-    private final String title;
     private final String contents;
 
 }

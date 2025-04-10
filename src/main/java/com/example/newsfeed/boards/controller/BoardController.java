@@ -32,35 +32,35 @@ public class BoardController {
     private final UserRepository userRepository;
 
     /**
-     * 게시글 생성
+     * 게시글 생성 요청 컨트롤러
      *
-     * @param requestDto 게시물 생성 dto 요청
-     * @param request    로그인 유저 정보
-     * @return 게시글 정보가 담긴 응답 dto , 성공 - 201, 실패 - 400
+     * @param requestDto 게시물 생성 요청 정보가 담긴 {@link BoardRequestDto} 객체
+     * @param request    로그인 세션 정보가 딤긴 {@link HttpServletRequest} 객체
+     * @return 생성된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @PostMapping
     public ResponseEntity<BoardResponseDto> save(
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
+
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        BoardResponseDto boardResponseDto =
-            boardService.save(userId, requestDto.getTitle(),
-                requestDto.getContents());
+        BoardResponseDto boardResponseDto = boardService.save(userId, requestDto);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
 
     }
 
     /**
-     * 게시글 전체조회
+     * 게시글 전체 조회 요청 컨트롤러
      *
-     * @param page          페이지
-     * @param size          페이지당 개수
+     * @param page          현재 페이지
+     * @param size          페이지당 게시글 개수
      * @param isFriendBoard true = 팔로우한 게시글 우선순위, false = 기본 정렬
-     * @return
+     * @param request       로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
+     * @return 조회된 게시글 정보가 담긴 {@link BoardPageResponseDto} 객체
      */
     @GetMapping
     public ResponseEntity<Page<BoardPageResponseDto>> findAll(
@@ -73,34 +73,38 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(page, size,
-            isFriendBoard, userId);
+        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(
+            page, size, isFriendBoard, userId
+        );
 
         return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
+
     }
 
     /**
-     * 게시글 단건 조회
+     * 게시글 단건 조회 요청 컨트롤러
      *
-     * @param boardId 게시물 조회시 요청 식별자
-     * @return 게시물 정보가 담긴 응답 Dto, 성공시 200
+     * @param boardId 게시물 식별자
+     * @return 조회된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> findOne(
         @PathVariable Long boardId
     ) {
-        BoardResponseDto boardResponseDto =
-            boardService.findOne(boardId);
+
+        BoardResponseDto boardResponseDto = boardService.findOne(boardId);
+
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+
     }
 
     /**
-     * 게시글 수정
+     * 게시글 수정 요청 컨트롤러
      *
      * @param boardId    수정할 게시물 식별자 요청
      * @param requestDto 게시물 수정 dto 요청
      * @param request    로그인 유저 정보 요청
-     * @return 수정된 게시물 dto 응답 , 성공 - 200, 실패(다른 사용자 수정 시도)-400, 실패(게시물 식별자 없음)-404
+     * @return 수정된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @PatchMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> update(
@@ -112,11 +116,10 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        BoardResponseDto boardResponseDto =
-            boardService.update(boardId, userId, requestDto.getTitle(),
-                requestDto.getContents());
+        BoardResponseDto boardResponseDto = boardService.update(boardId, userId, requestDto);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+
     }
 
 
@@ -132,15 +135,17 @@ public class BoardController {
         @PathVariable Long boardId,
         HttpServletRequest request
     ) {
+
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
         User user = userRepository.findByIdElseThrow(userId);
 
         UserFindResponseDto loginUser = UserFindResponseDto.toDto(user);
 
-        boardService.delete(loginUser.getNickname(), boardId);
+        boardService.delete(loginUser.getId(), boardId);
 
         return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
+
     }
 
 
