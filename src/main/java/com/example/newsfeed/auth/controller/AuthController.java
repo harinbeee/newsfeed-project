@@ -49,8 +49,8 @@ public class AuthController {
 
     /**
      * @param requestDto 이메일과 비밀번호 요청
-     * @param session    세션에 userid 입력
-     * @param response   쿠키에 세션id 저장
+     * @param request    세션 생성
+     * @param response   쿠키에 세션 id 저장
      * @return 응답코드 200 성공, 400 접근금지, 400 비밀번호 미일치
      */
     @PostMapping("/login")
