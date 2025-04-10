@@ -2,7 +2,9 @@ package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
 import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
+import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.PasswordEncoder;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final AuthService authService;
     private final BoardRepository boardRepository;
     private final FriendRepository friendRepository;
+    private final CommentRepository commentRepository;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -111,10 +114,15 @@ public class UserServiceImpl implements UserService {
         boardDelete.setDeleted(true);
         boardRepository.save(boardDelete);
 
-        // friends에서 탈토회원 처리
+        // friends에서 탈퇴회원 처리
         Friend friendDelete = friendRepository.findByIdElseThrow(userId);
         friendDelete.setDeleted(true);
         friendRepository.save(friendDelete);
+
+        // comment에서 탈퇴회원 처리
+        Comment commentDelete = commentRepository.findByIdOrElseThrow(userId);
+        commentDelete.setDeleted(true);
+        commentRepository.save(commentDelete);
 
         // 로그아웃 실행
         authService.logout(request, response);
