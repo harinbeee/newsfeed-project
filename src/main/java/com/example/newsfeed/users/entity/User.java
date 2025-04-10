@@ -9,10 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Table(name = "users")
+@Where(clause = "is_deleted = false")
 public class User extends BaseEntity {
 
     @Id
@@ -44,9 +46,6 @@ public class User extends BaseEntity {
     @Column
     private String description;
 
-    @Setter
-    @Column
-    private boolean isDeleted;
 
     public User() {
 
@@ -61,10 +60,6 @@ public class User extends BaseEntity {
         this.phone = phone;
         this.profilePicture = profilePicture;
         this.description = description;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
     }
 
     public void updatePassword(String newPassword) {
