@@ -2,8 +2,6 @@ package com.example.newsfeed.likes.controller;
 
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
-import com.example.newsfeed.likes.dto.LikeFindRequestDto;
-import com.example.newsfeed.likes.dto.LikeFindResponseDto;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
 import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 import com.example.newsfeed.likes.service.LikeService;
@@ -11,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,20 +37,5 @@ public class LikeController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    /**
-     * boardId, commentId로 조회 컨트롤러
-     * <p>
-     * 일단 boardId,commentId로,boardId+commentId로 로 조회 가능 넘겨주는 값에 따라 사용에 따라 수정 부탁합니다
-     *
-     * @param requestDto boardId, commentId 둘 중 하나
-     * @return
-     */
-    @GetMapping
-    public ResponseEntity<LikeFindResponseDto> findLikeCntByBoardIdOrCommentId(
-        @RequestBody @Valid LikeFindRequestDto requestDto
-    ) {
-        LikeFindResponseDto responseDto = likeService.findLikeCntByBoardIdOrCommentId(requestDto);
 
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-    }
 }
