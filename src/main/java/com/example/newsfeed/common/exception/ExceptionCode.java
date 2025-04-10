@@ -35,7 +35,9 @@ public enum ExceptionCode {
     SORT_TYPE_NOT_FOUND(404, HttpStatus.NOT_FOUND, "지원하지 않는 정렬 타입 입니다."),
 
     //409
-    DB_DATA_CONFLICT(409, HttpStatus.CONFLICT, "동일한 값이 존재 합니다");
+    DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다"),
+    FOLLOW_USER_CONFLICT(409, "", "본인에게는 팔로우 할 수 없습니다");
+
 
     private final int code;
     private final HttpStatus httpStatus;

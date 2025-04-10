@@ -1,0 +1,91 @@
+package com.example.newsfeed.friends.controller;
+
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
+import com.example.newsfeed.common.response.ApiResponse;
+import com.example.newsfeed.friends.dto.FriendAcceptRequestDto;
+import com.example.newsfeed.friends.dto.FriendAcceptResponseDto;
+import com.example.newsfeed.friends.dto.FriendFindResponseDto;
+import com.example.newsfeed.friends.dto.FriendRequestFindResponseDto;
+import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
+import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
+import com.example.newsfeed.friends.service.FriendRequestService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Min;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/follows/requests")
+@RequiredArgsConstructor
+@Validated
+public class FriendRequestController {
+
+    private final FriendRequestService requestService;
+
+
+    /**
+     * 친구요청  저장 컨트롤러
+     *
+     * @param requestDto 친구 요청 정보가 담겨있는 {@link FriendSaveRequestDto} 객체
+     * @return 친구 요청 정보가 담겨있는 {@link FriendSaveResponseDto} 객체
+     */
+    @PostMapping
+    public ApiResponse<FriendAcceptResponseDto> save(
+        @RequestBody FriendAcceptRequestDto requestDto,
+        HttpServletRequest request
+    ) {
+        return ApiResponse.ok(requestService.save(requestDto, getUserId(request)));
+    }
+
+    /**
+     * 나에게 친구 요청 보낸 유저 조회 컨트롤러
+     *
+     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
+     * @return 나에게 친구 요청 보낸 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
+     */
+    @GetMapping("/toUserId")
+    public ApiResponse<List<FriendRequestFindResponseDto>> findByToUserId(
+        HttpServletRequest request
+    ) {
+        return ApiResponse.ok(requestService.findByToUserId(getUserId(request)));
+    }
+
+    /**
+     * 내가 친구 요청 보낸 유저 조회 컨트롤러
+     *
+     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
+     * @return 내가 친구 요청 보낸 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
+     */
+    @GetMapping("/fromUserId")
+    public ApiResponse<List<FriendRequestFindResponseDto>> findByIdFromUserId(
+        HttpServletRequest request
+    ) {
+        return ApiResponse.ok(requestService.findByFromUserId(getUserId(request)));
+    }
+
+    /**
+     * 친구 요청 거절 컨트롤러
+     *
+     * @param fromUserId 요청 거절 할 유저 식별자
+     * @param request    로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
+     * @return 성공 시 200 OK
+     */
+    @DeleteMapping("/{fromUserId}")
+    public ApiResponse<String> reject(
+        @PathVariable @Min(1) Long fromUserId,
+        HttpServletRequest request
+    ) {
+        requestService.reject(fromUserId, getUserId(request));
+
+        return ApiResponse.ok();
+    }
+}

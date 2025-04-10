@@ -39,39 +39,26 @@ public class FriendController {
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(friendService.save(requestDto, getUserId(request)));
+        return ApiResponse.ok(friendService.accept(requestDto, getUserId(request)));
     }
 
     /**
-     * 나를 팔로우하는 유저 조회 컨트롤러
+     * 내 친구 목록 조회 컨트롤러
      *
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
-     * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
-     */
-    @GetMapping("/toUserId")
-    public ApiResponse<List<FriendFindResponseDto>> findByToUserId(
-        HttpServletRequest request
-    ) {
-        return ApiResponse.ok(friendService.findByToUserId(getUserId(request)));
-    }
-
-    /**
-     * 내가 팔로우하는 유저 조회 컨트롤러
-     *
-     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
-     * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
+     * @return 내 친구 목록이 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
     @GetMapping("/fromUserId")
-    public ApiResponse<List<FriendFindResponseDto>> findByIdFromUserId(
+    public ApiResponse<List<FriendFindResponseDto>> findFriendListByFromUserId(
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(friendService.findByFromUserId(getUserId(request)));
+        return ApiResponse.ok(friendService.findFriendListByFromUserId(getUserId(request)));
     }
 
     /**
-     * 팔로우 취소 요청 컨트롤러
+     * 친구 삭제 요청 컨트롤러
      *
-     * @param toUserId 팔로우를 취소할 유저 식별자
+     * @param toUserId 친구 삭제할 유저 식별자
      * @param request  로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 성공 시 200 OK
      */
