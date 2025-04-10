@@ -1,6 +1,7 @@
 package com.example.newsfeed.likes.entity;
 
 import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.entity.Comment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +27,9 @@ public class Like {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-//    @ManyToOne
-//    @JoinColumn(name = "comment_id", nullable = false)
-//    private Comment comment;
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
     @Column(nullable = false)
     private Long userId;

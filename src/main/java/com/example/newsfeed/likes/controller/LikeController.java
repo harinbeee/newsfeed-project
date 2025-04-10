@@ -40,13 +40,19 @@ public class LikeController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
+    /**
+     * boardId, commentId로 조회 컨트롤러
+     * <p>
+     * 일단 boardId,commentId로,boardId+commentId로 로 조회 가능 넘겨주는 값에 따라 사용에 따라 수정 부탁합니다
+     *
+     * @param requestDto boardId, commentId 둘 중 하나
+     * @return
+     */
     @GetMapping
-    public ResponseEntity<LikeFindResponseDto> findLikeCntByBoardId(
-        @RequestBody @Valid LikeFindRequestDto requestDto,
-        @SessionAttribute("user") Long loginUserId
+    public ResponseEntity<LikeFindResponseDto> findLikeCntByBoardIdOrCommentId(
+        @RequestBody @Valid LikeFindRequestDto requestDto
     ) {
-
-        LikeFindResponseDto responseDto = likeService.findLikeCntByBoardId(requestDto);
+        LikeFindResponseDto responseDto = likeService.findLikeCntByBoardIdOrCommentId(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }

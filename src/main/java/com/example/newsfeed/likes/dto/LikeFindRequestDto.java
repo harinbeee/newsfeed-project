@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class LikeFindRequestDto {
 
-    @Min(1)
+    @Min(0)
     private Long boardId;
 
-    @Min(1)
+    @Min(0)
     private Long commentId;
-    
+
 }

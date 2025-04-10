@@ -8,7 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    @Query("SELECT l FROM Like l WHERE l.board.id = :boardId OR l.comment.id = :commentId")
-    Optional<Like> findByBoardIdOrCommnetId(@Param("boardId") Long boardId,
-        @Param("commentId") Long commentId);
+    @Query("SELECT count(l) FROM Like l WHERE l.board.boardId = :boardId or l.comment.commentId = :commentId")
+    Optional<Long> findByBoardIdORCommentId(
+        @Param("boardId") Long boardId,
+        @Param("commentId") Long commentId
+    );
 }

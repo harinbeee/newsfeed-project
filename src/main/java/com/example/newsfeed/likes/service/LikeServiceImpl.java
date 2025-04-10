@@ -37,18 +37,26 @@ public class LikeServiceImpl implements LikeService {
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
     }
 
+    /**
+     * 게시글 ID로 조회 or 댓글 ID로 조회
+     * <p>
+     * boardId,commentId로,boardId+commentId로 로 조회 가능 넘겨주는 값에 따라 사용에 따라 수정 부탁합니다
+     *
+     * @param requestDto 게시글 ID,  댓글 ID
+     * @return 게시글 좋아요 개수 or댓글 좋아요 개수
+     */
     @Override
-    public LikeFindResponseDto findLikeCntByBoardId(LikeFindRequestDto requestDto) {
+    public LikeFindResponseDto findLikeCntByBoardIdOrCommentId(LikeFindRequestDto requestDto) {
 
         boardRepository.findByIdOrElseThrow(requestDto.getBoardId()); // 있는 게시글 인지 체크
 
-        Like like = likeRepository.findByBoardIdOrCommnetId(
+        Long likeCnt = likeRepository.findByBoardIdORCommentId(
                 requestDto.getBoardId(),
                 requestDto.getCommentId()
             )
             .orElseThrow(() -> new BusinessException(ExceptionCode.Like_NOT_FOUND));
 
-        return LikeFindResponseDto.toDto(like);
+        return new LikeFindResponseDto(likeCnt);
     }
 
 }

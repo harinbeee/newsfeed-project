@@ -9,5 +9,5 @@ public interface LikeService {
 
     LikeSaveResponseDto save(LikeSaveRequestDto requestDto);
 
-    LikeFindResponseDto findLikeCntByBoardId(LikeFindRequestDto requestDto);
+    LikeFindResponseDto findLikeCntByBoardIdOrCommentId(LikeFindRequestDto requestDto);
 }
