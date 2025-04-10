@@ -9,9 +9,6 @@ import lombok.RequiredArgsConstructor;
 public class LikeSaveRequestDto {
 
     @Min(1)
-    private final Long userId;
-
-    @Min(1)
     private final Long boardId;
 
     @Min(0)

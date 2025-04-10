@@ -2,6 +2,7 @@ package com.example.newsfeed.friends.entity;
 
 import com.example.newsfeed.users.entity.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +23,11 @@ public class FriendRequest { // 친구 요청 저장 테이블
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "to_user_id")
     private User toUser; // 친구 요청을 받은 사람
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "from_user_id")
     private User fromUser; // 친구 요청을 보낸 사람
 

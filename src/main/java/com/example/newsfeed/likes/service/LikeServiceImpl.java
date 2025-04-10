@@ -29,17 +29,25 @@ public class LikeServiceImpl implements LikeService {
      * 좋아요 저장 요청 서비스
      *
      * @param requestDto 좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
+     * @param userId
      * @return 좋아요 응답 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @Override
     @Transactional
-    public LikeSaveResponseDto save(LikeSaveRequestDto requestDto) {
+    public LikeSaveResponseDto save(LikeSaveRequestDto requestDto, Long userId) {
 
         Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
 
         // 자기 게시판에 좋아요 금지
-        if (board.getUser().getId().equals(requestDto.getUserId())) {
+        if (board.getUser().getId().equals(userId)) {
             throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
+        }
+
+        //db에 이미 같은 형식의 데이터가 있는지 체크
+        if (likeRepository.findByCommentIdAndBoardId(requestDto.getCommentId(),
+                requestDto.getBoardId())
+            .isPresent()) {
+            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
         }
 
         Comment comment =
@@ -49,12 +57,12 @@ public class LikeServiceImpl implements LikeService {
 
         if (comment != null) {
             // 자기 댓글에 좋아요 금지
-            if (comment.getUser().getId().equals(requestDto.getUserId())) {
+            if (comment.getUser().getId().equals(userId)) {
                 throw new BusinessException(ExceptionCode.COMMENT_SELFLIKE_BLOCK);
             }
         }
 
-        Like like = new Like(requestDto.getUserId(), board, comment);
+        Like like = new Like(userId, board, comment);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
 
