@@ -4,8 +4,6 @@ import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
-import com.example.newsfeed.common.exception.BusinessException;
-import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.likes.dto.LikeFindRequestDto;
 import com.example.newsfeed.likes.dto.LikeFindResponseDto;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
