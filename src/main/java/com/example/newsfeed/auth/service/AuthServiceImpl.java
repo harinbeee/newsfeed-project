@@ -1,10 +1,11 @@
 package com.example.newsfeed.auth.service;
 
+import com.example.newsfeed.auth.dto.LoginRequestDto;
 import com.example.newsfeed.auth.dto.UserSaveRequestDto;
 import com.example.newsfeed.auth.dto.UserSaveResponseDto;
-import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.util.PasswordEncoder;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -25,8 +26,8 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 유저 회원가입 기능
      *
-     * @param requestDto 가입정보
-     * @return UserSaveResponseDto 와 응답코드
+     * @param requestDto 회원가입 요청 정보가 담겨있는 {@link UserSaveRequestDto} 객체
+     * @return 가입된 유저 정보가 담긴 {@link UserSaveResponseDto} 객체
      */
     @Transactional
     @Override
@@ -34,17 +35,36 @@ public class AuthServiceImpl implements AuthService {
         // 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(requestDto.getEmail(), encodedPassword, requestDto.getUsername(),
-            requestDto.getNickname(), requestDto.getPhone(), requestDto.getProfilePicture(),
-            requestDto.getDescription());
+        User user = new User(
+            requestDto.getEmail(),
+            encodedPassword,
+            requestDto.getUsername(),
+            requestDto.getNickname(),
+            requestDto.getPhone(),
+            requestDto.getProfilePicture(),
+            requestDto.getDescription()
+        );
 
         return UserSaveResponseDto.toDto(userRepository.save(user));
 
     }
 
+    /**
+     * 로그인 기능
+     *
+     * @param requestDto 로그인 요청 정보가 담겨있는 {@link LoginRequestDto} 객체
+     * @param session    현재 요청에 대한 {@link HttpSession} 객체
+     * @param response   로그인 성공 시 세션 쿠키를 추가할 {@link HttpServletResponse} 객체
+     */
     @Override
-    public void login(String email, String password, HttpSession session,
-        HttpServletResponse response) {
+    public void login(
+        LoginRequestDto requestDto,
+        HttpSession session,
+        HttpServletResponse response
+    ) {
+
+        String email = requestDto.getEmail();
+        String password = requestDto.getPassword();
 
         User findUser = userRepository.findByEmailElseThrow(email);
         Long sessionUserId = (Long) session.getAttribute("user");
@@ -67,8 +87,15 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
+
     }
 
+    /**
+     * 로그아웃 기능
+     *
+     * @param request  로그아웃 요청이 포함된 {@link HttpServletRequest} 객체
+     * @param response 로그아웃 처리 후 쿠키 제거를 위한 {@link HttpServletResponse} 객체
+     */
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -84,5 +111,7 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new BusinessException(ExceptionCode.NOT_LOGIN_ERROR);
         }
+
     }
+
 }

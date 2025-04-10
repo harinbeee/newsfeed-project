@@ -2,25 +2,19 @@ package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Board;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BoardResponseDto {
 
-    private Long boardId;
-
-    private String nickname;
-
-    private String title;
-
-    private String contents;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
+    private final Long boardId;
+    private final String nickname;
+    private final String title;
+    private final String contents;
+    private final LocalDateTime cratedAt;
+    private final LocalDateTime updatedAt;
 
     // 전체 조회
     public static BoardResponseDto toDto(Board board) {
@@ -33,4 +27,5 @@ public class BoardResponseDto {
             board.getUpdatedAt()
         );
     }
+
 }

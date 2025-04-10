@@ -4,25 +4,23 @@ import com.example.newsfeed.boards.entity.Board;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class BoardPageResponseDto {
 
-    private Long userId;
-
-    private String username;
-
-    private String nickname;
-
-    private String title;
-
-    private String contents;
+    private final Long userId;
+    private final String username;
+    private final String nickname;
+    private final String title;
+    private final String contents;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
+    private final LocalDateTime updatedAt;
 
     public BoardPageResponseDto(Board board) {
         this.userId = board.getUser().getId();
@@ -34,15 +32,4 @@ public class BoardPageResponseDto {
         this.updatedAt = board.getUpdatedAt();
     }
 
-    public BoardPageResponseDto(Long userId, String username, String nickname, String title,
-        String contents,
-        LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.userId = userId;
-        this.username = username;
-        this.nickname = nickname;
-        this.title = title;
-        this.contents = contents;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }

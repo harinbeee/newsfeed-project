@@ -1,5 +1,6 @@
 package com.example.newsfeed.common.config;
 
+import com.example.newsfeed.common.filter.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

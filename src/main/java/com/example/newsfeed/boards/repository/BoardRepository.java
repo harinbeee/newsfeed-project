@@ -5,16 +5,12 @@ import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-
-
-    Optional<Board> findById(Long boardId);
 
     default Board findByIdOrElseThrow(Long boardId) {
         return findById(boardId).orElseThrow(
@@ -28,5 +24,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
         """)
     Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long userId);
 
-    Long boardId(Long boardId);
 }
