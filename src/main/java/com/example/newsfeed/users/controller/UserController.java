@@ -2,6 +2,7 @@ package com.example.newsfeed.users.controller;
 
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,11 +38,10 @@ public class UserController {
      * @return 조회 한 유저 데이터 와 응답코드 성공 200 실패 401
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<UserFindResponseDto> find(
+    public ApiResponse<UserFindResponseDto> find(
         @PathVariable Long userId
     ) {
-        UserFindResponseDto responseDto = userService.find(userId);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return ApiResponse.ok(userService.find(userId));
     }
 
     /**
@@ -51,7 +52,7 @@ public class UserController {
      * @return 수정된 정보가 담겨있는 응답 객체
      */
     @PatchMapping("/{userId}")
-    public ResponseEntity<UpdateUserProfileResponseDto> update(
+    public ApiResponse<UpdateUserProfileResponseDto> update(
         @PathVariable Long userId,
         @RequestBody UpdateUserProfileRequestDto requestDto,
         HttpSession session
@@ -64,7 +65,7 @@ public class UserController {
 
         UpdateUserProfileResponseDto updatedUser = userService.update(userId, requestDto);
 
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return ApiResponse.ok(updatedUser);
 
     }
 
@@ -76,11 +77,12 @@ public class UserController {
      * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
      */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> isDeleted(
+    public ApiResponse<Void> isDeleted(
         @RequestBody UserDeleteRequsetDto requestDto,
         @PathVariable Long userId,
         HttpServletRequest request,
-        HttpServletResponse response) {
+        HttpServletResponse response
+    ) {
 
         HttpSession session = request.getSession(false);
         Long sessionUserId = (Long) session.getAttribute("user");
@@ -90,7 +92,7 @@ public class UserController {
         }
 
         userService.isDeleted(requestDto, userId, request, response);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok();
     }
 
     /**
@@ -101,7 +103,7 @@ public class UserController {
      * @return 응답코드 200 성공
      */
     @PatchMapping("/{userId}/update-password")
-    public ResponseEntity<Void> updatePassword(
+    public ApiResponse<Void> updatePassword(
         @PathVariable Long userId,
         @RequestBody UpdatePasswordRequestDto requestDto,
         HttpSession session
@@ -115,9 +117,8 @@ public class UserController {
 
         userService.updatePassword(userId, requestDto);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ApiResponse.ok();
 
     }
-
 
 }
