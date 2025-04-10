@@ -52,7 +52,7 @@ public class LikeServiceImpl implements LikeService {
 
         boardRepository.findByIdOrElseThrow(requestDto.getBoardId()); // 있는 게시글 인지 체크
 
-        Long likeCnt = likeRepository.findByBoardIdORCommentId(
+        Long likeCnt = likeRepository.findByBoardIdOrCommentId(
                 requestDto.getBoardId(),
                 requestDto.getCommentId()
             )
