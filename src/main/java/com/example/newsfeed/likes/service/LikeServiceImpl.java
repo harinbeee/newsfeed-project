@@ -22,10 +22,10 @@ public class LikeServiceImpl implements LikeService {
     private final CommentRepository commentRepository;
 
     /**
-     * 좋아요 저장 메소드
+     * 좋아요 저장 요청 서비스
      *
-     * @param requestDto 게시글 ID, 작성한 유저 ID
-     * @return 게시글 ID, 작성한 유저 ID , 좋아요 테이블 식별자
+     * @param requestDto 좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
+     * @return 좋아요 응답 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @Override
     public LikeSaveResponseDto save(LikeSaveRequestDto requestDto) {
@@ -39,6 +39,7 @@ public class LikeServiceImpl implements LikeService {
         Like like = new Like(requestDto.getUserId(), board, comment);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
+
     }
 
 

@@ -1,18 +1,18 @@
 package com.example.newsfeed.likes.dto;
 
 import com.example.newsfeed.likes.entity.Like;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LikeSaveResponseDto {
 
-    private Long userId;
-
-    private Long boardId;
+    private final Long userId;
+    private final Long boardId;
 
     public static LikeSaveResponseDto toDto(Like like) {
         return new LikeSaveResponseDto(like.getUserId(), like.getBoard().getBoardId());
     }
+
 }

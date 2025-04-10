@@ -1,6 +1,6 @@
 package com.example.newsfeed.friends.entity;
 
-import com.example.newsfeed.common.delete.IsDelete;
+import com.example.newsfeed.common.entity.IsDelete;
 import com.example.newsfeed.users.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
