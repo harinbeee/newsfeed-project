@@ -25,14 +25,5 @@ public class BoardPageResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime updatedAt;
 
-    public BoardPageResponseDto(Board board) {
-        this.userId = board.getUser().getId();
-        this.username = board.getUser().getUsername();
-        this.nickname = board.getUser().getNickname();
-        this.title = board.getTitle();
-        this.contents = board.getContents();
-        this.createdAt = board.getCreatedAt();
-        this.updatedAt = board.getUpdatedAt();
-    }
 
 }
