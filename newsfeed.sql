@@ -48,3 +48,6 @@ CREATE TABLE comments
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     FOREIGN KEY (board_id) REFERENCES boards (board_id)
 );
+
+ALTER TABLE boards
+    ADD COLUMN board_image VARCHAR(512);
