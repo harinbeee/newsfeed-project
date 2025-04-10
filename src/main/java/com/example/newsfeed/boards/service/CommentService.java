@@ -2,10 +2,12 @@ package com.example.newsfeed.boards.service;
 
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface CommentService {
+
 
     /**
      * 댓글 저장 요청 서비스
@@ -25,5 +27,9 @@ public interface CommentService {
      * @return 댓글 정보가 담긴 {@link CommentResponseDto} 객체
      */
     CommentResponseDto findOne(Long boardId, Long commentId);
+
+    CommentResponseDto update(Long commentId, Long userId, CommentRequestDto requestDto);
+
+    void delete(Long commentId, Long userId);
 
 }

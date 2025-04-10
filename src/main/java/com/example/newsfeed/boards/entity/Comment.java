@@ -25,6 +25,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
+    @Setter
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
 

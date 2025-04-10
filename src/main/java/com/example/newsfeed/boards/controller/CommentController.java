@@ -2,6 +2,7 @@ package com.example.newsfeed.boards.controller;
 
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
+import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.service.CommentService;
 import com.example.newsfeed.users.repository.UserRepository;
@@ -10,7 +11,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,19 +33,19 @@ public class CommentController {
     /**
      * 댓글 작성 요청 컨트롤러
      *
-     * @param boardId    게시글 식별자
-     * @param requestDto 댓글 요청 정보가 담긴 {@link CommentRequestDto} 객체
-     * @param request    로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
+     * @param boardId     게시글 식별자
+     * @param requestDto  댓글 요청 정보가 담긴 {@link CommentRequestDto} 객체
+     * @param userRequest 로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
      * @return 댓글 정보가 담긴 {@link CommentResponseDto} 객체
      */
     @PostMapping
     public ResponseEntity<CommentResponseDto> save(
         @PathVariable Long boardId,
         @RequestBody CommentRequestDto requestDto,
-        HttpServletRequest request
+        HttpServletRequest userRequest
     ) {
 
-        HttpSession session = request.getSession(false);
+        HttpSession session = userRequest.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
         CommentResponseDto commentResponseDto = commentService.save(userId, boardId, requestDto);
@@ -69,4 +73,30 @@ public class CommentController {
 
     }
 
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<CommentResponseDto> update(
+        @PathVariable Long commentId,
+        @RequestBody CommentRequestDto requestDto,
+        HttpServletRequest userRequest
+    ) {
+
+        HttpSession session = userRequest.getSession(false);
+        Long userId = (Long) session.getAttribute("user");
+
+        CommentResponseDto commentResponseDto = commentService.update(commentId, userId,
+            requestDto);
+
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public void delete(
+        @PathVariable Long commentId,
+        HttpServletRequest userRequest
+    ) {
+        HttpSession session = userRequest.getSession(false);
+        Long userId = (Long) session.getAttribute("user");
+
+        CommentService.delete(commentId, userId);
+    }
 }

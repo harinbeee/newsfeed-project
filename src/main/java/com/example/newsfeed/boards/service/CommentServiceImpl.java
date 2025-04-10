@@ -6,10 +6,13 @@ import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +60,40 @@ public class CommentServiceImpl implements CommentService {
 
         return CommentResponseDto.toDto(findComment);
 
+    }
+
+    @Transactional
+    @Override
+    public CommentResponseDto update(Long commentId, Long userId, CommentRequestDto requestDto) {
+
+        // 현재 로그인한 유저찾기
+        User loginUser = userRepository.findByIdElseThrow(userId);
+        // 수정할 댓글
+        Comment updatedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        // 수정 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때 **익셉션 추가 필요**
+        if (!loginUser.getId().equals(updatedComment.getUser().getId())) {
+            throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
+        }
+
+        updatedComment.setContents(requestDto.getContents());
+
+        return CommentResponseDto.toDto(updatedComment);
+    }
+
+    @Override
+    public void delete(Long commentId, Long userId) {
+
+        // 현재 로그인한 유저찾기
+        User loginUser = userRepository.findByIdElseThrow(userId);
+        // 삭제할 댓글
+        Comment deletedComment = commentRepository.findByIdOrElseThrow(commentId);
+
+        // 삭제 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때 **익셉션 추가필요**
+        if (!loginUser.getId().equals(deletedComment.getUser().getId())) {
+            throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
+        }
+
+        commentRepository.delete(deletedComment);
     }
 }
