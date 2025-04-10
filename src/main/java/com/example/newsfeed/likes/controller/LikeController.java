@@ -2,8 +2,6 @@ package com.example.newsfeed.likes.controller;
 
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
-import com.example.newsfeed.likes.dto.LikeFindRequestDto;
-import com.example.newsfeed.likes.dto.LikeFindResponseDto;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
 import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 import com.example.newsfeed.likes.service.LikeService;
@@ -11,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,20 +45,4 @@ public class LikeController {
 
     }
 
-    /**
-     * 게시글 또는 댓글의 좋아요 개수 조회 요청 컨트롤러
-     *
-     * @param requestDto 게시글 또는 댓글의 좋아요 요청 정보가 담겨있는 {@link LikeFindRequestDto} 객체
-     * @return 좋아요 개수 정보가 담긴 {@link LikeFindResponseDto} 객체
-     */
-    @GetMapping
-    public ResponseEntity<LikeFindResponseDto> findLikeCntByBoardIdOrCommentId(
-        @RequestBody @Valid LikeFindRequestDto requestDto
-    ) {
-
-        LikeFindResponseDto responseDto = likeService.findLikeCntByBoardIdOrCommentId(requestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-        
-    }
 }

@@ -1,7 +1,5 @@
 package com.example.newsfeed.likes.repository;
 
-import com.example.newsfeed.common.exception.BusinessException;
-import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.likes.entity.Like;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,17 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    @Query("SELECT count(l) FROM Like l WHERE l.board.boardId = :boardId or l.comment.commentId = :commentId")
-    Optional<Long> findByBoardIdOrCommentId(
-        @Param("boardId") Long boardId,
-        @Param("commentId") Long commentId
+    @Query("SELECT count(l) FROM Like l WHERE l.board.boardId = :boardId group by l.board.boardId")
+    Optional<Long> findByBoardId(
+        @Param("boardId") Long boardId
     );
 
-    default Long findByBoardIdOrCommentIdOrElseThrow(
-        @Param("boardId") Long boardId,
-        @Param("commentId") Long commentId) {
-        return findByBoardIdOrCommentId(boardId, commentId).orElseThrow(
-            () -> new BusinessException(ExceptionCode.Like_NOT_FOUND));
-    }
-
+    @Query("SELECT count(l) FROM Like l WHERE l.comment.commentId = :commentId group by l.comment.commentId")
+    Optional<Long> findByCommentId(
+        @Param("commentId") Long commentId
+    );
 }
