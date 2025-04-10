@@ -1,9 +1,9 @@
 package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
-import com.example.newsfeed.common.encoder.PasswordEncoder;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.util.PasswordEncoder;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
