@@ -30,7 +30,8 @@ public enum ExceptionCode {
     Like_NOT_FOUND(404, "", "좋아요 테이블 정보를 찾을 수 없습니다."),
 
     //409
-    DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다");
+    DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다"),
+    FOLLOW_USER_CONFLICT(409, "", "본인에게는 팔로우 할 수 없습니다");
 
     private final int status;
     private final String code;
