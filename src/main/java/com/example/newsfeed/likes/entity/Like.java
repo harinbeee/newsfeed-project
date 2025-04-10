@@ -34,12 +34,12 @@ public class Like {
     @Column(nullable = false)
     private Long userId;
 
-    public Like(Long userId, Board board) {
-        this.userId = userId;
-        this.board = board;
+    public Like() {
     }
 
-    public Like() {
-
+    public Like(Long userId, Board board, Comment comment) {
+        this.userId = userId;
+        this.board = board;
+        this.comment = comment;
     }
 }
