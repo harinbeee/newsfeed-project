@@ -34,7 +34,10 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestDto requestDto,
-        HttpSession session, HttpServletResponse response) {
+        HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession();
+
         authService.login(requestDto.getEmail(), requestDto.getPassword(), session, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
