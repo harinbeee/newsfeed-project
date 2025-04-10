@@ -2,11 +2,10 @@ package com.example.newsfeed.boards.controller;
 
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
+import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.common.util.SortType;
-import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -87,16 +86,16 @@ public class BoardController {
      * 게시글 단건 조회 요청 컨트롤러
      *
      * @param boardId 게시물 식별자
-     * @return 조회된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
+     * @return 조회된 게시글 정보가 담긴 {@link BoardFindResponseDto} 객체
      */
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponseDto> findOne(
+    public ResponseEntity<BoardFindResponseDto> findOne(
         @PathVariable Long boardId
     ) {
 
-        BoardResponseDto boardResponseDto = boardService.findOne(boardId);
+        BoardFindResponseDto boardFindResponseDto = boardService.findOne(boardId);
 
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(boardFindResponseDto, HttpStatus.OK);
 
     }
 

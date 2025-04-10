@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class BoardResponseDto {
+public class BoardFindResponseDto {
 
     private final Long boardId;
     private final String nickname;
@@ -24,10 +24,12 @@ public class BoardResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime updatedAt;
 
+    private final List<CommentResponseDto> comments;
 
     // 전체 조회
-    public static BoardResponseDto toDto(Board board, Long likeCount) {
-        return new BoardResponseDto(
+    public static BoardFindResponseDto toDto(Board board, Long likeCount,
+        List<CommentResponseDto> comments) {
+        return new BoardFindResponseDto(
             board.getBoardId(),
             board.getUser().getNickname(),
             board.getTitle(),
@@ -35,7 +37,8 @@ public class BoardResponseDto {
             board.getBoardImage(),
             likeCount,
             board.getCreatedAt(),
-            board.getUpdatedAt()
+            board.getUpdatedAt(),
+            comments
         );
     }
 

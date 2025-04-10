@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setBoard(board);
         comment.setUser(findUser);
 
-        return CommentResponseDto.toDto(commentRepository.save(comment));
+        return CommentResponseDto.toDto(commentRepository.save(comment), 0L);
 
     }
 
@@ -57,8 +57,9 @@ public class CommentServiceImpl implements CommentService {
 
         Board findboard = boardRepository.findByIdOrElseThrow(boardId); // 게시물 - 댓글 일치하는지 검증?
         Comment findComment = commentRepository.findByIdOrElseThrow(commentId);
+        Long likeCount = commentRepository.countCommentLikes(commentId);
 
-        return CommentResponseDto.toDto(findComment);
+        return CommentResponseDto.toDto(findComment, likeCount);
 
     }
 
@@ -78,6 +79,7 @@ public class CommentServiceImpl implements CommentService {
         User loginUser = userRepository.findByIdElseThrow(userId);
         // 수정할 댓글
         Comment updatedComment = commentRepository.findByIdOrElseThrow(commentId);
+        Long likeCount = commentRepository.countCommentLikes(commentId);
 
         // 수정 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때
         if (!loginUser.getId().equals(updatedComment.getUser().getId())) {
@@ -86,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
 
         updatedComment.setContents(requestDto.getContents());
 
-        return CommentResponseDto.toDto(updatedComment);
+        return CommentResponseDto.toDto(updatedComment, likeCount);
     }
 
     /**
