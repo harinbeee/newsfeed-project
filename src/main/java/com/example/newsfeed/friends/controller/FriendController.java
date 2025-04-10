@@ -39,19 +39,7 @@ public class FriendController {
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
-<<<<<<< HEAD
-
-        HttpSession session = request.getSession(false);
-
-        Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        FriendSaveResponseDto responseDto = friendService.accept(requestDto, toUserId);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-
-=======
-        return ApiResponse.ok(friendService.save(requestDto, getUserId(request)));
->>>>>>> 9bdf350e6c87716ef577e1c3df2c1c521cca1046
+        return ApiResponse.ok(friendService.accept(requestDto, getUserId(request)));
     }
 
     /**
@@ -60,40 +48,11 @@ public class FriendController {
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내 친구 목록이 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-<<<<<<< HEAD
-    @GetMapping("/userId")
-    public ResponseEntity<List<FriendFindResponseDto>> findFriendListByFromUserId(
-        HttpServletRequest request
-    ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        List<FriendFindResponseDto> responseDtoList = friendService.findFriendListByFromUserId(
-            fromUserId); // 내 친구 리스트
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-
-=======
-    @GetMapping("/toUserId")
-    public ApiResponse<List<FriendFindResponseDto>> findByToUserId(
-        HttpServletRequest request
-    ) {
-        return ApiResponse.ok(friendService.findByToUserId(getUserId(request)));
-    }
-
-    /**
-     * 내가 팔로우하는 유저 조회 컨트롤러
-     *
-     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
-     * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
-     */
     @GetMapping("/fromUserId")
-    public ApiResponse<List<FriendFindResponseDto>> findByIdFromUserId(
+    public ApiResponse<List<FriendFindResponseDto>> findFriendListByFromUserId(
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(friendService.findByFromUserId(getUserId(request)));
->>>>>>> 9bdf350e6c87716ef577e1c3df2c1c521cca1046
+        return ApiResponse.ok(friendService.findFriendListByFromUserId(getUserId(request)));
     }
 
     /**
