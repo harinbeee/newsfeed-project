@@ -4,15 +4,12 @@ import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
-import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.entity.User;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,7 +36,7 @@ public class BoardController {
      * @return 생성된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @PostMapping
-    public ResponseEntity<BoardResponseDto> save(
+    public ApiResponse<BoardResponseDto> save(
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
@@ -47,9 +44,7 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        BoardResponseDto boardResponseDto = boardService.save(userId, requestDto);
-
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.CREATED);
+        return ApiResponse.created(boardService.save(userId, requestDto));
 
     }
 
@@ -63,7 +58,7 @@ public class BoardController {
      * @return 조회된 게시글 정보가 담긴 {@link BoardPageResponseDto} 객체
      */
     @GetMapping
-    public ResponseEntity<Page<BoardPageResponseDto>> findAll(
+    public ApiResponse<Page<BoardPageResponseDto>> findAll(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "false") boolean isFriendBoard,
@@ -73,11 +68,7 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        Page<BoardPageResponseDto> boardPageResponseDto = boardService.findAll(
-            page, size, isFriendBoard, userId
-        );
-
-        return new ResponseEntity<>(boardPageResponseDto, HttpStatus.OK);
+        return ApiResponse.ok(boardService.findAll(page, size, isFriendBoard, userId));
 
     }
 
@@ -88,14 +79,10 @@ public class BoardController {
      * @return 조회된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponseDto> findOne(
+    public ApiResponse<BoardResponseDto> findOne(
         @PathVariable Long boardId
     ) {
-
-        BoardResponseDto boardResponseDto = boardService.findOne(boardId);
-
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
-
+        return ApiResponse.ok(boardService.findOne(boardId));
     }
 
     /**
@@ -107,7 +94,7 @@ public class BoardController {
      * @return 수정된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
      */
     @PatchMapping("/{boardId}")
-    public ResponseEntity<BoardResponseDto> update(
+    public ApiResponse<BoardResponseDto> update(
         @PathVariable Long boardId,
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
@@ -116,9 +103,7 @@ public class BoardController {
         HttpSession session = request.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        BoardResponseDto boardResponseDto = boardService.update(boardId, userId, requestDto);
-
-        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+        return ApiResponse.ok(boardService.update(boardId, userId, requestDto));
 
     }
 
@@ -131,7 +116,7 @@ public class BoardController {
      * @return 메세지 응답 , 성공 - 200, 실패(다른 사용자 삭제 시도) - 400, 실패(게시물 식별자 없음) - 404
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<String> delete(
+    public ApiResponse<String> delete(
         @PathVariable Long boardId,
         HttpServletRequest request
     ) {
@@ -141,7 +126,7 @@ public class BoardController {
 
         boardService.delete(userId, boardId);
 
-        return new ResponseEntity<>("게시물 삭제 성공!", HttpStatus.OK);
+        return ApiResponse.ok();
 
     }
 
