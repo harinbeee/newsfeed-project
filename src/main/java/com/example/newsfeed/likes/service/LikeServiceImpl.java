@@ -32,9 +32,10 @@ public class LikeServiceImpl implements LikeService {
 
         Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
 
-        Comment comment = requestDto.getCommentId().equals(0L) // 0L이면 게시물 좋아요
-            ? null
-            : commentRepository.findByIdOrElseThrow(requestDto.getCommentId()); // 댓글 좋아요
+        Comment comment =
+            requestDto.getCommentId() == null || requestDto.getCommentId().equals(0L)// 0L이면 게시물 좋아요
+                ? null
+                : commentRepository.findByIdOrElseThrow(requestDto.getCommentId()); // 댓글 좋아요
 
         Like like = new Like(requestDto.getUserId(), board, comment);
 

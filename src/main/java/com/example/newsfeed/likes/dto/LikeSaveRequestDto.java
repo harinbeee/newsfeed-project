@@ -14,6 +14,7 @@ public class LikeSaveRequestDto {
     @Min(1)
     private final Long boardId;
 
+    @Min(0)
     private final Long commentId;
 
 }
