@@ -1,7 +1,6 @@
 package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Board;
-import com.example.newsfeed.boards.entity.Comment;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
