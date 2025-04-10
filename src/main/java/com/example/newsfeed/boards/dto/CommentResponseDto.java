@@ -2,24 +2,19 @@ package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Comment;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentResponseDto {
 
-    private Long commentId;
-
-    private Long boardId;
-
-    private String nickname;
-
-    private String contents;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
+    private final Long commentId;
+    private final Long boardId;
+    private final String nickname;
+    private final String contents;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public static CommentResponseDto toDto(Comment comment) {
         return new CommentResponseDto(
@@ -31,4 +26,5 @@ public class CommentResponseDto {
             comment.getUpdatedAt()
         );
     }
+
 }

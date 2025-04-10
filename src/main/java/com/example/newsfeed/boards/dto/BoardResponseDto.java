@@ -1,7 +1,9 @@
 package com.example.newsfeed.boards.dto;
 
 import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.entity.Comment;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +17,7 @@ public class BoardResponseDto {
     private final String contents;
     private final LocalDateTime cratedAt;
     private final LocalDateTime updatedAt;
+    private final List<CommentResponseDto> comments;
 
     // 전체 조회
     public static BoardResponseDto toDto(Board board) {
@@ -24,7 +27,8 @@ public class BoardResponseDto {
             board.getTitle(),
             board.getContents(),
             board.getCreatedAt(),
-            board.getUpdatedAt()
+            board.getUpdatedAt(),
+            board.getComments().stream().map(CommentResponseDto::toDto).toList()
         );
     }
 
