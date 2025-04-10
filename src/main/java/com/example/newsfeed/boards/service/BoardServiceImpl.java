@@ -135,6 +135,7 @@ public class BoardServiceImpl implements BoardService {
     public void delete(Long userId, Long boardId) {
 
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+        User user = userRepository.findByIdElseThrow(userId);
 
         // 작성자 = 로그인 유저인지 검증
         if (!findBoard.getUser().getId().equals(userId)) {

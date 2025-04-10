@@ -90,13 +90,15 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public void delete(
+    public ResponseEntity<String> delete(
         @PathVariable Long commentId,
         HttpServletRequest userRequest
     ) {
         HttpSession session = userRequest.getSession(false);
         Long userId = (Long) session.getAttribute("user");
 
-        CommentService.delete(commentId, userId);
+        commentService.delete(commentId, userId);
+
+        return new ResponseEntity<>("댓글 삭제 성공!", HttpStatus.OK);
     }
 }
