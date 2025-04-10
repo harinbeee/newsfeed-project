@@ -2,13 +2,12 @@ package com.example.newsfeed.likes.controller;
 
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
 import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 import com.example.newsfeed.likes.service.LikeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ public class LikeController {
      * @return 좋아요 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @PostMapping
-    public ResponseEntity<LikeSaveResponseDto> save(
+    public ApiResponse<LikeSaveResponseDto> save(
         @RequestBody @Valid LikeSaveRequestDto requestDto,
         @SessionAttribute("user") Long loginUserId
     ) {
@@ -39,9 +38,7 @@ public class LikeController {
             throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
-        LikeSaveResponseDto responseDto = likeService.save(requestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return ApiResponse.created(likeService.save(requestDto));
 
     }
 

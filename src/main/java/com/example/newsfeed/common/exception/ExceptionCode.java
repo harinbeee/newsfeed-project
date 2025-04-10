@@ -2,6 +2,7 @@ package com.example.newsfeed.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,24 +18,32 @@ public enum ExceptionCode {
     LOGIN_FORBIDDEN(400, "", "탈퇴한 회원은 로그인 하실 수 없습니다."),
     SIGNUP_FORBIDDEN(400, "", "탈퇴한 회원은 재가입 할 수 없습니다."),
     ALREADY_LOGIN(400, "", "이미 로그인 되어있습니다."),
+    BOARD_SELFLIKE_BLOCK(400, "", "자신이 작성한 게시글에 좋아요를 누를 수 없습니다."),
+    COMMENT_SELFLIKE_BLOCK(400, "", "자신이 작성한 댓글에 좋아요를 누를 수 없습니다."),
 
     // 401
-    NOT_LOGIN_ERROR(401, "", "로그인이 필요합니다."),
+    NOT_LOGIN_ERROR(401, HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
 
     // 403
-    USER_ACCESS_DENIED(403, "", "로그인한 유저의 id와 일치하지 않습니다."),
+    USER_ACCESS_DENIED(403, HttpStatus.FORBIDDEN, "로그인한 유저의 id와 일치하지 않습니다."),
 
     // 404
     BOARD_NOT_FOUND(404, "", "게시글이 존재하지 않습니다."),
+    COMMENT_NOT_FOUND(404, "", "댓글이 존재하지 않습니다."),
     USER_NOT_FOUND(404, "", "유저 정보를 찾을 수 없습니다."),
     Like_NOT_FOUND(404, "", "좋아요 테이블 정보를 찾을 수 없습니다."),
+    SORT_TYPE_NOT_FOUND(404, "", "지원하지 않는 정렬 타입 입니다."),
 
     //409
+<<<<<<< HEAD
     DB_DATA_CONFLICT(409, "", "동일한 값이 존재 합니다"),
     FOLLOW_USER_CONFLICT(409, "", "본인에게는 팔로우 할 수 없습니다");
+=======
+    DB_DATA_CONFLICT(409, HttpStatus.CONFLICT, "동일한 값이 존재 합니다");
+>>>>>>> 9bdf350e6c87716ef577e1c3df2c1c521cca1046
 
-    private final int status;
-    private final String code;
+    private final int code;
+    private final HttpStatus httpStatus;
     private final String message;
 
 }

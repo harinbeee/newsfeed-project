@@ -1,16 +1,16 @@
 package com.example.newsfeed.friends.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +35,11 @@ public class FriendController {
      * @return 팔로우 정보가 담겨있는 {@link FriendSaveResponseDto} 객체
      */
     @PostMapping
-    public ResponseEntity<FriendSaveResponseDto> save(
+    public ApiResponse<FriendSaveResponseDto> save(
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
+<<<<<<< HEAD
 
         HttpSession session = request.getSession(false);
 
@@ -48,6 +49,9 @@ public class FriendController {
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
+=======
+        return ApiResponse.ok(friendService.save(requestDto, getUserId(request)));
+>>>>>>> 9bdf350e6c87716ef577e1c3df2c1c521cca1046
     }
 
     /**
@@ -56,6 +60,7 @@ public class FriendController {
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내 친구 목록이 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
+<<<<<<< HEAD
     @GetMapping("/userId")
     public ResponseEntity<List<FriendFindResponseDto>> findFriendListByFromUserId(
         HttpServletRequest request
@@ -69,6 +74,26 @@ public class FriendController {
             fromUserId); // 내 친구 리스트
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
 
+=======
+    @GetMapping("/toUserId")
+    public ApiResponse<List<FriendFindResponseDto>> findByToUserId(
+        HttpServletRequest request
+    ) {
+        return ApiResponse.ok(friendService.findByToUserId(getUserId(request)));
+    }
+
+    /**
+     * 내가 팔로우하는 유저 조회 컨트롤러
+     *
+     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
+     * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
+     */
+    @GetMapping("/fromUserId")
+    public ApiResponse<List<FriendFindResponseDto>> findByIdFromUserId(
+        HttpServletRequest request
+    ) {
+        return ApiResponse.ok(friendService.findByFromUserId(getUserId(request)));
+>>>>>>> 9bdf350e6c87716ef577e1c3df2c1c521cca1046
     }
 
     /**
@@ -79,19 +104,12 @@ public class FriendController {
      * @return 성공 시 200 OK
      */
     @DeleteMapping("/{toUserId}")
-    public ResponseEntity<String> delete(
+    public ApiResponse<String> delete(
         @PathVariable @Min(1) Long toUserId,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        friendService.delete(toUserId, fromUserId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
+        friendService.delete(toUserId, getUserId(request));
+        return ApiResponse.ok();
     }
 
 }

@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -31,11 +33,16 @@ public class Board extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardId;
 
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @NotBlank
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
+
+    @Column(name = "board_image")
+    private String boardImage;
 
     @Setter
     @ManyToOne
@@ -49,11 +56,13 @@ public class Board extends BaseEntity {
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+        this.boardImage = requestDto.getBoardImage();
     }
 
-    public void update(String title, String contents) {
+    public void update(String title, String contents, String boardImage) {
         this.title = title;
         this.contents = contents;
+        this.boardImage = boardImage;
     }
 
 }

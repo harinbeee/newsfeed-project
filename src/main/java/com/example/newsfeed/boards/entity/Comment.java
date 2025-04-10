@@ -14,17 +14,20 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Entity
 @Table(name = "comments")
 @NoArgsConstructor
+@Where(clause = "is_deleted = false")
 public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
+    @Setter
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String contents;
 
