@@ -111,12 +111,15 @@ public class BoardServiceImpl implements BoardService {
         }
 
         // 기존 내용 저장
+        String updateImage =
+            (requestDto.getBoardImage() != null) ? requestDto.getBoardImage()
+                : findBoard.getBoardImage();
         String updateTitle =
             (requestDto.getTitle() != null) ? requestDto.getTitle() : findBoard.getTitle();
         String updateContents =
             (requestDto.getContents() != null) ? requestDto.getContents() : findBoard.getContents();
 
-        findBoard.update(updateTitle, updateContents);
+        findBoard.update(updateImage, updateTitle, updateContents);
 
         Board updatedBoard = boardRepository.findByIdOrElseThrow(boardId); // 업데이트 내용 저장
 

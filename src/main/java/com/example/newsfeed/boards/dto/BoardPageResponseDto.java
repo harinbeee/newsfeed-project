@@ -15,6 +15,7 @@ public class BoardPageResponseDto {
     private final String nickname;
     private final String title;
     private final String contents;
+    private final String boardImage;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
@@ -28,6 +29,7 @@ public class BoardPageResponseDto {
         this.nickname = board.getUser().getNickname();
         this.title = board.getTitle();
         this.contents = board.getContents();
+        this.boardImage = board.getBoardImage();
         this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
     }

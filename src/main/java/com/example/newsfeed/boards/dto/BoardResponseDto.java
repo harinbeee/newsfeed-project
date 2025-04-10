@@ -15,6 +15,7 @@ public class BoardResponseDto {
     private final String nickname;
     private final String title;
     private final String contents;
+    private final String boardImage;
     private final LocalDateTime cratedAt;
     private final LocalDateTime updatedAt;
     private final List<CommentResponseDto> comments;
@@ -26,6 +27,7 @@ public class BoardResponseDto {
             board.getUser().getNickname(),
             board.getTitle(),
             board.getContents(),
+            board.getBoardImage(),
             board.getCreatedAt(),
             board.getUpdatedAt(),
             board.getComments().stream().map(CommentResponseDto::toDto).toList()
