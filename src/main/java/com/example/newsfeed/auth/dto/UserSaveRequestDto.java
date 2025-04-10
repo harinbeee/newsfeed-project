@@ -28,4 +28,5 @@ public class UserSaveRequestDto {
     private String profilePicture; // 유저 프로필
 
     private String description; //유저 소개
+
 }
