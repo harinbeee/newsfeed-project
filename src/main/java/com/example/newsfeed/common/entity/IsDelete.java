@@ -5,11 +5,11 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
 @Getter
 @MappedSuperclass
 public abstract class IsDelete {
 
-    @Setter
     @Column
     private boolean isDeleted;
 
