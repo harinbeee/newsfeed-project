@@ -12,11 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "comments")
+@NoArgsConstructor
 public class Comment extends BaseEntity {
 
     @Id
@@ -36,10 +38,8 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public Comment() {
-    }
-
     public Comment(String contents) {
         this.contents = contents;
     }
+
 }
