@@ -19,24 +19,39 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     }
 
     @Query("""
-        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
-        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u LEFT JOIN Comment c ON c.board = b LEFT JOIN Like l ON l.board = b
+        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
+        FROM Board b
+                LEFT JOIN b.user u
+                LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
+                LEFT JOIN Comment c ON c.board = b
+                LEFT JOIN Like l ON l.board = b
         GROUP BY b
         ORDER BY CASE WHEN f.fromUser.id = :userId THEN 0 ELSE 1 END, COUNT(l.userId) DESC, b.updatedAt DESC
         """)
     Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long userId);
 
     @Query("""
-        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
-        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u LEFT JOIN Comment c ON c.board = b LEFT JOIN Like l ON l.board = b
+        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
+        FROM Board b
+                LEFT JOIN b.user u
+                LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
+                LEFT JOIN Comment c ON c.board = b
+                LEFT JOIN Like l ON l.board = b
         GROUP BY b
         ORDER BY COUNT(l.userId) DESC, b.updatedAt DESC
         """)
     Page<BoardPageResponseDto> findAllByLikePriority(Pageable pageable, Long userId);
 
     @Query("""
-        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c),b.createdAt, b.updatedAt)
-        FROM Board b LEFT JOIN b.user u LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u LEFT JOIN Comment c ON c.board = b LEFT JOIN Like l ON l.board = b
+        SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c),b.createdAt, b.updatedAt)
+        FROM Board b
+                LEFT JOIN b.user u
+                LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
+                LEFT JOIN Comment c ON c.board = b
+                LEFT JOIN Like l ON l.board = b
         GROUP BY b
         ORDER BY b.updatedAt DESC
         """)

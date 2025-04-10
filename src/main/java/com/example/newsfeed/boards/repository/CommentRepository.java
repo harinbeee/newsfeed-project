@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     }
 
     @Query("""
-        SELECT count(l) FROM Like l WHERE l.comment.commentId =:commentId AND l.board IS NULL
+        SELECT count(l) FROM Like l WHERE l.comment.commentId =:commentId
         """)
     Long countCommentLikes(@Param("commentId") Long commentId);
 
