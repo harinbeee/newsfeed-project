@@ -1,7 +1,11 @@
 package com.example.newsfeed.likes.service;
 
 import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
+import com.example.newsfeed.boards.repository.CommentRepository;
+import com.example.newsfeed.common.exception.BusinessException;
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.likes.dto.LikeFindRequestDto;
 import com.example.newsfeed.likes.dto.LikeFindResponseDto;
 import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
@@ -17,7 +21,7 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
-
+    private final CommentRepository commentRepository;
 
     /**
      * 좋아요 저장 요청 서비스
@@ -29,8 +33,11 @@ public class LikeServiceImpl implements LikeService {
     public LikeSaveResponseDto save(LikeSaveRequestDto requestDto) {
 
         Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
+        Comment comment = requestDto.getCommentId().equals(0L) // 0L이면 게시물 좋아요
+            ? null
+            : commentRepository.findByIdOrElseThrow(requestDto.getCommentId()); // 댓글 좋아요
 
-        Like like = new Like(requestDto.getUserId(), board);
+        Like like = new Like(requestDto.getUserId(), board, comment);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
 
