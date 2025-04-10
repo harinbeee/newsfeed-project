@@ -27,4 +27,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
         ORDER BY CASE WHEN f.fromUser.id = :userId THEN 0 ELSE 1 END, b.updatedAt DESC
         """)
     Page<BoardPageResponseDto> findAllByFriendPriority(Pageable pageable, Long userId);
+
+    Long boardId(Long boardId);
 }
