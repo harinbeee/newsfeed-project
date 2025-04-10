@@ -24,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     /**
-     * 댓글 저장 요청 서비스
+     * 댓글 생성 요청 서비스
      *
      * @param userId     유저 식별자
      * @param boardId    게시글 식별자
@@ -62,6 +62,14 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
+    /**
+     * 댓글 수정 요청 서비스
+     *
+     * @param commentId  댓글 식별자
+     * @param userId     유저 식별자
+     * @param requestDto 댓글 내용이 담긴 {@link CommentRequestDto} 객체
+     * @return
+     */
     @Transactional
     @Override
     public CommentResponseDto update(Long commentId, Long userId, CommentRequestDto requestDto) {
@@ -71,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
         // 수정할 댓글
         Comment updatedComment = commentRepository.findByIdOrElseThrow(commentId);
 
-        // 수정 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때 **익셉션 추가 필요**
+        // 수정 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때
         if (!loginUser.getId().equals(updatedComment.getUser().getId())) {
             throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }
@@ -81,6 +89,12 @@ public class CommentServiceImpl implements CommentService {
         return CommentResponseDto.toDto(updatedComment);
     }
 
+    /**
+     * 댓글 삭제 요청 서비스
+     *
+     * @param commentId 댓글 식별자
+     * @param userId    유저 식별자
+     */
     @Override
     public void delete(Long commentId, Long userId) {
 
@@ -89,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
         // 삭제할 댓글
         Comment deletedComment = commentRepository.findByIdOrElseThrow(commentId);
 
-        // 삭제 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때 **익셉션 추가필요**
+        // 삭제 실패 : 댓글 작성자 = 현재 로그인 유저가 아닐때
         if (!loginUser.getId().equals(deletedComment.getUser().getId())) {
             throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }

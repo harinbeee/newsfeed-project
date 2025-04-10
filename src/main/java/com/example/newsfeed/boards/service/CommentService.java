@@ -10,7 +10,7 @@ public interface CommentService {
 
 
     /**
-     * 댓글 저장 요청 서비스
+     * 댓글 생성 요청 서비스
      *
      * @param userId     유저 식별자
      * @param boardId    게시글 식별자
@@ -28,8 +28,23 @@ public interface CommentService {
      */
     CommentResponseDto findOne(Long boardId, Long commentId);
 
+
+    /**
+     * 댓글 수정 요청 서비스
+     *
+     * @param commentId  댓글 식별자
+     * @param userId     유저 식별자
+     * @param requestDto 댓글 내용이 담긴 {@link CommentRequestDto} 객체
+     * @return 댓글 정보가 담긴 {@link CommentResponseDto} 객체
+     */
     CommentResponseDto update(Long commentId, Long userId, CommentRequestDto requestDto);
 
+    /**
+     * 댓글 삭제 요청 서비스
+     *
+     * @param commentId 댓글 식별자
+     * @param userId    유저 식별자
+     */
     void delete(Long commentId, Long userId);
 
 }

@@ -73,6 +73,14 @@ public class CommentController {
 
     }
 
+    /**
+     * 댓글 수정 요청 컨트롤러
+     *
+     * @param commentId   댓글 식별자
+     * @param requestDto  댓글 요청 정보가 담긴 {@link CommentRequestDto} 객체
+     * @param userRequest 로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
+     * @return 댓글 정보가 담긴 {@link CommentRequestDto} 객체
+     */
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> update(
         @PathVariable Long commentId,
@@ -89,6 +97,13 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
 
+    /**
+     * 댓글 삭제 요청 컨트롤러
+     *
+     * @param commentId   댓글 식별자
+     * @param userRequest 로그인 세션 정보가 담긴 {@link HttpServletRequest} 객체
+     * @return 메세지 응답 , 성공 - 200, 실패(다른 사용자 삭제 시도) - 400, 실패(댓글 식별자 없음) - 404
+     */
     @DeleteMapping("/{commentId}")
     public ResponseEntity<String> delete(
         @PathVariable Long commentId,
