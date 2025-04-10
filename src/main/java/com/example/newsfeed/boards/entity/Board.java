@@ -18,11 +18,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "boards")
+@Where(clause = "is_deleted = false")
 public class Board extends BaseEntity {
 
     @Id

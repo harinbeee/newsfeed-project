@@ -21,4 +21,10 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
         return findById(id).orElseThrow(
             () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
     }
+
+    default Friend findByTwoIdOrElseThrow(Long toUserId, Long fromUserId) {
+        return findByToUserIdAndFromUserId(toUserId, fromUserId).orElseThrow(
+            () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
+    }
+
 }
