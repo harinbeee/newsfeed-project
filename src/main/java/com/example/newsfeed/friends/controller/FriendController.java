@@ -1,12 +1,13 @@
 package com.example.newsfeed.friends.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
 import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +39,7 @@ public class FriendController {
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        return ApiResponse.ok(friendService.save(requestDto, fromUserId));
-
+        return ApiResponse.ok(friendService.save(requestDto, getUserId(request)));
     }
 
     /**
@@ -56,12 +52,7 @@ public class FriendController {
     public ApiResponse<List<FriendFindResponseDto>> findByToUserId(
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        return ApiResponse.ok(friendService.findByToUserId(toUserId));
-
+        return ApiResponse.ok(friendService.findByToUserId(getUserId(request)));
     }
 
     /**
@@ -74,12 +65,7 @@ public class FriendController {
     public ApiResponse<List<FriendFindResponseDto>> findByIdFromUserId(
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        return ApiResponse.ok(friendService.findByFromUserId(fromUserId));
-
+        return ApiResponse.ok(friendService.findByFromUserId(getUserId(request)));
     }
 
     /**
@@ -94,14 +80,8 @@ public class FriendController {
         @PathVariable @Min(1) Long toUserId,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        friendService.delete(toUserId, fromUserId);
-
+        friendService.delete(toUserId, getUserId(request));
         return ApiResponse.ok();
-
     }
 
 }

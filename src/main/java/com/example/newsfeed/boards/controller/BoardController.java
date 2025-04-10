@@ -1,5 +1,7 @@
 package com.example.newsfeed.boards.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
@@ -7,7 +9,6 @@ import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,12 +41,7 @@ public class BoardController {
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        return ApiResponse.created(boardService.save(userId, requestDto));
-
+        return ApiResponse.created(boardService.save(getUserId(request), requestDto));
     }
 
     /**
@@ -64,12 +60,7 @@ public class BoardController {
         @RequestParam(defaultValue = "false") boolean isFriendBoard,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        return ApiResponse.ok(boardService.findAll(page, size, isFriendBoard, userId));
-
+        return ApiResponse.ok(boardService.findAll(page, size, isFriendBoard, getUserId(request)));
     }
 
     /**
@@ -99,12 +90,7 @@ public class BoardController {
         @RequestBody BoardRequestDto requestDto,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        return ApiResponse.ok(boardService.update(boardId, userId, requestDto));
-
+        return ApiResponse.ok(boardService.update(boardId, getUserId(request), requestDto));
     }
 
 
@@ -120,14 +106,8 @@ public class BoardController {
         @PathVariable Long boardId,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        boardService.delete(userId, boardId);
-
+        boardService.delete(getUserId(request), boardId);
         return ApiResponse.ok();
-
     }
 
 
