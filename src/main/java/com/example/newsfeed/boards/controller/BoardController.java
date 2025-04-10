@@ -7,14 +7,9 @@ import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.service.BoardService;
 import com.example.newsfeed.common.response.ApiResponse;
-import com.example.newsfeed.users.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import com.example.newsfeed.common.util.SortType;
-import com.example.newsfeed.users.dto.UserFindResponseDto;
-import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -67,7 +62,7 @@ public class BoardController {
         @RequestParam(defaultValue = "RECENT") SortType sort,
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(boardService.findAll(page, size, isFriendBoard, getUserId(request)));
+        return ApiResponse.ok(boardService.findAll(page, size, sort, getUserId(request)));
     }
 
     /**
