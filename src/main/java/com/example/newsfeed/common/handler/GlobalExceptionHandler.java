@@ -5,6 +5,7 @@ import com.example.newsfeed.common.exception.ErrorResponse;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,6 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> responseStatusExceptionHandler(
         ResponseStatusException ex
     ) {
+        log.error("Catch Response Status Exception : {}", ex.getMessage());
         return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, ex.getReason());
     }
 
@@ -29,6 +32,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> constraintViolationExceptionHandler(
         ConstraintViolationException ex
     ) {
+        log.error("Catch Constraint Violation Exception : {}", ex.getMessage());
         return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, ex.getMessage());
     }
 
@@ -37,11 +41,13 @@ public class GlobalExceptionHandler {
         MethodArgumentNotValidException ex
     ) {
         String errorMessage = createValidationErrorMessage(ex.getBindingResult());
+        log.error(errorMessage, ex.getMessage());
         return createErrorResponse(ExceptionCode.NOT_VALID_ERROR, errorMessage);
     }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
+        log.error("Catch Business Exception : {}", ex.getMessage());
         return createErrorResponse(ex.getExceptionCode(), ex.getMessage());
     }
 
