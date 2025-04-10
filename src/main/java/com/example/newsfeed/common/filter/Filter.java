@@ -1,4 +1,4 @@
-package com.example.newsfeed.common.config;
+package com.example.newsfeed.common.filter;
 
 import com.example.newsfeed.common.exception.ErrorResponse;
 import com.example.newsfeed.common.exception.ExceptionCode;
