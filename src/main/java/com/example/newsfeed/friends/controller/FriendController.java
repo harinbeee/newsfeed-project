@@ -1,16 +1,16 @@
 package com.example.newsfeed.friends.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.friends.dto.FriendFindResponseDto;
 import com.example.newsfeed.friends.dto.FriendSaveRequestDto;
 import com.example.newsfeed.friends.dto.FriendSaveResponseDto;
 import com.example.newsfeed.friends.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,85 +35,40 @@ public class FriendController {
      * @return 팔로우 정보가 담겨있는 {@link FriendSaveResponseDto} 객체
      */
     @PostMapping
-    public ResponseEntity<FriendSaveResponseDto> save(
+    public ApiResponse<FriendSaveResponseDto> save(
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        FriendSaveResponseDto responseDto = friendService.save(requestDto, fromUserId);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-
+        return ApiResponse.ok(friendService.accept(requestDto, getUserId(request)));
     }
 
     /**
-     * 나를 팔로우하는 유저 조회 컨트롤러
+     * 내 친구 목록 조회 컨트롤러
      *
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
-     * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
-     */
-    @GetMapping("/toUserId")
-    public ResponseEntity<List<FriendFindResponseDto>> findByToUserId(
-        HttpServletRequest request
-    ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long toUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        List<FriendFindResponseDto> responseDtoList = friendService.findByToUserId(
-            toUserId); // 날 팔로우 하는 사람 리스트
-
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-
-    }
-
-    /**
-     * 내가 팔로우하는 유저 조회 컨트롤러
-     *
-     * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
-     * @return 내가를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
+     * @return 내 친구 목록이 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
     @GetMapping("/fromUserId")
-    public ResponseEntity<List<FriendFindResponseDto>> findByIdFromUserId(
+    public ApiResponse<List<FriendFindResponseDto>> findFriendListByFromUserId(
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        List<FriendFindResponseDto> responseDtoList = friendService.findByFromUserId(
-            fromUserId); // 내가 팔로우 한 사람 리스트
-        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
-
+        return ApiResponse.ok(friendService.findFriendListByFromUserId(getUserId(request)));
     }
 
     /**
-     * 팔로우 취소 요청 컨트롤러
+     * 친구 삭제 요청 컨트롤러
      *
-     * @param toUserId 팔로우를 취소할 유저 식별자
+     * @param toUserId 친구 삭제할 유저 식별자
      * @param request  로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 성공 시 200 OK
      */
     @DeleteMapping("/{toUserId}")
-    public ResponseEntity<String> delete(
+    public ApiResponse<String> delete(
         @PathVariable @Min(1) Long toUserId,
         HttpServletRequest request
     ) {
-
-        HttpSession session = request.getSession(false);
-
-        Long fromUserId = (Long) session.getAttribute("user"); // 로그인 한 유저의 아이디
-
-        friendService.delete(toUserId, fromUserId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
+        friendService.delete(toUserId, getUserId(request));
+        return ApiResponse.ok();
     }
 
 }

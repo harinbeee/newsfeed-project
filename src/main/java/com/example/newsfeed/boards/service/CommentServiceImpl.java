@@ -69,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
      * @param commentId  댓글 식별자
      * @param userId     유저 식별자
      * @param requestDto 댓글 내용이 담긴 {@link CommentRequestDto} 객체
-     * @return
+     * @return 댓글 정보가 담긴 {@link CommentResponseDto} 객체
      */
     @Transactional
     @Override

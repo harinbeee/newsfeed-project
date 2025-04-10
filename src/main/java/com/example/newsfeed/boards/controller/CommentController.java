@@ -1,17 +1,15 @@
 package com.example.newsfeed.boards.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
-import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.service.CommentService;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,19 +37,13 @@ public class CommentController {
      * @return 댓글 정보가 담긴 {@link CommentResponseDto} 객체
      */
     @PostMapping
-    public ResponseEntity<CommentResponseDto> save(
+    public ApiResponse<CommentResponseDto> save(
         @PathVariable Long boardId,
         @RequestBody CommentRequestDto requestDto,
         HttpServletRequest userRequest
     ) {
-
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        CommentResponseDto commentResponseDto = commentService.save(userId, boardId, requestDto);
-
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
-
+        return ApiResponse.created(
+            commentService.save(getUserId(userRequest), boardId, requestDto));
     }
 
     /**
@@ -62,15 +54,11 @@ public class CommentController {
      * @return 조회된 댓글 정보가 담겨있는 {@link CommentResponseDto} 객체
      */
     @GetMapping("/{commentId}")
-    public ResponseEntity<CommentResponseDto> findOne(
+    public ApiResponse<CommentResponseDto> findOne(
         @PathVariable Long boardId,
         @PathVariable Long commentId
     ) {
-
-        CommentResponseDto commentResponseDto = commentService.findOne(boardId, commentId);
-
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
-
+        return ApiResponse.ok(commentService.findOne(boardId, commentId));
     }
 
     /**
@@ -82,19 +70,12 @@ public class CommentController {
      * @return 댓글 정보가 담긴 {@link CommentRequestDto} 객체
      */
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommentResponseDto> update(
+    public ApiResponse<CommentResponseDto> update(
         @PathVariable Long commentId,
         @RequestBody CommentRequestDto requestDto,
         HttpServletRequest userRequest
     ) {
-
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        CommentResponseDto commentResponseDto = commentService.update(commentId, userId,
-            requestDto);
-
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+        return ApiResponse.ok(commentService.update(commentId, getUserId(userRequest), requestDto));
     }
 
     /**
@@ -105,15 +86,11 @@ public class CommentController {
      * @return 메세지 응답 , 성공 - 200, 실패(다른 사용자 삭제 시도) - 400, 실패(댓글 식별자 없음) - 404
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<String> delete(
+    public ApiResponse<String> delete(
         @PathVariable Long commentId,
         HttpServletRequest userRequest
     ) {
-        HttpSession session = userRequest.getSession(false);
-        Long userId = (Long) session.getAttribute("user");
-
-        commentService.delete(commentId, userId);
-
-        return new ResponseEntity<>("댓글 삭제 성공!", HttpStatus.OK);
+        commentService.delete(commentId, getUserId(userRequest));
+        return ApiResponse.ok();
     }
 }

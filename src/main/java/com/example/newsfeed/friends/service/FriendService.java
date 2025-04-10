@@ -11,18 +11,11 @@ public interface FriendService {
      * 팔로우 저장 요청 서비스
      *
      * @param requestDto 팔로우 요청을 받는 유저 정보가 담긴 {@link FriendSaveRequestDto} 객체
-     * @param fromUserId 팔로우 요청을 하는 유저 식별자
+     * @param toUserId   팔로우 요청을 하는 유저 식별자
      * @return 팔로우 정보가 담긴 {@link FriendSaveResponseDto} 객체
      */
-    FriendSaveResponseDto save(FriendSaveRequestDto requestDto, Long fromUserId);
+    FriendSaveResponseDto accept(FriendSaveRequestDto requestDto, Long toUserId);
 
-    /**
-     * 나를 팔로우하는 유저 조회 서비스
-     *
-     * @param toUserId 나를 팔로우하는 유저 식별자
-     * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
-     */
-    List<FriendFindResponseDto> findByToUserId(Long toUserId);
 
     /**
      * 내가 팔로우하는 유저 조회 서비스
@@ -30,7 +23,7 @@ public interface FriendService {
      * @param fromUserId 내가 팔로우하는 유저 식별자
      * @return 내가 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    List<FriendFindResponseDto> findByFromUserId(Long fromUserId);
+    List<FriendFindResponseDto> findFriendListByFromUserId(Long fromUserId);
 
     /**
      * 팔로우 취소 요청 서비스

@@ -9,4 +9,8 @@ public class BusinessException extends RuntimeException {
 
     private final ExceptionCode exceptionCode;
 
+    public String getMessage() {
+        return exceptionCode.getMessage();
+    }
+
 }

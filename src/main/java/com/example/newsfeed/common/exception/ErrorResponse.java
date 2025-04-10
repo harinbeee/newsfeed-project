@@ -3,32 +3,25 @@ package com.example.newsfeed.common.exception;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class ErrorResponse {
 
-    @Setter
-    private int status;
-
-    @Setter
-    private String code;
-
-    @Setter
+    private HttpStatus httpStatus;
+    private Integer code;
     private String message;
 
-    private String reason;
-
-    public ErrorResponse(final ExceptionCode code, final String reason) {
-        this.message = code.getMessage();
-        this.status = code.getStatus();
-        this.code = code.getCode();
-        this.reason = reason;
+    public ErrorResponse(ExceptionCode exceptionCode) {
+        this.message = exceptionCode.getMessage();
+        this.httpStatus = exceptionCode.getHttpStatus();
+        this.code = exceptionCode.getCode();
     }
 
-    public static ErrorResponse of(final ExceptionCode code, final String reason) {
-        return new ErrorResponse(code, reason);
+    public static ErrorResponse of(ExceptionCode code) {
+        return new ErrorResponse(code);
     }
-
 
 }
