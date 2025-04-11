@@ -12,6 +12,7 @@ import com.example.newsfeed.friends.repository.FriendRequestRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,9 +70,11 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<FriendFindResponseDto> findFriendListByFromUserId(Long fromUserId) {
 
-        List<Friend> friendList = friendRepository.findByFromUserId(fromUserId);
-        return friendList.stream().map(FriendFindResponseDto::toDto).toList();
-
+        Optional<List<Friend>> friendList = friendRepository.findByFromUserId(fromUserId);
+        return
+            friendList.orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_NOT_FOUND))
+                .stream()
+                .map(FriendFindResponseDto::toDto).toList();
     }
 
     /**

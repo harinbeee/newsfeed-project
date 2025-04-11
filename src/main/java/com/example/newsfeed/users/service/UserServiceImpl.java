@@ -1,12 +1,18 @@
 package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
+import com.example.newsfeed.boards.entity.Board;
+import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.PasswordEncoder;
+import com.example.newsfeed.friends.entity.Friend;
+import com.example.newsfeed.friends.entity.FriendRequest;
 import com.example.newsfeed.friends.repository.FriendRepository;
+import com.example.newsfeed.friends.repository.FriendRequestRepository;
+import com.example.newsfeed.likes.repository.LikeRepository;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileResponseDto;
@@ -16,6 +22,7 @@ import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +37,9 @@ public class UserServiceImpl implements UserService {
     private final AuthService authService;
     private final BoardRepository boardRepository;
     private final FriendRepository friendRepository;
+    private final FriendRequestRepository friendRequestRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     /**
      * User 프로필 userId 값으로  조회 메소드
@@ -83,18 +92,42 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
+        Optional<List<Comment>> s = commentRepository.findByUserId(userId);
+
+        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
+        commentRepository.findByUserId(userId).ifPresent(comments -> {
+            comments.forEach(comment ->
+                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
+                    comment.getBoard().getBoardId(),
+                    comment.getCommentId()
+                )
+            );
+            commentRepository.deleteCommentByUserId(userId);
+        });
+
+        Optional<List<Board>> ss = boardRepository.findByUserId(userId);
+
+        // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
+        boardRepository.findByUserId(userId).ifPresent(boards -> {
+            boards.forEach(board -> likeRepository.deleteLikeByBoardBoardId(board.getBoardId()));
+            boardRepository.deleteBoardByUserId(userId);
+        });
+
+        Optional<List<Friend>> ssss = friendRepository.findByFromUserId(userId);
+
+        // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
+        friendRepository.findByFromUserId(userId)
+            .ifPresent(friend -> friendRepository.deleteFriendByUserId(userId));
+
+        Optional<List<FriendRequest>> ssssss = friendRequestRepository.findByFromUserId(userId);
+
+        // 친구 요청 삭제
+        friendRequestRepository.findByFromUserId(userId)
+            .ifPresent(fr -> friendRequestRepository.deleteFriendByUserId(userId));
+
         // 회원 정보에 탈퇴 입력
         user.setDeleted(true);
         userRepository.save(user);
-
-        // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
-        boardRepository.findById(userId).ifPresent(boardRepository::delete);
-
-        // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
-        friendRepository.findById(userId).ifPresent(friendRepository::delete);
-
-        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
-        commentRepository.findById(userId).ifPresent(commentRepository::delete);
 
         // 로그아웃 실행
         authService.logout(request, response);
