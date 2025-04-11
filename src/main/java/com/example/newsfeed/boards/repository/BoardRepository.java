@@ -25,7 +25,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
                 LEFT JOIN Comment c ON c.board = b
-                LEFT JOIN Like l ON l.board = b
+                LEFT JOIN Like l ON l.board = b AND l.comment IS NULL
         GROUP BY b
         ORDER BY CASE WHEN f.fromUser.id = :userId THEN 0 ELSE 1 END, COUNT(l.userId) DESC, b.updatedAt DESC
         """)
@@ -38,7 +38,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
                 LEFT JOIN Comment c ON c.board = b
-                LEFT JOIN Like l ON l.board = b
+                LEFT JOIN Like l ON l.board = b AND l.comment IS NULL
         GROUP BY b
         ORDER BY COUNT(l.userId) DESC, b.updatedAt DESC
         """)
@@ -51,7 +51,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
                 LEFT JOIN Comment c ON c.board = b
-                LEFT JOIN Like l ON l.board = b
+                LEFT JOIN Like l ON l.board = b AND l.comment IS NULL
         GROUP BY b
         ORDER BY b.updatedAt DESC
         """)
