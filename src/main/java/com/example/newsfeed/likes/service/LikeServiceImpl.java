@@ -11,6 +11,7 @@ import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
 import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 import com.example.newsfeed.likes.entity.Like;
 import com.example.newsfeed.likes.repository.LikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,14 +57,13 @@ public class LikeServiceImpl implements LikeService {
         }
 
         // 게시글,댓글 좋아요 중복 금지
-        Long boardId = likeRepository.findbyBoardElseThrow(
+        Optional<Like> likeList = likeRepository.findByUserIdAndBoardIdAndCommentId(
             userId,
             requestDto.getBoardId(),
             requestDto.getCommentId()
         );
-
-        if (boardId == requestDto.getBoardId()) {
-            throw new BusinessException(ExceptionCode.DUPLICATED_LIKE_BLOCK);
+        if (likeList.isPresent()) {
+            throw new BusinessException(ExceptionCode.COMMENT_SELFLIKE_BLOCK);
         }
 
         Like like = new Like(userId, board, comment);
