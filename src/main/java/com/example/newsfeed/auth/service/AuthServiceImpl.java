@@ -44,15 +44,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
             });
 
-        User user = new User(
-            requestDto.getEmail(),
-            encodedPassword,
-            requestDto.getUsername(),
-            requestDto.getNickname(),
-            requestDto.getPhone(),
-            requestDto.getProfilePicture(),
-            requestDto.getDescription()
-        );
+        User user = User.of(encodedPassword, requestDto);
 
         return UserSaveResponseDto.toDto(userRepository.save(user));
 

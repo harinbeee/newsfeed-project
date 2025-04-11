@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.entity;
 
+import com.example.newsfeed.auth.dto.UserSaveRequestDto;
 import com.example.newsfeed.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,6 +60,18 @@ public class User extends BaseEntity {
         this.phone = phone;
         this.profilePicture = profilePicture;
         this.description = description;
+    }
+
+    public static User of(String encodedPassword, UserSaveRequestDto dto) {
+        return new User(
+            dto.getEmail(),
+            encodedPassword,
+            dto.getUsername(),
+            dto.getNickname(),
+            dto.getPhone(),
+            dto.getProfilePicture(),
+            dto.getDescription()
+        );
     }
 
     public void updatePassword(String newPassword) {
