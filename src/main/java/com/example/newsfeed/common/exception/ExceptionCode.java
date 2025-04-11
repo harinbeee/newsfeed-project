@@ -20,6 +20,7 @@ public enum ExceptionCode {
     ALREADY_LOGIN(400, HttpStatus.BAD_REQUEST, "이미 로그인 되어있습니다."),
     BOARD_SELFLIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "자신이 작성한 게시글에 좋아요를 누를 수 없습니다."),
     COMMENT_SELFLIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "자신이 작성한 댓글에 좋아요를 누를 수 없습니다."),
+    DUPLICATED_LIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "좋아요를 중복해서 누를 수 없습니다."),
 
     // 401
     NOT_LOGIN_ERROR(401, HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
