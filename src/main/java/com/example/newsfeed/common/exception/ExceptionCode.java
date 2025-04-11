@@ -27,6 +27,7 @@ public enum ExceptionCode {
     BOARD_NOT_FOUND(404, HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
     BOARD_UPDATE_FORBIDDEN(400, HttpStatus.BAD_REQUEST, "작성자 본인만 수정할 수 있습니다."),
     BOARD_DELETE_FORBIDDEN(400, HttpStatus.BAD_REQUEST, "작성자 본인만 삭제할 수 있습니다."),
+    NOT_MATCH_BOARD(400, HttpStatus.BAD_REQUEST, "게시물 id와 일치하지 않습니다."),
 
     // 댓글 (피드)
     COMMENT_NOT_FOUND(404, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
