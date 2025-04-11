@@ -47,29 +47,29 @@ public class FriendRequestController {
     }
 
     /**
-     * 나에게 친구 요청 보낸 유저 조회 컨트롤러
+     * 내가 친구 요청 보낸 유저 조회 컨트롤러
      *
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 나에게 친구 요청 보낸 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    @GetMapping("/toUserId")
-    public ApiResponse<List<FriendRequestFindResponseDto>> findByToUserId(
+    @GetMapping("/fromUser")
+    public ApiResponse<List<FriendRequestFindResponseDto>> findByFromUserId(
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(requestService.findByToUserId(getUserId(request)));
+        return ApiResponse.ok(requestService.findByFromUserId(getUserId(request)));
     }
 
     /**
-     * 내가 친구 요청 보낸 유저 조회 컨트롤러
+     * 나에게 친구 요청 보낸 유저 조회 컨트롤러
      *
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내가 친구 요청 보낸 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    @GetMapping("/fromUserId")
-    public ApiResponse<List<FriendRequestFindResponseDto>> findByIdFromUserId(
+    @GetMapping("/toUser")
+    public ApiResponse<List<FriendRequestFindResponseDto>> findByIdToUserId(
         HttpServletRequest request
     ) {
-        return ApiResponse.ok(requestService.findByFromUserId(getUserId(request)));
+        return ApiResponse.ok(requestService.findByToUserId(getUserId(request)));
     }
 
     /**

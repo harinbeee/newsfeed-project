@@ -1,8 +1,8 @@
 package com.example.newsfeed.boards.service;
 
+import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
-import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
 import com.example.newsfeed.boards.entity.Board;
@@ -13,7 +13,6 @@ import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.SortType;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
