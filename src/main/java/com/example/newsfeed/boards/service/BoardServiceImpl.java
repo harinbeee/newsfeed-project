@@ -2,14 +2,19 @@ package com.example.newsfeed.boards.service;
 
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
+import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
+import com.example.newsfeed.boards.dto.CommentResponseDto;
 import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.repository.BoardRepository;
+import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.SortType;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.domain.Page;
@@ -25,13 +30,14 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     /**
      * 게시글 생성 요청 서비스
      *
      * @param userId     게시글을 작성하는 유저 식별자
      * @param requestDto 게시글 작성 요청 내용이 담겨있는 {@link BoardRequestDto} 객체
-     * @return 작성된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 작성된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
     @Override
     public BoardResponseDto save(Long userId, BoardRequestDto requestDto) {
@@ -43,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board savedboard = boardRepository.save(board);
 
-        return BoardResponseDto.toDto(savedboard);
+        return BoardResponseDto.toDto(savedboard, 0L);
 
     }
 
@@ -90,11 +96,21 @@ public class BoardServiceImpl implements BoardService {
      * 게시글 단건 조회 요청 서비스
      *
      * @param boardId 게시글 식별자
-     * @return 조회된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 조회된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
     @Override
-    public BoardResponseDto findOne(Long boardId) {
-        return BoardResponseDto.toDto(boardRepository.findByIdOrElseThrow(boardId));
+    public BoardFindResponseDto findOne(Long boardId) {
+        Board board = boardRepository.findByIdOrElseThrow(boardId);
+        Long likeCount = boardRepository.countBoardLikes(boardId);
+
+        List<CommentResponseDto> commentDtos = board.getComments().stream()
+            .map(comment -> {
+                Long commentLikeCount = commentRepository.countCommentLikes(comment.getCommentId());
+                return CommentResponseDto.toDto(comment, commentLikeCount);
+            })
+            .toList();
+
+        return BoardFindResponseDto.toDto(board, likeCount, commentDtos);
     }
 
     /**
@@ -103,7 +119,7 @@ public class BoardServiceImpl implements BoardService {
      * @param boardId    게시글 식별자
      * @param userId     유저 식별자
      * @param requestDto 게시글 수정 요청 정보가 담겨있는 {@link BoardRequestDto} 객체
-     * @return 수정된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 수정된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
     @Transactional
     @Override
@@ -111,6 +127,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 게시글 찾기
         Board findBoard = boardRepository.findByIdOrElseThrow(boardId);
+        Long likeCount = boardRepository.countBoardLikes(boardId);
 
         // 작성자 = 로그인 유저인지 검증
         if (!findBoard.getUser().getId().equals(userId)) {
@@ -130,7 +147,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board updatedBoard = boardRepository.findByIdOrElseThrow(boardId); // 업데이트 내용 저장
 
-        return BoardResponseDto.toDto(updatedBoard);
+        return BoardResponseDto.toDto(updatedBoard, likeCount);
 
     }
 

@@ -55,6 +55,17 @@ public class LikeServiceImpl implements LikeService {
             }
         }
 
+        // 게시글,댓글 좋아요 중복 금지
+        Long boardId = likeRepository.findbyBoardElseThrow(
+            userId,
+            requestDto.getBoardId(),
+            requestDto.getCommentId()
+        );
+
+        if (boardId == requestDto.getBoardId()) {
+            throw new BusinessException(ExceptionCode.DUPLICATED_LIKE_BLOCK);
+        }
+
         Like like = new Like(userId, board, comment);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));

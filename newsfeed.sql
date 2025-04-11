@@ -51,3 +51,12 @@ CREATE TABLE comments
 
 ALTER TABLE boards
     ADD COLUMN board_image VARCHAR(512);
+
+create table likes
+(
+    board_id   bigint not null,
+    comment_id bigint,
+    id         bigint not null auto_increment,
+    user_id    bigint not null,
+    primary key (id)
+);
