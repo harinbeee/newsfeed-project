@@ -37,7 +37,10 @@ public enum ExceptionCode {
 
     //409
     DB_DATA_CONFLICT(409, HttpStatus.CONFLICT, "동일한 값이 존재 합니다"),
-    FOLLOW_USER_CONFLICT(409, HttpStatus.CONFLICT, "본인에게는 팔로우 할 수 없습니다");
+    FOLLOW_USER_CONFLICT(409, HttpStatus.CONFLICT, "본인에게는 팔로우 할 수 없습니다"),
+
+    // 500
+    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
 
 
     private final int code;
