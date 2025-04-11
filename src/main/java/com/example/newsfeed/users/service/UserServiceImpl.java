@@ -79,25 +79,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    /**
-     * 이메일 중복체크
-     *
-     * @param email 유저가 입력한 이메일
-     */
-    @Override
-    public void findByEmail(String email) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            if (userRepository.findByEmail(email).get().isDeleted()) {
-                // 회원가입시 탈퇴된 회원 예외처리
-                throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
-            } else {
-                // 회원가입시 중복된 회원 예외처리
-                throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
-            }
-        }
-    }
-
-
     @Override
     @Transactional
     public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
@@ -173,8 +154,10 @@ public class UserServiceImpl implements UserService {
         if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
             throw new BusinessException(ExceptionCode.PASSWORD_NOT_CHANGED);
         }
+        // 새로운 비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
 
-        user.updatePassword(requestDto.getNewPassword());
+        user.updatePassword(encodedPassword);
 
     }
 

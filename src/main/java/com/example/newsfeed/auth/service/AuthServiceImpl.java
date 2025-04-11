@@ -35,15 +35,16 @@ public class AuthServiceImpl implements AuthService {
         // 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(
-            requestDto.getEmail(),
-            encodedPassword,
-            requestDto.getUsername(),
-            requestDto.getNickname(),
-            requestDto.getPhone(),
-            requestDto.getProfilePicture(),
-            requestDto.getDescription()
-        );
+        // 이미 가입 후 탈퇴된 이메일이거나 중복된 이메일 사용 시
+        userRepository.findAllByEmailIncludingDeleted(requestDto.getEmail())
+            .ifPresent(user -> {
+                if (user.isDeleted()) {
+                    throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
+                }
+                throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
+            });
+
+        User user = User.of(encodedPassword, requestDto);
 
         return UserSaveResponseDto.toDto(userRepository.save(user));
 
@@ -62,20 +63,22 @@ public class AuthServiceImpl implements AuthService {
         HttpSession session,
         HttpServletResponse response
     ) {
-
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();
+
+        // 회원 탈퇴시
+        userRepository.findAllByEmailIncludingDeleted(email)
+            .ifPresent(user -> {
+                if (user.isDeleted()) {
+                    throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
+                }
+            });
 
         User findUser = userRepository.findByEmailElseThrow(email);
         Long sessionUserId = (Long) session.getAttribute("user");
 
         if (sessionUserId != null) {
             throw new BusinessException(ExceptionCode.ALREADY_LOGIN);
-        }
-
-        // 회원 탈퇴시
-        if (findUser.isDeleted()) {
-            throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
         }
 
         if (passwordEncoder.matches(password, findUser.getPassword())) {
