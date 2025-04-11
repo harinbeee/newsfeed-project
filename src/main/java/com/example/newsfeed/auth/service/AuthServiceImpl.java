@@ -44,15 +44,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
             });
 
-        User user = new User(
-            requestDto.getEmail(),
-            encodedPassword,
-            requestDto.getUsername(),
-            requestDto.getNickname(),
-            requestDto.getPhone(),
-            requestDto.getProfilePicture(),
-            requestDto.getDescription()
-        );
+        User user = User.of(encodedPassword, requestDto);
 
         return UserSaveResponseDto.toDto(userRepository.save(user));
 
@@ -71,20 +63,22 @@ public class AuthServiceImpl implements AuthService {
         HttpSession session,
         HttpServletResponse response
     ) {
-
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();
+
+        // 회원 탈퇴시
+        userRepository.findAllByEmailIncludingDeleted(email)
+            .ifPresent(user -> {
+                if (user.isDeleted()) {
+                    throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
+                }
+            });
 
         User findUser = userRepository.findByEmailElseThrow(email);
         Long sessionUserId = (Long) session.getAttribute("user");
 
         if (sessionUserId != null) {
             throw new BusinessException(ExceptionCode.ALREADY_LOGIN);
-        }
-
-        // 회원 탈퇴시
-        if (findUser.isDeleted()) {
-            throw new BusinessException(ExceptionCode.LOGIN_FORBIDDEN);
         }
 
         if (passwordEncoder.matches(password, findUser.getPassword())) {

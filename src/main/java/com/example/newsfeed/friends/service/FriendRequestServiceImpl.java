@@ -12,6 +12,7 @@ import com.example.newsfeed.friends.repository.FriendRequestRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,11 +55,11 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Override
     public List<FriendRequestFindResponseDto> findByToUserId(Long toUserId) {
 
-        List<FriendRequest> friendList = requestRepository.findByToUserId(toUserId);
-        return friendList.stream()
-            .map(FriendRequestFindResponseDto::toDto)
-            .toList();
-
+        Optional<List<FriendRequest>> friendList = requestRepository.findByToUserId(toUserId);
+        return
+            friendList.orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_TO_REQUEST))
+                .stream()
+                .map(FriendRequestFindResponseDto::toDto).toList();
     }
 
     /**
@@ -70,11 +71,11 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Override
     public List<FriendRequestFindResponseDto> findByFromUserId(Long fromUserId) {
 
-        List<FriendRequest> friendList = requestRepository.findByFromUserId(fromUserId);
-        return friendList.stream()
-            .map(FriendRequestFindResponseDto::toDto)
-            .toList();
-
+        Optional<List<FriendRequest>> friendList = requestRepository.findByFromUserId(fromUserId);
+        return
+            friendList.orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_FROM_REQUEST))
+                .stream()
+                .map(FriendRequestFindResponseDto::toDto).toList();
     }
 
     /**

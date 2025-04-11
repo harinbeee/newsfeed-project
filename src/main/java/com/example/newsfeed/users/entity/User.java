@@ -1,5 +1,6 @@
 package com.example.newsfeed.users.entity;
 
+import com.example.newsfeed.auth.dto.UserSaveRequestDto;
 import com.example.newsfeed.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.Where;
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
+@NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id
@@ -48,13 +51,10 @@ public class User extends BaseEntity {
     @Column
     private String description;
 
-
-    public User() {
-
-    }
-
-    public User(String email, String password, String username, String nickname, String phone,
-        String profilePicture, String description) {
+    public User(
+        String email, String password, String username, String nickname,
+        String phone, String profilePicture, String description
+    ) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -62,6 +62,18 @@ public class User extends BaseEntity {
         this.phone = phone;
         this.profilePicture = profilePicture;
         this.description = description;
+    }
+
+    public static User of(String encodedPassword, UserSaveRequestDto dto) {
+        return new User(
+            dto.getEmail(),
+            encodedPassword,
+            dto.getUsername(),
+            dto.getNickname(),
+            dto.getPhone(),
+            dto.getProfilePicture(),
+            dto.getDescription()
+        );
     }
 
     public void updatePassword(String newPassword) {
