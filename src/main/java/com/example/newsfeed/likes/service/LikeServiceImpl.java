@@ -43,13 +43,6 @@ public class LikeServiceImpl implements LikeService {
             throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
         }
 
-        //db에 이미 같은 형식의 데이터가 있는지 체크
-        if (likeRepository.findByCommentIdAndBoardId(requestDto.getCommentId(),
-                requestDto.getBoardId())
-            .isPresent()) {
-            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
-        }
-
         Comment comment =
             requestDto.getCommentId() == null || requestDto.getCommentId().equals(0L)// 0L이면 게시물 좋아요
                 ? null
