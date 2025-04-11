@@ -20,7 +20,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("""
         SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
-                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(DISTINCT l.userId), COUNT(DISTINCT c), b.createdAt, b.updatedAt)
         FROM Board b
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
@@ -33,7 +33,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("""
         SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
-                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c), b.createdAt, b.updatedAt)
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(DISTINCT l.userId), COUNT(DISTINCT c), b.createdAt, b.updatedAt)
         FROM Board b
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
@@ -46,7 +46,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("""
         SELECT new com.example.newsfeed.boards.dto.BoardPageResponseDto(
-                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(l.userId), COUNT(c),b.createdAt, b.updatedAt)
+                u.id, u.username, u.nickname, b.title, b.contents, b.boardImage, COUNT(DISTINCT l.id), COUNT(DISTINCT c),b.createdAt, b.updatedAt)
         FROM Board b
                 LEFT JOIN b.user u
                 LEFT JOIN Friend f ON f.fromUser.id = :userId AND f.toUser = u
