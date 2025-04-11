@@ -60,3 +60,12 @@ create table likes
     user_id    bigint not null,
     primary key (id)
 );
+
+CREATE TABLE friend_requests
+(
+    id           BIGINT NOT NULL AUTO_INCREMENT,
+    to_user_id   BIGINT,
+    from_user_id BIGINT,
+    FOREIGN KEY (to_user_id) REFERENCES users (user_id),
+    FOREIGN KEY (from_user_id) REFERENCES users (user_id)
+);

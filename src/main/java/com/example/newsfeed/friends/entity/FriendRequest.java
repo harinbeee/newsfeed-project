@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "friend_requsts")
+@Table(name = "friend_requests")
 @NoArgsConstructor
 public class FriendRequest { // 친구 요청 저장 테이블
 
