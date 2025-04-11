@@ -34,11 +34,7 @@ public class AuthController {
     public ApiResponse<UserSaveResponseDto> signUp(
         @RequestBody @Valid UserSaveRequestDto requestDto
     ) {
-
-        userService.findByEmail(requestDto.getEmail()); // 입력한 이메일 이미 있는지 체크 중복이면 Exception
-
         return ApiResponse.ok(authService.save(requestDto));
-
     }
 
     /**
@@ -55,11 +51,8 @@ public class AuthController {
         HttpServletRequest request,
         HttpServletResponse response
     ) {
-
         authService.login(requestDto, request.getSession(), response);
-
         return ApiResponse.ok();
-
     }
 
     /**

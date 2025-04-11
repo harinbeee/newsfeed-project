@@ -35,6 +35,15 @@ public class AuthServiceImpl implements AuthService {
         // 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
+        // 이미 가입 후 탈퇴된 이메일이거나 중복된 이메일 사용 시
+        userRepository.findAllByEmailIncludingDeleted(requestDto.getEmail())
+            .ifPresent(user -> {
+                if (user.isDeleted()) {
+                    throw new BusinessException(ExceptionCode.SIGNUP_FORBIDDEN);
+                }
+                throw new BusinessException(ExceptionCode.EMAIL_ALREADY_USED);
+            });
+
         User user = new User(
             requestDto.getEmail(),
             encodedPassword,
