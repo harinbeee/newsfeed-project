@@ -83,9 +83,8 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
-        // 회원 정보에 탈퇴 입력
-        user.setDeleted(true);
-        userRepository.save(user);
+        // 회원 정보에 탈퇴 입력 @SQLDelete 기능사용(user entity)
+        userRepository.delete(user);
 
         // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
         boardRepository.findById(userId).ifPresent(boardRepository::delete);
