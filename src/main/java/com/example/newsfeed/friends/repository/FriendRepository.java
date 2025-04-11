@@ -13,8 +13,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Optional<Friend> findByToUserIdAndFromUserId(Long toUserId, Long fromUserId);
 
-    List<Friend> findByToUserId(Long toUserId); // 로그인 한 유저 아이디 기준 조회
-
     List<Friend> findByFromUserId(Long fromUserId); // 로그인 한 유저 아이디 기준 조회
 
     default Friend findByIdElseThrow(Long id) {

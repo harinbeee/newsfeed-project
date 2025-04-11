@@ -3,6 +3,7 @@ package com.example.newsfeed.friends.entity;
 import com.example.newsfeed.common.entity.IsDelete;
 import com.example.newsfeed.users.entity.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,11 +25,11 @@ public class Friend extends IsDelete {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "to_user_id")
     private User toUser; //팔로우 유저가 팔로잉한 유저 아이디
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "from_user_id")
     private User fromUser; // 팔로우한 유저 아이디
 

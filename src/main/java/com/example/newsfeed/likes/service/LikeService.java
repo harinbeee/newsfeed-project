@@ -5,6 +5,6 @@ import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 
 public interface LikeService {
 
-    LikeSaveResponseDto save(LikeSaveRequestDto requestDto);
+    LikeSaveResponseDto save(LikeSaveRequestDto requestDto, Long userId);
 
 }

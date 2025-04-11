@@ -11,6 +11,7 @@ import com.example.newsfeed.likes.dto.LikeSaveRequestDto;
 import com.example.newsfeed.likes.dto.LikeSaveResponseDto;
 import com.example.newsfeed.likes.entity.Like;
 import com.example.newsfeed.likes.repository.LikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +30,12 @@ public class LikeServiceImpl implements LikeService {
      * 좋아요 저장 요청 서비스
      *
      * @param requestDto 좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
+     * @param userId
      * @return 좋아요 응답 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @Override
     @Transactional
-    public LikeSaveResponseDto save(LikeSaveRequestDto requestDto) {
-
-        Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
-
-        // 자기 게시판에 좋아요 금지
-        if (board.getUser().getId().equals(requestDto.getUserId())) {
-            throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
-        }
+    public LikeSaveResponseDto save(LikeSaveRequestDto requestDto, Long userId) {
 
         Comment comment =
             requestDto.getCommentId() == null || requestDto.getCommentId().equals(0L)// 0L이면 게시물 좋아요
@@ -49,12 +44,29 @@ public class LikeServiceImpl implements LikeService {
 
         if (comment != null) {
             // 자기 댓글에 좋아요 금지
-            if (comment.getUser().getId().equals(requestDto.getUserId())) {
+            if (comment.getUser().getId().equals(userId)) {
                 throw new BusinessException(ExceptionCode.COMMENT_SELFLIKE_BLOCK);
             }
         }
 
-        Like like = new Like(requestDto.getUserId(), board, comment);
+        Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
+
+        // 자기 게시판에 좋아요 금지
+        if (board.getUser().getId().equals(userId)) {
+            throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
+        }
+
+        // 게시글,댓글 좋아요 중복 금지
+        Optional<Like> likeList = likeRepository.findByUserIdAndBoardIdAndCommentId(
+            userId,
+            requestDto.getBoardId(),
+            requestDto.getCommentId()
+        );
+        if (likeList.isPresent()) {
+            throw new BusinessException(ExceptionCode.DUPLICATED_LIKE_BLOCK);
+        }
+
+        Like like = new Like(userId, board, comment);
 
         return LikeSaveResponseDto.toDto(likeRepository.save(like));
 

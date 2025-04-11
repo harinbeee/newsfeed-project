@@ -29,13 +29,13 @@ public class FriendController {
     private final FriendService friendService;
 
     /**
-     * 팔로우 저장 요청 컨트롤러
+     * 친구 저장 요청 컨트롤러
      *
      * @param requestDto 팔로우 요청 정보가 담겨있는 {@link FriendSaveRequestDto} 객체
      * @return 팔로우 정보가 담겨있는 {@link FriendSaveResponseDto} 객체
      */
     @PostMapping
-    public ApiResponse<FriendSaveResponseDto> save(
+    public ApiResponse<FriendSaveResponseDto> accept(
         @RequestBody FriendSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
