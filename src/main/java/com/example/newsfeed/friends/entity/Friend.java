@@ -12,13 +12,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Table(name = "friends")
 @NoArgsConstructor
-@Where(clause = "is_deleted = false")
 public class Friend extends IsDelete {
 
     @Id
