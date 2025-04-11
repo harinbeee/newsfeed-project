@@ -33,6 +33,7 @@ public class LikeController {
         @RequestBody @Valid LikeSaveRequestDto requestDto,
         HttpServletRequest request
     ) {
+
         return ApiResponse.created(likeService.save(requestDto, getUserId(request)));
     }
 }

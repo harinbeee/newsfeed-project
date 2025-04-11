@@ -12,13 +12,14 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
         + "SELECT l "
         + "FROM Like l "
         + "WHERE l.board.boardId = :boardId "
-        + "AND l.comment.commentId = :commentId AND l.userId = :userId"
+        + "AND l.userId = :userId "
+        + "AND :commentId "
+        + "IS Null or l.comment.commentId = :commentId "
     )
     Optional<Like> findByUserIdAndBoardIdAndCommentId(
-        @Param("userid") Long userid,
+        @Param("userId") Long userId,
         @Param("boardId") Long boardId,
         @Param("commentId") Long commentId
     );
-
 
 }

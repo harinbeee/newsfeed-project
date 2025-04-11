@@ -37,13 +37,6 @@ public class LikeServiceImpl implements LikeService {
     @Transactional
     public LikeSaveResponseDto save(LikeSaveRequestDto requestDto, Long userId) {
 
-        Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
-
-        // 자기 게시판에 좋아요 금지
-        if (board.getUser().getId().equals(userId)) {
-            throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
-        }
-
         Comment comment =
             requestDto.getCommentId() == null || requestDto.getCommentId().equals(0L)// 0L이면 게시물 좋아요
                 ? null
@@ -56,6 +49,13 @@ public class LikeServiceImpl implements LikeService {
             }
         }
 
+        Board board = boardRepository.findByIdOrElseThrow(requestDto.getBoardId());
+
+        // 자기 게시판에 좋아요 금지
+        if (board.getUser().getId().equals(userId)) {
+            throw new BusinessException(ExceptionCode.BOARD_SELFLIKE_BLOCK);
+        }
+
         // 게시글,댓글 좋아요 중복 금지
         Optional<Like> likeList = likeRepository.findByUserIdAndBoardIdAndCommentId(
             userId,
@@ -63,7 +63,7 @@ public class LikeServiceImpl implements LikeService {
             requestDto.getCommentId()
         );
         if (likeList.isPresent()) {
-            throw new BusinessException(ExceptionCode.COMMENT_SELFLIKE_BLOCK);
+            throw new BusinessException(ExceptionCode.DUPLICATED_LIKE_BLOCK);
         }
 
         Like like = new Like(userId, board, comment);
