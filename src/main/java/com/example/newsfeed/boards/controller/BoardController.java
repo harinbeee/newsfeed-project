@@ -2,6 +2,7 @@ package com.example.newsfeed.boards.controller;
 
 import static com.example.newsfeed.common.util.SessionUtil.getUserId;
 
+import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
@@ -69,10 +70,10 @@ public class BoardController {
      * 게시글 단건 조회 요청 컨트롤러
      *
      * @param boardId 게시물 식별자
-     * @return 조회된 게시글 정보가 담긴 {@link BoardResponseDto} 객체
+     * @return 조회된 게시글 정보가 담긴 {@link BoardFindResponseDto} 객체
      */
     @GetMapping("/{boardId}")
-    public ApiResponse<BoardResponseDto> findOne(
+    public ApiResponse<BoardFindResponseDto> findOne(
         @PathVariable Long boardId
     ) {
         return ApiResponse.ok(boardService.findOne(boardId));

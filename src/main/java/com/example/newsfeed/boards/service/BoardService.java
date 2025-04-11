@@ -2,6 +2,7 @@ package com.example.newsfeed.boards.service;
 
 import com.example.newsfeed.boards.dto.BoardPageResponseDto;
 import com.example.newsfeed.boards.dto.BoardRequestDto;
+import com.example.newsfeed.boards.dto.BoardFindResponseDto;
 import com.example.newsfeed.boards.dto.BoardResponseDto;
 import com.example.newsfeed.common.util.SortType;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ public interface BoardService {
      *
      * @param userId     게시글을 작성하는 유저 식별자
      * @param requestDto 게시글 작성 요청 내용이 담겨있는 {@link BoardRequestDto} 객체
-     * @return 작성된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 작성된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
     BoardResponseDto save(Long userId, BoardRequestDto requestDto);
 
@@ -34,9 +35,9 @@ public interface BoardService {
      * 게시글 단건 조회 요청 서비스
      *
      * @param boardId 게시글 식별자
-     * @return 조회된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 조회된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
-    BoardResponseDto findOne(Long boardId);
+    BoardFindResponseDto findOne(Long boardId);
 
     /**
      * 게시글 수정 요청 서비스
@@ -44,7 +45,7 @@ public interface BoardService {
      * @param boardId    게시글 식별자
      * @param userId     유저 식별자
      * @param requestDto 게시글 수정 요청 정보가 담겨있는 {@link BoardRequestDto} 객체
-     * @return 수정된 게시글 정보가 담겨있는 {@link BoardResponseDto} 객체
+     * @return 수정된 게시글 정보가 담겨있는 {@link BoardFindResponseDto} 객체
      */
     BoardResponseDto update(Long boardId, Long userId, BoardRequestDto requestDto);
 

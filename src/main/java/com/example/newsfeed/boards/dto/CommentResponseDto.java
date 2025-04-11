@@ -14,6 +14,7 @@ public class CommentResponseDto {
     private final Long boardId;
     private final String nickname;
     private final String contents;
+    private final Long likeCount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime createdAt;
@@ -21,12 +22,13 @@ public class CommentResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime updatedAt;
 
-    public static CommentResponseDto toDto(Comment comment) {
+    public static CommentResponseDto toDto(Comment comment, Long likeCount) {
         return new CommentResponseDto(
             comment.getCommentId(),
             comment.getBoard().getBoardId(),
             comment.getUser().getNickname(),
             comment.getContents(),
+            likeCount,
             comment.getCreatedAt(),
             comment.getUpdatedAt()
         );
