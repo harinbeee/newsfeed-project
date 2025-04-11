@@ -57,6 +57,9 @@ public class CommentServiceImpl implements CommentService {
 
         Board findboard = boardRepository.findByIdOrElseThrow(boardId); // 게시물 - 댓글 일치하는지 검증?
         Comment findComment = commentRepository.findByIdOrElseThrow(commentId);
+        if (!findboard.getBoardId().equals(findComment.getBoard().getBoardId())) {
+            throw new BusinessException(ExceptionCode.NOT_MATCH_BOARD);
+        }
         Long likeCount = commentRepository.countCommentLikes(commentId);
 
         return CommentResponseDto.toDto(findComment, likeCount);

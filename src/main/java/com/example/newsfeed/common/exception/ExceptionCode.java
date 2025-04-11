@@ -22,6 +22,7 @@ public enum ExceptionCode {
     BOARD_SELFLIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "자신이 작성한 게시글에 좋아요를 누를 수 없습니다."),
     COMMENT_SELFLIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "자신이 작성한 댓글에 좋아요를 누를 수 없습니다."),
     DUPLICATED_LIKE_BLOCK(400, HttpStatus.BAD_REQUEST, "좋아요를 중복해서 누를 수 없습니다."),
+    NOT_MATCH_BOARD(400, HttpStatus.BAD_REQUEST, "게시물 id와 일치하지 않습니다."),
 
     // 401
     NOT_LOGIN_ERROR(401, HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
