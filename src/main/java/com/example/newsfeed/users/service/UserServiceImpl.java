@@ -121,8 +121,10 @@ public class UserServiceImpl implements UserService {
         if (requestDto.getNewPassword().equals(requestDto.getOldPassword())) {
             throw new BusinessException(ExceptionCode.PASSWORD_NOT_CHANGED);
         }
+        // 새로운 비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
 
-        user.updatePassword(requestDto.getNewPassword());
+        user.updatePassword(encodedPassword);
 
     }
 
