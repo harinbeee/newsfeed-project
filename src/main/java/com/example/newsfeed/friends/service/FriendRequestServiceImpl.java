@@ -25,11 +25,13 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Override
     public FriendAcceptResponseDto save(FriendAcceptRequestDto requestDto, Long fromUserId) {
+
         //db에 이미 같은 형식의 데이터가 있는지 체크
-        if (requestRepository.findByToUserIdAndFromUserId(requestDto.getToUserId(), fromUserId)
-            .isPresent()) {
-            throw new BusinessException(ExceptionCode.DB_DATA_CONFLICT);
-        }
+        isUsed(requestRepository.findByToUserIdAndFromUserId(requestDto.getToUserId(), fromUserId)
+            .isPresent(), ExceptionCode.DB_DATA_CONFLICT);
+        //이미 친구 인지 체크
+        isUsed(friendRepository.findByToUserIdAndFromUserId(requestDto.getToUserId(), fromUserId)
+            .isPresent(), ExceptionCode.FRIEND_ALREADY_USED);
 
         if (fromUserId.equals(requestDto.getToUserId())) { // 같은 유저를 팔로우 하는지 체크
             throw new BusinessException(ExceptionCode.FOLLOW_USER_CONFLICT);
@@ -44,7 +46,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     /**
-     * 나를 팔로우하는 유저 조회 서비스
+     * 나에게 친구 요청 보낸 유저 조회 서비스
      *
      * @param toUserId 나를 팔로우하는 유저 식별자
      * @return 나를 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
@@ -60,7 +62,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     /**
-     * 내가 팔로우하는 유저 조회 서비스
+     * 내가 친구 요청 보낸 유저 조회 서비스
      *
      * @param fromUserId 내가 팔로우하는 유저 식별자
      * @return 내가 팔로우하는 유저 정보가 담긴 {@link FriendFindResponseDto} 객체 리스트
@@ -86,5 +88,13 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
         requestRepository.delete(requestRepository.findByTwoIdOrElseThrow(toUserId, fromUserId));
 
+    }
+
+    @Override
+    public void isUsed(boolean isUsed, ExceptionCode exceptionCode) {
+        //db에 이미 같은 형식의 데이터가 있는지 체크
+        if (isUsed) {
+            throw new BusinessException(exceptionCode);
+        }
     }
 }
