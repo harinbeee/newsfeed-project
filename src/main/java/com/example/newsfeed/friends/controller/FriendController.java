@@ -48,7 +48,7 @@ public class FriendController {
      * @param request 로그인 정보가 담겨있는 {@link HttpServletRequest} 객체
      * @return 내 친구 목록이 담긴 {@link FriendFindResponseDto} 객체 리스트
      */
-    @GetMapping("/fromUserId")
+    @GetMapping
     public ApiResponse<List<FriendFindResponseDto>> findFriendListByFromUserId(
         HttpServletRequest request
     ) {

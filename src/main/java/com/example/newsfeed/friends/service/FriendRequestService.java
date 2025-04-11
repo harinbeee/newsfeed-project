@@ -1,5 +1,6 @@
 package com.example.newsfeed.friends.service;
 
+import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.friends.dto.FriendAcceptRequestDto;
 import com.example.newsfeed.friends.dto.FriendAcceptResponseDto;
 import com.example.newsfeed.friends.dto.FriendRequestFindResponseDto;
@@ -23,6 +24,8 @@ public interface FriendRequestService {
 
 
     void reject(Long toUserId, Long fromUserId);
+
+    void isUsed(boolean isUsed, ExceptionCode exceptionCode);
 
 
 }

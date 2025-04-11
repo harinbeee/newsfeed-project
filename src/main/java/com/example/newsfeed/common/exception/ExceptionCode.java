@@ -11,6 +11,7 @@ public enum ExceptionCode {
     NOT_VALID_ERROR(400, HttpStatus.BAD_REQUEST, "Validation Exception 발생"),
     EMAIL_NOT_FOUND(400, HttpStatus.BAD_REQUEST, "이메일이 존재하지 않습니다."),
     EMAIL_ALREADY_USED(400, HttpStatus.BAD_REQUEST, "이미 사용중인 이메일입니다."),
+    FRIEND_ALREADY_USED(400, HttpStatus.BAD_REQUEST, "이미 친구 입니다."),
     PASSWORD_INVALID(400, HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     PASSWORD_NOT_CHANGED(400, HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 일치합니다."),
     BOARD_UPDATE_FORBIDDEN(400, HttpStatus.BAD_REQUEST, "작성자 본인만 수정할 수 있습니다."),
@@ -37,7 +38,10 @@ public enum ExceptionCode {
 
     //409
     DB_DATA_CONFLICT(409, HttpStatus.CONFLICT, "동일한 값이 존재 합니다"),
-    FOLLOW_USER_CONFLICT(409, HttpStatus.CONFLICT, "본인에게는 팔로우 할 수 없습니다");
+    FOLLOW_USER_CONFLICT(409, HttpStatus.CONFLICT, "본인에게는 팔로우 할 수 없습니다"),
+
+    // 500
+    INTERNAL_SERVER_ERROR(500, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
 
 
     private final int code;

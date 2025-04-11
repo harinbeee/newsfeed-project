@@ -1,14 +1,11 @@
 package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
-import com.example.newsfeed.boards.entity.Board;
-import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.PasswordEncoder;
-import com.example.newsfeed.friends.entity.Friend;
 import com.example.newsfeed.friends.repository.FriendRepository;
 import com.example.newsfeed.users.dto.UpdatePasswordRequestDto;
 import com.example.newsfeed.users.dto.UpdateUserProfileRequestDto;
@@ -109,20 +106,14 @@ public class UserServiceImpl implements UserService {
         user.setDeleted(true);
         userRepository.save(user);
 
-        // board에서 탈퇴회원의 게시판 숨김
-        Board boardDelete = boardRepository.findByIdOrElseThrow(userId);
-        boardDelete.setDeleted(true);
-        boardRepository.save(boardDelete);
+        // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
+        boardRepository.findById(userId).ifPresent(boardRepository::delete);
 
-        // friends에서 탈퇴회원의 팔로우 숨김
-        Friend friendDelete = friendRepository.findByIdElseThrow(userId);
-        friendDelete.setDeleted(true);
-        friendRepository.save(friendDelete);
+        // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
+        friendRepository.findById(userId).ifPresent(friendRepository::delete);
 
-        // comment에서 탈퇴회원의 댓글 숨김
-        Comment commentDelete = commentRepository.findByIdOrElseThrow(userId);
-        commentDelete.setDeleted(true);
-        commentRepository.save(commentDelete);
+        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
+        commentRepository.findById(userId).ifPresent(commentRepository::delete);
 
         // 로그아웃 실행
         authService.logout(request, response);
