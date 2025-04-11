@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
@@ -15,6 +16,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Table(name = "users")
 @Where(clause = "is_deleted = false")
+@NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id
@@ -46,13 +48,10 @@ public class User extends BaseEntity {
     @Column
     private String description;
 
-
-    public User() {
-
-    }
-
-    public User(String email, String password, String username, String nickname, String phone,
-        String profilePicture, String description) {
+    public User(
+        String email, String password, String username, String nickname,
+        String phone, String profilePicture, String description
+    ) {
         this.email = email;
         this.password = password;
         this.username = username;
