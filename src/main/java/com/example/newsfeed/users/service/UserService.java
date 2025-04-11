@@ -12,8 +12,6 @@ public interface UserService {
 
     UserFindResponseDto find(Long userId);
 
-    void findByEmail(String email);
-
     /**
      * 유저 프로필 수정 메소드
      *

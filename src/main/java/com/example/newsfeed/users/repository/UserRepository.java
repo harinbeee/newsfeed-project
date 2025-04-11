@@ -5,6 +5,8 @@ import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.users.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -26,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findByUsername(username).orElseThrow(
             () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
     }
+
+    @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
+    Optional<User> findAllByEmailIncludingDeleted(@Param("email") String email);
 }
