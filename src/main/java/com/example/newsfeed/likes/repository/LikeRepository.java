@@ -3,6 +3,7 @@ package com.example.newsfeed.likes.repository;
 import com.example.newsfeed.likes.entity.Like;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -31,4 +32,15 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
         @Param("commentId") Long commentId
     );
 
+    Optional<Like> findByBoardBoardId(Long userId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM Like l WHERE l.board.boardId = :boardId")
+    void deleteLikeByBoardBoardId(@Param("boardId") Long boardId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("DELETE FROM Like l WHERE l.board.boardId = :boardId and l.comment.commentId = :commentId")
+    void deleteLikeByBoardBoardIdAndCommentCommentId(
+        @Param("boardId") Long boardId,
+        @Param("commentId") Long commentId);
 }
