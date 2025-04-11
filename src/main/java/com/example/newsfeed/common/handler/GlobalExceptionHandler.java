@@ -14,8 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String VALIDATION_ERROR_DELIMITER = ", ";
-
     // 입력 값 검증 예외 핸들러
     @ExceptionHandler(value = {
         ResponseStatusException.class,
@@ -40,16 +38,5 @@ public class GlobalExceptionHandler {
         log.error("Catch General Exception : {}", e.getMessage());
         return ApiResponse.fail(new BusinessException(ExceptionCode.INTERNAL_SERVER_ERROR));
     }
-
-//    private ApiResponse<ErrorResponse> createErrorResponse(ExceptionCode code, String reason) {
-//        ErrorResponse response = ErrorResponse.of(code);
-//        return new ApiResponse<>();
-//    }
-
-//    private String createValidationErrorMessage(BindingResult bindingResult) {
-//        return bindingResult.getFieldErrors().stream()
-//            .map(error -> String.format("%s:%s", error.getField(), error.getDefaultMessage()))
-//            .collect(Collectors.joining(VALIDATION_ERROR_DELIMITER));
-//    }
 
 }
