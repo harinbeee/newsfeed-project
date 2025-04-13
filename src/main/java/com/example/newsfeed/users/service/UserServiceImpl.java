@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
         commentRepository.findByUserId(userId).ifPresent(comments -> {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardIdAndCommentId(
+                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
