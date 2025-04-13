@@ -92,12 +92,12 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
-        Optional<List<Comment>> s = commentRepository.findByUserId(userId);
+        Optional<List<Comment>> s = commentRepository.findByUserIdAndBoard(userId);// test
 
         // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
-        commentRepository.findByUserId(userId).ifPresent(comments -> {
+        commentRepository.findByUserIdAndBoard(userId).ifPresent(comments -> {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
+                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId( // 좋아요 먼저 삭제
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
@@ -105,21 +105,22 @@ public class UserServiceImpl implements UserService {
             commentRepository.deleteCommentByUserId(userId);
         });
 
-        Optional<List<Board>> ss = boardRepository.findByUserId(userId);
+        Optional<List<Board>> ss = boardRepository.findByUserId(userId);// test
 
         // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
-        boardRepository.findByUserId(userId).ifPresent(boards -> {
+        boardRepository.findByUserId(userId).ifPresent(boards -> { // 좋아요 먼저 삭제
             boards.forEach(board -> likeRepository.deleteLikeByBoardBoardId(board.getBoardId()));
             boardRepository.deleteBoardByUserId(userId);
         });
 
-        Optional<List<Friend>> ssss = friendRepository.findByFromUserId(userId);
+        Optional<List<Friend>> ssss = friendRepository.findByFromUserId(userId);// test
 
         // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
         friendRepository.findByFromUserId(userId)
             .ifPresent(friend -> friendRepository.deleteFriendByUserId(userId));
 
-        Optional<List<FriendRequest>> ssssss = friendRequestRepository.findByFromUserId(userId);
+        Optional<List<FriendRequest>> ssssss = friendRequestRepository.findByFromUserId(// test
+            userId);// test
 
         // 친구 요청 삭제
         friendRequestRepository.findByFromUserId(userId)
