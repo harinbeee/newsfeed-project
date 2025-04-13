@@ -12,7 +12,6 @@ import com.example.newsfeed.friends.repository.FriendRequestRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,12 +53,11 @@ public class FriendRequestServiceImpl implements FriendRequestService {
      */
     @Override
     public List<FriendRequestFindResponseDto> findByToUserId(Long toUserId) {
-
-        Optional<List<FriendRequest>> friendList = requestRepository.findByToUserId(toUserId);
-        return
-            friendList.orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_TO_REQUEST))
-                .stream()
-                .map(FriendRequestFindResponseDto::toDto).toList();
+        return requestRepository
+            .findByToUserId(toUserId)
+            .orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_TO_REQUEST))
+            .stream()
+            .map(FriendRequestFindResponseDto::toDto).toList();
     }
 
     /**
@@ -70,12 +68,11 @@ public class FriendRequestServiceImpl implements FriendRequestService {
      */
     @Override
     public List<FriendRequestFindResponseDto> findByFromUserId(Long fromUserId) {
-
-        Optional<List<FriendRequest>> friendList = requestRepository.findByFromUserId(fromUserId);
-        return
-            friendList.orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_FROM_REQUEST))
-                .stream()
-                .map(FriendRequestFindResponseDto::toDto).toList();
+        return requestRepository
+            .findByFromUserId(fromUserId)
+            .orElseThrow(() -> new BusinessException(ExceptionCode.FRIEND_FROM_REQUEST))
+            .stream()
+            .map(FriendRequestFindResponseDto::toDto).toList();
     }
 
     /**
@@ -86,9 +83,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
      */
     @Override
     public void reject(Long fromUserId, Long toUserId) {
-
         requestRepository.delete(requestRepository.findByTwoIdOrElseThrow(toUserId, fromUserId));
-
     }
 
     @Override
