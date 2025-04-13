@@ -25,7 +25,7 @@ public class LikeController {
      * 좋아요 저장 요청 컨트롤러
      *
      * @param requestDto 좋아요 요청 정보가 담긴 {@link LikeSaveRequestDto} 객체
-     * @param
+     * @param request    세션 정보가 담긴 {@link HttpServletRequest} 객체
      * @return 좋아요 정보가 담긴 {@link LikeSaveResponseDto} 객체
      */
     @PostMapping
