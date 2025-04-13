@@ -10,7 +10,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -64,11 +63,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
         SELECT count(l) FROM Like l WHERE l.board.boardId =:boardId AND l.comment IS NULL
         """)
     Long countBoardLikes(@Param("boardId") Long boardId);
-
-    @Modifying
-    @Query("DELETE FROM Board b WHERE b.user.id = :userId")
-    void deleteBoardByUserId(
-        @Param("userId") Long userId);
 
     Optional<List<Board>> findByUserId(Long userId);
 
