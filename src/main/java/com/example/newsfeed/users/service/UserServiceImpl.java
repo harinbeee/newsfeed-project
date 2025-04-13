@@ -79,10 +79,20 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * 회원 탈퇴 메소드
+     *
+     * @param requestDto 탈퇴 요청 {@link UserDeleteRequsetDto} 객체
+     * @param userId     유저 식별자
+     * @param request    세션 정보
+     * @param response   세션 응답
+     */
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
-        HttpServletResponse response) {
+    public void withdraw(
+        UserDeleteRequsetDto requestDto, Long userId,
+        HttpServletRequest request, HttpServletResponse response
+    ) {
 
         User user = userRepository.findByIdElseThrow(userId);
         String password = user.getPassword();
@@ -131,6 +141,7 @@ public class UserServiceImpl implements UserService {
 
         // 로그아웃 실행
         authService.logout(request, response);
+
     }
 
     /**
