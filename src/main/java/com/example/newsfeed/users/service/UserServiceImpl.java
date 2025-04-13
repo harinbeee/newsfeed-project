@@ -79,10 +79,20 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * 회원 탈퇴 메소드
+     *
+     * @param requestDto 탈퇴 요청 {@link UserDeleteRequsetDto} 객체
+     * @param userId     유저 식별자
+     * @param request    세션 정보
+     * @param response   세션 응답
+     */
     @Override
     @Transactional
-    public void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
-        HttpServletResponse response) {
+    public void withdraw(
+        UserDeleteRequsetDto requestDto, Long userId,
+        HttpServletRequest request, HttpServletResponse response
+    ) {
 
         User user = userRepository.findByIdElseThrow(userId);
         String password = user.getPassword();
@@ -92,25 +102,28 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
-        Optional<List<Comment>> s = commentRepository.findByUserIdAndBoard(userId);// test
+        List<Comment> s = commentRepository.findByUserIdAndBoard(userId);// test
 
         // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
-        commentRepository.findByUserIdAndBoard(userId).ifPresent(comments -> {
+        List<Comment> comments = commentRepository.findByUserId(userId);
+        if (!comments.isEmpty()) {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId( // 좋아요 먼저 삭제
+                likeRepository.deleteLikeByBoardIdAndCommentId(
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
             );
-            commentRepository.deleteCommentByUserId(userId);
-        });
+            commentRepository.deleteCommentByUserId(userId); // 꼭 실행되게
+        }
 
         Optional<List<Board>> ss = boardRepository.findByUserId(userId);// test
 
         // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
-        boardRepository.findByUserId(userId).ifPresent(boards -> { // 좋아요 먼저 삭제
-            boards.forEach(board -> likeRepository.deleteLikeByBoardBoardId(board.getBoardId()));
-            boardRepository.deleteBoardByUserId(userId);
+        boardRepository.findByUserId(userId).ifPresent(boards -> {
+            boards.forEach(board -> {
+                likeRepository.deleteLikeByBoardBoardId(board.getBoardId());
+                boardRepository.delete(board);
+            });
         });
 
         Optional<List<Friend>> ssss = friendRepository.findByFromUserId(userId);// test
@@ -132,6 +145,7 @@ public class UserServiceImpl implements UserService {
 
         // 로그아웃 실행
         authService.logout(request, response);
+
     }
 
     /**

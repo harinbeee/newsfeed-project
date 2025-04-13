@@ -1,7 +1,8 @@
 package com.example.newsfeed.common.filter;
 
-import com.example.newsfeed.common.exception.ErrorResponse;
+import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.common.response.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,31 +21,25 @@ public class Filter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain
+        HttpServletRequest request, HttpServletResponse response, FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String requestURI = request.getRequestURI();
-//        String method = request.getMethod();
-
         // 회원가입, 로그인 시 필터 제외
-        if (isWhiteList(requestURI)) {
+        if (isWhiteList(request.getRequestURI())) {
             filterChain.doFilter(request, response);
             return;
         }
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            ErrorResponse errorResponse = ErrorResponse.of(
-                ExceptionCode.NOT_LOGIN_ERROR
-            );
+            ApiResponse<Object> fail = ApiResponse.fail(
+                new BusinessException(ExceptionCode.NOT_LOGIN_ERROR));
 
-            response.setStatus(errorResponse.getCode());
+            response.setStatus(fail.getHttpStatus().value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
 
-            objectMapper.writeValue(response.getWriter(), errorResponse);
+            objectMapper.writeValue(response.getWriter(), fail);
 
             return;
         }

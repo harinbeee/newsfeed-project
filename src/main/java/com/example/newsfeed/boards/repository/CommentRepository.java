@@ -4,7 +4,6 @@ import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,11 +21,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         """)
     Long countCommentLikes(@Param("commentId") Long commentId);
 
-    Optional<List<Comment>> findByUserId(Long userId);
+    List<Comment> findByUserId(Long userId);
 
 
     @Query("SELECT c FROM Comment c JOIN FETCH c.board WHERE c.user.id = :userId")
-    Optional<List<Comment>> findByUserIdAndBoard(@Param("userId") Long userId);
+    List<Comment> findByUserIdAndBoard(@Param("userId") Long userId);
 
     @Modifying
     @Query("DELETE FROM Comment c WHERE c.user.id = :userId")
