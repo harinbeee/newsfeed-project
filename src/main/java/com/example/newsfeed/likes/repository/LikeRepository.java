@@ -38,7 +38,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM Like l WHERE l.board.boardId = :boardId and l.comment.commentId = :commentId")
-    void deleteLikeByBoardIdAndCommentId(
+    void deleteLikeByBoardBoardIdAndCommentCommentId(
         @Param("boardId") Long boardId,
         @Param("commentId") Long commentId);
 }

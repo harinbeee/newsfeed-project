@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
         List<Comment> comments = commentRepository.findByUserId(userId);
         if (!comments.isEmpty()) {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardIdAndCommentId(
+                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
