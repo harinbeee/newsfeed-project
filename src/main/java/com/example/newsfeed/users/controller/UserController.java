@@ -1,5 +1,7 @@
 package com.example.newsfeed.users.controller;
 
+import static com.example.newsfeed.common.util.SessionUtil.getUserId;
+
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.response.ApiResponse;
@@ -12,6 +14,7 @@ import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +70,8 @@ public class UserController {
     }
 
     /**
+     * 회원 탈퇴 요청 컨트롤러
+     *
      * @param requestDto 입력한 password 요청
      * @param userId     로그인 한 id
      * @param request    세션에 저장된 userid 요청
@@ -74,22 +79,23 @@ public class UserController {
      * @return 응답코드 200 성공, 401 미로그인, 400 비밀번호 미일치
      */
     @DeleteMapping("/{userId}")
-    public ApiResponse<Void> isDeleted(
+    public ApiResponse<Void> withdraw(
         @RequestBody UserDeleteRequsetDto requestDto,
         @PathVariable Long userId,
         HttpServletRequest request,
         HttpServletResponse response
     ) {
 
-        HttpSession session = request.getSession(false);
-        Long sessionUserId = (Long) session.getAttribute("user");
+        Long sessionUserId = getUserId(request);
         // 로그인한 유저와 삭제하려는 유저의 id 비교
         if (!userId.equals(sessionUserId)) {
             throw new BusinessException(ExceptionCode.USER_ACCESS_DENIED);
         }
 
-        userService.isDeleted(requestDto, userId, request, response);
+        userService.withdraw(requestDto, userId, request, response);
+
         return ApiResponse.ok();
+
     }
 
     /**
@@ -102,7 +108,7 @@ public class UserController {
     @PatchMapping("/{userId}/update-password")
     public ApiResponse<Void> updatePassword(
         @PathVariable Long userId,
-        @RequestBody UpdatePasswordRequestDto requestDto,
+        @Valid @RequestBody UpdatePasswordRequestDto requestDto,
         HttpSession session
     ) {
 

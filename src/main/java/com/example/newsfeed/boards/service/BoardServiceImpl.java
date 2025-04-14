@@ -11,6 +11,7 @@ import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.SortType;
+import com.example.newsfeed.likes.repository.LikeRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import java.util.List;
@@ -30,6 +31,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
     /**
      * 게시글 생성 요청 서비스
@@ -167,7 +169,7 @@ public class BoardServiceImpl implements BoardService {
         if (!findBoard.getUser().getId().equals(userId)) {
             throw new BusinessException(ExceptionCode.BOARD_DELETE_FORBIDDEN);
         }
-
+        likeRepository.deleteLikeByBoardId(findBoard.getBoardId());
         boardRepository.delete(findBoard);
 
     }

@@ -21,7 +21,15 @@ public interface UserService {
     UpdateUserProfileResponseDto update(Long userId,
         UpdateUserProfileRequestDto requestDto);
 
-    void isDeleted(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
+    /**
+     * 회원 탈퇴 메소드
+     *
+     * @param requestDto 탈퇴 요청 {@link UserDeleteRequsetDto} 객체
+     * @param userId     유저 식별자
+     * @param request    세션 정보
+     * @param response   세션 응답
+     */
+    void withdraw(UserDeleteRequsetDto requestDto, Long userId, HttpServletRequest request,
         HttpServletResponse response);
 
     /**
