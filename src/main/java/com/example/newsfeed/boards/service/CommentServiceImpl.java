@@ -8,6 +8,7 @@ import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
+import com.example.newsfeed.likes.repository.LikeRepository;
 import com.example.newsfeed.users.entity.User;
 import com.example.newsfeed.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
 
     /**
@@ -100,6 +102,7 @@ public class CommentServiceImpl implements CommentService {
      * @param commentId 댓글 식별자
      * @param userId    유저 식별자
      */
+    @Transactional
     @Override
     public void delete(Long commentId, Long userId) {
 
@@ -112,7 +115,10 @@ public class CommentServiceImpl implements CommentService {
         if (!loginUser.getId().equals(deletedComment.getUser().getId())) {
             throw new BusinessException(ExceptionCode.BOARD_UPDATE_FORBIDDEN);
         }
-
+        likeRepository.deleteLikeByBoardIdAndCommentCommentId(
+            deletedComment.getBoard().getBoardId(),
+            deletedComment.getCommentId()
+        );
         commentRepository.delete(deletedComment);
     }
 }

@@ -1,15 +1,12 @@
 package com.example.newsfeed.users.service;
 
 import com.example.newsfeed.auth.service.AuthService;
-import com.example.newsfeed.boards.entity.Board;
 import com.example.newsfeed.boards.entity.Comment;
 import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.PasswordEncoder;
-import com.example.newsfeed.friends.entity.Friend;
-import com.example.newsfeed.friends.entity.FriendRequest;
 import com.example.newsfeed.friends.repository.FriendRepository;
 import com.example.newsfeed.friends.repository.FriendRequestRepository;
 import com.example.newsfeed.likes.repository.LikeRepository;
@@ -80,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 회원 탈퇴 메소드
+     * 회원 탈퇴 메소드 탈퇴 유저가 작성한 게시글, 댓글, 보내거나 받은 친구요청, 친구를 삭제합니다
      *
      * @param requestDto 탈퇴 요청 {@link UserDeleteRequsetDto} 객체
      * @param userId     유저 식별자
@@ -102,13 +99,11 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
-        List<Comment> s = commentRepository.findByUserIdAndBoard(userId);// test
-
-        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
+        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 삭제
         List<Comment> comments = commentRepository.findByUserId(userId);
         if (!comments.isEmpty()) {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
+                likeRepository.deleteLikeByBoardIdAndCommentCommentId(
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
@@ -116,24 +111,17 @@ public class UserServiceImpl implements UserService {
             commentRepository.deleteCommentByUserId(userId); // 꼭 실행되게
         }
 
-        Optional<List<Board>> ss = boardRepository.findByUserId(userId);// test
-
-        // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
+        // board 에서 게시글 있으면 탈퇴회원의 게시판 삭제
         boardRepository.findByUserId(userId).ifPresent(boards -> {
             boards.forEach(board -> {
-                likeRepository.deleteLikeByBoardBoardId(board.getBoardId());
+                likeRepository.deleteLikeByBoardId(board.getBoardId());
                 boardRepository.delete(board);
             });
         });
 
-        Optional<List<Friend>> ssss = friendRepository.findByFromUserId(userId);// test
-
-        // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
+        // friends 에서 친구 있으면 탈퇴회원의 친구 삭제
         friendRepository.findByFromUserId(userId)
             .ifPresent(friend -> friendRepository.deleteFriendByUserId(userId));
-
-        Optional<List<FriendRequest>> ssssss = friendRequestRepository.findByFromUserId(// test
-            userId);// test
 
         // 친구 요청 삭제
         friendRequestRepository.findByFromUserId(userId)
