@@ -14,6 +14,7 @@ import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,7 +108,7 @@ public class UserController {
     @PatchMapping("/{userId}/update-password")
     public ApiResponse<Void> updatePassword(
         @PathVariable Long userId,
-        @RequestBody UpdatePasswordRequestDto requestDto,
+        @Valid @RequestBody UpdatePasswordRequestDto requestDto,
         HttpSession session
     ) {
 
