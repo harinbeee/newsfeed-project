@@ -157,7 +157,7 @@ spring.datasource.username={USERNAME}
 spring.datasource.password={PASSWORD}
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
-`./src/main/resources` 경로에 위 파일을 생성해주셔야 정상적으로 동작합니다.
+`./src/main/resources` 경로에 위 파일을 생성하고, `MYSQL_URL`, `USERNAME`, `PASSWORD` 값을 설정해주셔야 정상적으로 동작합니다.
 
 <br/>
 
