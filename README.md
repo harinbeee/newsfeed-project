@@ -145,6 +145,23 @@ newsfeed-project/
 
 <br/>
 
+# ⚠️ 프로젝트 빌드 전 확인사항
+
+해당 프로젝트에는 `application.properties` 파일이 포함되어있지 않습니다.
+
+```
+spring.application.name=newsfeed
+
+# DataSource
+spring.datasource.url={MYSQL_URL}
+spring.datasource.username={USERNAME}
+spring.datasource.password={PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+`./src/main/resources` 경로에 위 파일을 생성해주셔야 정상적으로 동작합니다.
+
+<br/>
+
 # 📝 프로젝트 명세
 
 ### [ERD](https://github.com/harinbeee/newsfeed-project/wiki/ERD)
@@ -152,10 +169,3 @@ newsfeed-project/
 ### [API 명세서](https://github.com/harinbeee/newsfeed-project/wiki)
 
 <br/>
-
-# 💭 마무리
-
-### 느낀 점
-
-### 아쉬운 점
-
