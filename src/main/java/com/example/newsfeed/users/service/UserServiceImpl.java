@@ -7,8 +7,6 @@ import com.example.newsfeed.boards.repository.CommentRepository;
 import com.example.newsfeed.common.exception.BusinessException;
 import com.example.newsfeed.common.exception.ExceptionCode;
 import com.example.newsfeed.common.util.PasswordEncoder;
-import com.example.newsfeed.friends.entity.Friend;
-import com.example.newsfeed.friends.entity.FriendRequest;
 import com.example.newsfeed.friends.repository.FriendRepository;
 import com.example.newsfeed.friends.repository.FriendRequestRepository;
 import com.example.newsfeed.likes.repository.LikeRepository;
@@ -124,8 +122,6 @@ public class UserServiceImpl implements UserService {
         // friends 에서 친구 있으면 탈퇴회원의 친구 삭제
         friendRepository.findByFromUserId(userId)
             .ifPresent(friend -> friendRepository.deleteFriendByUserId(userId));
-
-        Optional<List<FriendRequest>> ssssss = friendRequestRepository.findByFromUserId(userId);
 
         // 친구 요청 삭제
         friendRequestRepository.findByFromUserId(userId)

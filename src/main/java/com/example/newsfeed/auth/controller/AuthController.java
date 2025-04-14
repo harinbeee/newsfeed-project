@@ -6,7 +6,6 @@ import com.example.newsfeed.auth.dto.UserSaveRequestDto;
 import com.example.newsfeed.auth.dto.UserSaveResponseDto;
 import com.example.newsfeed.auth.service.AuthService;
 import com.example.newsfeed.common.response.ApiResponse;
-import com.example.newsfeed.users.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
     /**
      * 유저 회원가입 메소드

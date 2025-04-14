@@ -4,10 +4,8 @@ import static com.example.newsfeed.common.util.SessionUtil.getUserId;
 
 import com.example.newsfeed.boards.dto.CommentRequestDto;
 import com.example.newsfeed.boards.dto.CommentResponseDto;
-import com.example.newsfeed.boards.repository.BoardRepository;
 import com.example.newsfeed.boards.service.CommentService;
 import com.example.newsfeed.common.response.ApiResponse;
-import com.example.newsfeed.users.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
-    private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
 
     /**
      * 댓글 작성 요청 컨트롤러
