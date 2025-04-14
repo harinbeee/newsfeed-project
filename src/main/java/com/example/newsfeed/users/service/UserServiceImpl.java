@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 회원 탈퇴 메소드
+     * 회원 탈퇴 메소드 탈퇴 유저가 작성한 게시글, 댓글, 보내거나 받은 친구요청, 친구를 삭제합니다
      *
      * @param requestDto 탈퇴 요청 {@link UserDeleteRequsetDto} 객체
      * @param userId     유저 식별자
@@ -99,11 +99,11 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ExceptionCode.PASSWORD_INVALID);
         }
 
-        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 숨김
+        // comment 에서 댓글 있으면  탈퇴회원의 댓글을 삭제
         List<Comment> comments = commentRepository.findByUserId(userId);
         if (!comments.isEmpty()) {
             comments.forEach(comment ->
-                likeRepository.deleteLikeByBoardBoardIdAndCommentCommentId(
+                likeRepository.deleteLikeByBoardIdAndCommentCommentId(
                     comment.getBoard().getBoardId(),
                     comment.getCommentId()
                 )
@@ -111,15 +111,15 @@ public class UserServiceImpl implements UserService {
             commentRepository.deleteCommentByUserId(userId); // 꼭 실행되게
         }
 
-        // board 에서 게시글 있으면 탈퇴회원의 게시판 숨김
+        // board 에서 게시글 있으면 탈퇴회원의 게시판 삭제
         boardRepository.findByUserId(userId).ifPresent(boards -> {
             boards.forEach(board -> {
-                likeRepository.deleteLikeByBoardBoardId(board.getBoardId());
+                likeRepository.deleteLikeByBoardId(board.getBoardId());
                 boardRepository.delete(board);
             });
         });
 
-        // friends 에서 친구 있으면 탈퇴회원의 친구 숨김
+        // friends 에서 친구 있으면 탈퇴회원의 친구 삭제
         friendRepository.findByFromUserId(userId)
             .ifPresent(friend -> friendRepository.deleteFriendByUserId(userId));
 
