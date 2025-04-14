@@ -16,12 +16,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 
     Optional<FriendRequest> findByToUserIdAndFromUserId(Long toUserId, Long fromUserId);
 
-
-    default FriendRequest findByIdElseThrow(Long id) {
-        return findById(id).orElseThrow(
-            () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
-    }
-
     default FriendRequest findByTwoIdOrElseThrow(Long toUserId, Long fromUserId) {
         return findByToUserIdAndFromUserId(toUserId, fromUserId).orElseThrow(
             () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));

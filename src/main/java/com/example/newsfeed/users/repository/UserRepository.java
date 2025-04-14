@@ -22,13 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             () -> new BusinessException(ExceptionCode.EMAIL_NOT_FOUND));
     }
 
-    Optional<User> findByUsername(String username);
-
-    default User findByUsernameElseThrow(String username) {
-        return findByUsername(username).orElseThrow(
-            () -> new BusinessException(ExceptionCode.USER_NOT_FOUND));
-    }
-
     @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
     Optional<User> findAllByEmailIncludingDeleted(@Param("email") String email);
 }

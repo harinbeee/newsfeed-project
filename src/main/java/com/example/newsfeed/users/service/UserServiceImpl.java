@@ -127,9 +127,8 @@ public class UserServiceImpl implements UserService {
         friendRequestRepository.findByFromUserId(userId)
             .ifPresent(fr -> friendRequestRepository.deleteFriendByUserId(userId));
 
-        // 회원 정보에 탈퇴 입력
-        user.setDeleted(true);
-        userRepository.save(user);
+        // 회원 정보에 탈퇴 입력 @SQLDelete 기능사용(user entity)
+        userRepository.delete(user);
 
         // 로그아웃 실행
         authService.logout(request, response);
